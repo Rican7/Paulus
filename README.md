@@ -10,3 +10,5 @@ A PHP boilerplate for creating RESTful API servers, also enabling the ability fo
 	- Copyright (C) 2012 Plymouth State University
 - [Klein.php](https://github.com/chriso/klein.php) - URL routing provided by Klein
 	- Copyright (c) 2010 Chris O'Hara cohara87@gmail.com
+- [PHP ActiveRecord](https://github.com/kla/php-activerecord) - ActiveRecord style database access pattern
+	- Copyright (c) 2009 Kien La and Jacques Fuentes
