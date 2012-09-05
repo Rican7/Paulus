@@ -19,7 +19,7 @@ $config = array();
 $config_files = array(
 	'app-meta',
 	'external-libs',
-	//'database',
+	'database',
 	'routes',
 );
 
@@ -55,6 +55,21 @@ spl_autoload_register(function($class) {
 	if ( file_exists($file_path) ) {
 		require_once( $file_path );
 	}
+});
+
+/*
+ * Let's setup ActiveRecord and pass it our configuration
+ * ( PHP Closure's can use the "use" keyword to allow the usage of an out-of-closure scope var )
+ */
+ActiveRecord\Config::initialize( function($cfg) use ( $config ) {
+	// Set the directory of our data models
+	$cfg->set_model_directory( BASE_DIR . 'models' );
+
+	// Set our connection configuration
+	$cfg->set_connections( $config['database']['connections'] );
+
+	// Set our default connection
+	$cfg->set_default_connection( $config['database']['default_connection'] );
 });
 
 /*
