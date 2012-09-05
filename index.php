@@ -20,6 +20,7 @@ $config_files = array(
 	'app-meta',
 	'external-libs',
 	//'database',
+	'routes',
 );
 
 foreach( $config_files as $file ) {
@@ -55,3 +56,25 @@ spl_autoload_register(function($class) {
 		require_once( $file_path );
 	}
 });
+
+/*
+ * Let's use Klein's router to lazily load some objects and make them available elsewhere
+ * ( PHP Closure's can use the "use" keyword to allow the usage of an out-of-closure scope var )
+ */
+respond( function( $request, $response, $app ) use ( $config ) {
+	// Let's give all of our routes easy access to our configuration definitions
+	$app->config = $config;
+});
+
+// Grab all of our routes
+foreach( $config['routes'] as $route ) {
+	// Define our endpoint base and include path
+	$route_base_url = '/' . $route;
+	$route_path = BASE_DIR . 'routes/' . $route . '.php';
+
+	with( $route_base_url, $route_path );
+}
+
+// Finally, call "dispatch" to have Klein route the request appropriately
+dispatch();
+
