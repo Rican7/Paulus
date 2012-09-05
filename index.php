@@ -50,7 +50,7 @@ if (isset($config['external-libs'])) {
  */
 spl_autoload_register(function($class) {
 	// Define our file path
-	$file_path = BASE_DIR . 'libraries/' . $class . '.php';
+	$file_path = BASE_DIR . 'controllers/' . $class . '.php';
 
 	if ( file_exists($file_path) ) {
 		require_once( $file_path );
