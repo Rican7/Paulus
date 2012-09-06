@@ -20,6 +20,7 @@ $config_files = array(
 	'app-meta',
 	'external-libs',
 	'database',
+	'rest',
 	'routes',
 );
 
@@ -80,6 +81,9 @@ respond( function( $request, $response, $app ) use ( $config ) {
 	// Let's give all of our routes easy access to our configuration definitions
 	$app->config = $config;
 });
+
+// Include all of our rest functions for use with the API
+require_once( BASE_DIR . 'routes/_rest.php' );
 
 // Grab all of our routes
 foreach( $config['routes'] as $route ) {
