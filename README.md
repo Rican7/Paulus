@@ -7,7 +7,7 @@ A PHP boilerplate for creating RESTful API servers, also enabling the ability fo
 ## Attributions
 
 - [Plymouth WebApp](https://github.com/plymouthstate/plymouth-webapp) - Much of the structure/organization inspired by or taken and modified from the MIS team at Plymouth State University,
-with most of the credit going to past member's of the team: [Matthew Batchelder](https://github.com/borkweb) and [Adam Backstrom](https://github.com/abackstrom)
+with most of the credit going to past member's of the team: [Matthew Batchelder](https://github.com/borkweb) (@borkweb) and [Adam Backstrom](https://github.com/abackstrom) (@abackstrom)
 	- Copyright (C) 2012 [Plymouth State University](https://github.com/plymouthstate)
 - [Klein.php](https://github.com/chriso/klein.php) - URL routing provided by Klein
 	- Copyright (c) 2010 [Chris O'Hara](https://github.com/chriso) cohara87@gmail.com
