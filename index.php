@@ -94,6 +94,19 @@ foreach( $config['routes'] as $route ) {
 	with( $route_base_url, $route_path );
 }
 
+// To always be RESTful, respond in our designated format ALWAYS
+respond( function( $request, $response, $app, $matches ) {
+	// If none of our routes were matched
+	if ( $matches < 1 ) {
+		// Respond with a 404 error... we didn't find it
+		$response->abort( 404, NULL, 'Unable to find the endpoint you requested' );
+	}
+
+	// ALWAYS respond with our formatting function
+	$response->api_respond();
+});
+
+
 // Finally, call "dispatch" to have Klein route the request appropriately
 dispatch();
 

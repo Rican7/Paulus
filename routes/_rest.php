@@ -55,6 +55,10 @@ respond( function( $request, $response, $app ) use ( $config ) {
 		else {
 			var_dump( $response_data );
 		}
+
+		// We need to EXIT here, since we want this to be our last output
+		// Also, Klein tries to clean the output buffer... which doesn't exist. Let's stop that here
+		exit;
 	};
 
 	// Function to handle an abort in the API ( an error response )
@@ -88,3 +92,4 @@ respond( function( $request, $response, $app ) use ( $config ) {
 		$response->abort( 500, 'EXCEPTION_THROWN', $error_message );
 	});
 });
+

@@ -6,5 +6,5 @@ respond( '/?', function( $request, $response, $app ) {
 	//var_dump( $app->config );
 	
 	// Show some data to test our DB connection
-	var_dump( Api::get_sample_data() );
+	$response->data = Api::get_sample_data();
 });
