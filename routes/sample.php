@@ -10,7 +10,7 @@ respond( '/[a:key]?', function( $request, $response, $app ) {
 });
 
 // Get a sample of user data
-respond( 'POST', '/user/?', function( $request, $response, $app ) {
+respond( 'POST', '/user/profile/?', function( $request, $response, $app ) {
 	// Get our sent parameter
 	$user_id = $request->param( 'id' );
 
@@ -32,7 +32,7 @@ respond( 'POST', '/user/?', function( $request, $response, $app ) {
 });
 
 // Get a sample of database data
-respond( '/db/?', function( $request, $response, $app ) {
+respond( '/user/db/?', function( $request, $response, $app ) {
 	// Show some data to test our DB connection
 	$response->data = Api::get_sample_db_data();
 });

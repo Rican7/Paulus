@@ -39,8 +39,10 @@ respond( function( $request, $response, $app ) use ( $config ) {
 
 		// Let's build our response data
 		$response_data = (object) array(
-			'status_code' => $response->code(),
-			'status' => $response->get_status(),
+			'meta' => (object) array(
+				'status_code' => $response->code(),
+				'status' => $response->get_status(),
+			),
 			'data' => $response->data ?: new stdClass,
 		);
 
