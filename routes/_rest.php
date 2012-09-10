@@ -57,12 +57,11 @@ respond( function( $request, $response, $app ) use ( $config ) {
 		}
 
 		// We need to EXIT here, since we want this to be our last output
-		// Also, Klein tries to clean the output buffer... which doesn't exist. Let's stop that here
 		exit;
 	};
 
 	// Function to handle an abort in the API ( an error response )
-	$response->abort = function( $error_code, $status = null, $message = 'Unknown error' ) use ( $response ) {
+	$response->abort = function( $error_code, $status = null, $message = null ) use ( $response ) {
 		// If no error code was provided
 		if ( empty($error_code) || is_nan($error_code) ) {
 			// No error code?! That's not restful!
@@ -73,10 +72,13 @@ respond( function( $request, $response, $app ) use ( $config ) {
 			$response->code( $error_code );
 			$response->status = $status;
 
-			// Now, set our message as our response data
-			$response->data = (object) array(
-				'message' => $message,
-			);
+			// If the message isn't null
+			if ( !is_null($message) ) {
+				// Set our message as our response data
+				$response->data = (object) array(
+					'message' => $message,
+				);
+			}
 
 			// Respond restfully
 			$response->api_respond();
