@@ -108,5 +108,5 @@ respond( function( $request, $response, $app, $matches ) {
 
 
 // Finally, call "dispatch" to have Klein route the request appropriately
-dispatch();
+dispatch( $_SERVER['PATH_INFO'] );
 
