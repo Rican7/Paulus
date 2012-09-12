@@ -87,6 +87,36 @@ respond( function( $request, $response, $app ) use ( $config ) {
 		}
 	};
 
+	// Function to easily handle a response for when the wrong method is used to call on a route endpoint
+	$response->wrong_method = function( $possible_methods = array() ) use ( $response ) {
+			// Set our HTTP status code and status
+			$response->code( 405 );
+
+			// Set our message as our response data
+			$response->data = (object) array(
+				'message' => 'The wrong method was called on this endpoint.',
+			);
+
+			// Any defined possible methods?
+			if ( is_array($possible_methods) && count($possible_methods) > 0 ) {
+				// Uppercase whatever was passed, for good measure
+				$possible_methods = array_map( 'strtoupper', $possible_methods );
+
+				// Add them to our response
+				$response->data->possible_methods = $possible_methods;
+			}
+			elseif ( is_string($possible_methods) && !empty($possible_methods) ) {
+				// Uppercase whatever was passed, for good measure
+				$possible_methods = strtoupper($possible_methods);
+
+				// Add it to our response as an array so that it stays consistent
+				$response->data->possible_methods = array( $possible_methods );
+			}
+
+			// Abort
+			$response->api_respond();
+	};
+
 	// Handle exceptions RESTfully
 	$response->onError( function($response, $error_message) {
 		// Log the error
