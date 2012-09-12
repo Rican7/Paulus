@@ -1,3 +1,11 @@
 RewriteEngine on
+
+## Remove trailing slashes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} (.*)$
+RewriteRule ^(.+)/$ $1 [R=301,L]
+
+## Route through our bootstrap file
+RewriteBase /
 RewriteCond $1 !^(index\.php|images|assets|robots\.txt|README\.md)
-RewriteRule ^(.*)$ /index.php/$1 [L]
+RewriteRule ^(.*)$ index.php/$1 [L]
