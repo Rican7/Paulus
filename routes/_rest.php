@@ -2,6 +2,7 @@
 
 // Let's define our API's response functions for use in other routes/endpoints
 respond( function( $request, $response, $app ) use ( $config ) {
+
 	// Function to get the status message given a status code
 	$response->get_status = function() use ( $response, $config ) {
 		// If a status is already set
@@ -82,6 +83,9 @@ respond( function( $request, $response, $app ) use ( $config ) {
 				);
 			}
 
+			// Log the abort..ion :/
+			$response->error_log( $message );
+
 			// Respond restfully
 			$response->api_respond();
 		}
@@ -113,6 +117,9 @@ respond( function( $request, $response, $app ) use ( $config ) {
 				$response->data->possible_methods = array( $possible_methods );
 			}
 
+			// Log the abort..ion :/
+			$response->error_log( $response->data->message );
+
 			// Abort
 			$response->api_respond();
 	};
@@ -120,10 +127,24 @@ respond( function( $request, $response, $app ) use ( $config ) {
 	// Handle exceptions RESTfully
 	$response->onError( function($response, $error_message) {
 		// Log the error
-		error_log( $error_message );
+		$response->error_log( $error_message );
 
 		// Let's handle the exception gracefully
 		$response->abort( 500, 'EXCEPTION_THROWN', $error_message );
 	});
+
+	// Function to handle formatting and sending of API error logs
+	$response->error_log = function( $error_message ) use ( $request, $response ) {
+		// Log the abort..ion :/
+		return error_log(
+			'API Response Error: Code '
+			. $response->code()
+			. ' - '
+			. $error_message
+			. ' at '
+			. $request->uri()
+		);
+	};
+
 });
 
