@@ -115,7 +115,7 @@ respond( function( $request, $response, $app ) use ( $config ) {
 		$response_data->data = $response->data ?: new stdClass();
 
 		// Only add paging data if it exists
-		if ( $response->paging ) {
+		if ( isset($response->paging) ) {
 			$response_data->paging = $response->paging;
 		}
 
