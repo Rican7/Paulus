@@ -3,6 +3,71 @@
 // Let's define our API's response functions for use in other routes/endpoints
 respond( function( $request, $response, $app ) use ( $config ) {
 
+	// Function to process a string as a template variable
+	$response->parse = function( $unprocessed_string ) use ( $request, $config ) {
+		// Copy the string so we can refer to both the processed and original
+		$processed_string = $unprocessed_string;
+
+		// Loop through each template key in the user config and parse
+		foreach ( $config['template']['keys'] as $key => $val ) {
+			$processed_string = str_replace( '{'. $key .'}', $val, $processed_string );
+		}
+
+		// Now for some framework level template keys/values
+		$processed_string = str_replace( '{BASE_URL}', $config['app-meta']['base_url'], $processed_string );
+		$processed_string = str_replace( '{APP_URL}', $config['app-meta']['app_url'], $processed_string );
+		$processed_string = str_replace( '{APP_TITLE}', $config['app-meta']['title'], $processed_string );
+		$processed_string = str_replace( '{ENDPOINT}', parse_url( $request->uri(), PHP_URL_PATH), $processed_string );
+		$processed_string = str_replace( '{QUERY_STRING}', parse_url( $request->uri(), PHP_URL_QUERY), $processed_string );
+		$processed_string = str_replace( '{URL_HASH}', parse_url( $request->uri(), PHP_URL_FRAGMENT), $processed_string );
+
+		return $processed_string;
+	};
+
+	// Function to process an entire array as a template 
+	$response->process_template = function( $unprocessed_data ) use ( $response ) {
+		// Quickly create a function to convert the object to an array
+		// Source: http://goo.gl/uTLGf
+		function objectToArray($d) {
+			if (is_object($d)) {
+				// Gets the properties of the given object
+				// with get_object_vars function
+				$d = get_object_vars($d);
+			}
+
+			if (is_array($d)) {
+				/*
+				 * Return array converted to object
+				 * Using __FUNCTION__ (Magic constant)
+				 * for recursive call
+				 */
+				return array_map(__FUNCTION__, $d);
+			}
+			else {
+				// Return array
+				return $d;
+			}
+		}
+
+		// Copy array for the processed data
+		$processed_data = objectToArray( $unprocessed_data );
+
+		// Let's walk through each item, recursively
+		array_walk_recursive(
+			$processed_data,
+			// Replace template placeholders
+			function( &$raw ) use ( $response ) {
+				// If its a string
+				if ( is_string($raw) ) {
+					// Parse our string
+					$raw = $response->parse( $raw );
+				}
+			}
+		);
+
+		return $processed_data;
+	};
+
 	// Function to get the status message given a status code
 	$response->get_status = function() use ( $response, $config ) {
 		// If a status is already set
@@ -49,6 +114,12 @@ respond( function( $request, $response, $app ) use ( $config ) {
 		// Only add paging data if it exists
 		if ( $response->paging ) {
 			$response_data->paging = $response->paging;
+		}
+
+		// If global template processing is turned on
+		if ( $config['template']['global_template_processing'] ) {
+			// Process our data for templating
+			$response_data = $response->process_template( $response_data );
 		}
 
 		// Let's encode our response based on our set type

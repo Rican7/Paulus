@@ -22,6 +22,7 @@ $config_files = array(
 	'database',
 	'rest',
 	'routes',
+	'template',
 );
 
 foreach( $config_files as $file ) {
@@ -105,7 +106,6 @@ respond( function( $request, $response, $app, $matches ) {
 	// ALWAYS respond with our formatting function
 	$response->api_respond();
 });
-
 
 // Finally, call "dispatch" to have Klein route the request appropriately
 dispatch( $_SERVER['PATH_INFO'] );
