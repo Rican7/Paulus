@@ -17,7 +17,10 @@ respond( function( $request, $response, $app ) use ( $config ) {
 		$processed_string = str_replace( '{BASE_URL}', $config['app-meta']['base_url'], $processed_string );
 		$processed_string = str_replace( '{APP_URL}', $config['app-meta']['app_url'], $processed_string );
 		$processed_string = str_replace( '{APP_TITLE}', $config['app-meta']['title'], $processed_string );
-		$processed_string = str_replace( '{ENDPOINT}', parse_url( $request->uri(), PHP_URL_PATH), $processed_string );
+		$processed_string = str_replace( '{ENDPOINT}',
+			str_replace( $config['app-meta']['base_url'], '', parse_url($request->uri(), PHP_URL_PATH) ),
+			$processed_string
+		);
 		$processed_string = str_replace( '{QUERY_STRING}', parse_url( $request->uri(), PHP_URL_QUERY), $processed_string );
 		$processed_string = str_replace( '{URL_HASH}', parse_url( $request->uri(), PHP_URL_FRAGMENT), $processed_string );
 
