@@ -39,13 +39,17 @@ respond( function( $request, $response, $app ) use ( $config ) {
 		$response->header( 'Access-Control-Allow-Origin', $config['rest']['http-access-control']['allow-origin']);
 
 		// Let's build our response data
-		$response_data = (object) array(
-			'meta' => (object) array(
-				'status_code' => $response->code(),
-				'status' => $response->get_status(),
-			),
-			'data' => $response->data ?: new stdClass,
+		$response_data = new stdClass();
+		$response_data->meta = (object) array(
+			'status_code' => $response->code(),
+			'status' => $response->get_status(),
 		);
+		$response_data->data = $response->data ?: new stdClass();
+
+		// Only add paging data if it exists
+		if ( $response->paging ) {
+			$response_data->paging = $response->paging;
+		}
 
 		// Let's encode our response based on our set type
 		if ( $response->type == 'json' ) {
