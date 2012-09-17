@@ -50,7 +50,12 @@ if (isset($config['external-libs'])) {
 /*
  * Create an autoloader and autoload all of our internal classes/libraries
  */
-spl_autoload_register(function($class) {
+spl_autoload_register( function($class) {
+	// Convert the namespace to a sub-directory path
+	if ( strpos( $class, '\\' ) !== false) {
+		$class = str_replace( '\\', '/', $class );
+	}
+
 	// Define our file path
 	$file_path = BASE_DIR . 'controllers/' . $class . '.php';
 
