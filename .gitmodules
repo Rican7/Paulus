@@ -1,3 +1,6 @@
 [submodule "external-libs/klein"]
 	path = external-libs/klein
 	url = https://github.com/Rican7/klein.php.git 
+[submodule "external-libs/php-activerecord"]
+	path = external-libs/php-activerecord
+	url = https://github.com/kla/php-activerecord.git
