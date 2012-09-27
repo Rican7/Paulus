@@ -111,8 +111,10 @@ respond( function( $request, $response, $app ) use ( $config ) {
 		$response_data->meta = (object) array(
 			'status_code' => $response->code(),
 			'status' => $response->get_status(),
+			'message' => (string) $response->message,
+			'more_info' => $response->more_info ?: null,
 		);
-		$response_data->data = $response->data ?: new stdClass();
+		$response_data->data = $response->data ?: null;
 
 		// Only add paging data if it exists
 		if ( isset($response->paging) ) {
@@ -142,7 +144,7 @@ respond( function( $request, $response, $app ) use ( $config ) {
 	};
 
 	// Function to handle an abort in the API ( an error response )
-	$response->abort = function( $error_code, $status = null, $message = null ) use ( $response ) {
+	$response->abort = function( $error_code, $status = null, $message = null, $more_info = null ) use ( $response ) {
 		// If no error code was provided
 		if ( empty($error_code) || is_nan($error_code) ) {
 			// No error code?! That's not restful!
@@ -153,13 +155,9 @@ respond( function( $request, $response, $app ) use ( $config ) {
 			$response->code( $error_code );
 			$response->status = $status;
 
-			// If the message isn't null
-			if ( !is_null($message) ) {
-				// Set our message as our response data
-				$response->data = (object) array(
-					'message' => $message,
-				);
-			}
+			// Set our message and more info for verbosity
+			$response->message = $message;
+			$response->more_info = $more_info;
 
 			// Log the abort..ion :/
 			$response->error_log( $message );
@@ -175,9 +173,7 @@ respond( function( $request, $response, $app ) use ( $config ) {
 			$response->code( 405 );
 
 			// Set our message as our response data
-			$response->data = (object) array(
-				'message' => 'The wrong method was called on this endpoint.',
-			);
+			$response->message = 'The wrong method was called on this endpoint.';
 
 			// Any defined possible methods?
 			if ( is_array($possible_methods) && count($possible_methods) > 0 ) {
@@ -185,14 +181,14 @@ respond( function( $request, $response, $app ) use ( $config ) {
 				$possible_methods = array_map( 'strtoupper', $possible_methods );
 
 				// Add them to our response
-				$response->data->possible_methods = $possible_methods;
+				$response->more_info->possible_methods = $possible_methods;
 			}
 			elseif ( is_string($possible_methods) && !empty($possible_methods) ) {
 				// Uppercase whatever was passed, for good measure
 				$possible_methods = strtoupper($possible_methods);
 
 				// Add it to our response as an array so that it stays consistent
-				$response->data->possible_methods = array( $possible_methods );
+				$response->more_info->possible_methods = array( $possible_methods );
 			}
 
 			// Log the abort..ion :/
