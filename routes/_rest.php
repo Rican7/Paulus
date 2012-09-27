@@ -3,6 +3,13 @@
 // Let's define our API's response functions for use in other routes/endpoints
 respond( function( $request, $response, $app ) use ( $config ) {
 
+	// Declare API response properties
+	$response->status = null;
+	$response->message = null;
+	$response->more_info = null;
+	$response->data = null;
+	$response->paging = null;
+
 	// Function to process a string as a template variable
 	$response->parse = function( $unprocessed_string ) use ( $request, $config ) {
 		// Copy the string so we can refer to both the processed and original
@@ -74,7 +81,7 @@ respond( function( $request, $response, $app ) use ( $config ) {
 	// Function to get the status message given a status code
 	$response->get_status = function() use ( $response, $config ) {
 		// If a status is already set
-		if ( isset($response->status) ) {
+		if ( isset($response->status) && !is_null($response->status) ) {
 			return $response->status;
 		}
 		// If the status code has a corresponding message in our config
@@ -109,9 +116,9 @@ respond( function( $request, $response, $app ) use ( $config ) {
 		// Let's build our response data
 		$response_data = new stdClass();
 		$response_data->meta = (object) array(
-			'status_code' => $response->code(),
-			'status' => $response->get_status(),
-			'message' => (string) $response->message,
+			'status_code' => (int) $response->code(),
+			'status' => (string) $response->get_status(),
+			'message' => (string) $response->message ?: (string) null,
 			'more_info' => $response->more_info ?: null,
 		);
 		$response_data->data = $response->data ?: null;
@@ -192,7 +199,7 @@ respond( function( $request, $response, $app ) use ( $config ) {
 			}
 
 			// Log the abort..ion :/
-			$response->error_log( $response->data->message );
+			$response->error_log( $response->message );
 
 			// Abort
 			$response->api_respond();
