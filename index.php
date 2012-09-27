@@ -91,6 +91,9 @@ respond( function( $request, $response, $app ) use ( $config ) {
 // Include all of our rest functions for use with the API
 require_once( BASE_DIR . 'routes/_rest.php' );
 
+// Include all of our generic routing functions for use with every route
+require_once( BASE_DIR . 'routes/_generic.php' );
+
 // Grab all of our routes
 foreach( $config['routes'] as $route ) {
 	// Define our endpoint base and include path
