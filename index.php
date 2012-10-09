@@ -90,12 +90,33 @@ require_once( BASE_DIR . 'routes/_rest.php' );
 require_once( BASE_DIR . 'routes/_generic.php' );
 
 // Grab all of our routes
-foreach( $config['routes'] as $route ) {
-	// Define our endpoint base and include path
-	$route_base_url = '/' . $route;
-	$route_path = BASE_DIR . 'routes/' . $route . '.php';
+if ( $config['routing']['load_all_automatically'] ) {
+	// Define our routes directory
+	$route_dir = BASE_DIR . 'routes/';
 
-	with( $route_base_url, $route_path );
+	// Get an array of all of the files in the routes directory
+	$found_routes = scandir( $route_dir );
+
+	// Loop through each found route
+	foreach( $found_routes as $route ) {
+		// Is the route a file?
+		if ( is_file( $route_dir . $route ) && ( strpos( $route, '_' ) !== 0 ) ) {
+			// Define our endpoint base
+			$route_base_url = '/' . basename( $route, '.php' );
+
+			with( $route_base_url, $route_dir . $route );
+		}
+	}
+}
+else {
+	// Grab all of our manually assigned routes
+	foreach( $config['routing']['routes'] as $route ) {
+		// Define our endpoint base and include path
+		$route_base_url = '/' . $route;
+		$route_path = BASE_DIR . 'routes/' . $route . '.php';
+
+		with( $route_base_url, $route_path );
+	}
 }
 
 // To always be RESTful, respond in our designated format ALWAYS

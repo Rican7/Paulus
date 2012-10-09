@@ -12,7 +12,7 @@ class Config implements ArrayAccess {
 		'autoload-directories',
 		'database',
 		'rest',
-		'routes',
+		'routing',
 		'template',
 	);
 
