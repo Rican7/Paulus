@@ -22,7 +22,7 @@ $config = new Config(); // Create our config
 /*
  * Load our external libraries
  */
-if (isset($config['external-libs'])) {
+if ( isset($config['external-libs']) ) {
 	foreach( $config['external-libs'] as $lib_path ) {
 		require_once( BASE_DIR . 'external-libs/' . $lib_path );
 	}
@@ -31,6 +31,7 @@ if (isset($config['external-libs'])) {
 
 /*
  * Create an autoloader and autoload all of our internal classes/libraries
+ * ( PHP Closure's can use the "use" keyword to allow the usage of an out-of-closure scope var )
  */
 spl_autoload_register( function($class) use ( $config ) {
 	// Convert the namespace to a sub-directory path
@@ -53,20 +54,25 @@ spl_autoload_register( function($class) use ( $config ) {
 	}
 });
 
+
 /*
  * Let's setup ActiveRecord and pass it our configuration
  * ( PHP Closure's can use the "use" keyword to allow the usage of an out-of-closure scope var )
  */
-ActiveRecord\Config::initialize( function($cfg) use ( $config ) {
-	// Set the directory of our data models
-	$cfg->set_model_directory( BASE_DIR . 'models' );
+// Check to see if ActiveRecord exists... the app/developer might not want to use it
+if ( class_exists( 'ActiveRecord', false ) ) { // Set to false to not try and autoload the class
+	ActiveRecord\Config::initialize( function($cfg) use ( $config ) {
+		// Set the directory of our data models
+		$cfg->set_model_directory( BASE_DIR . 'models' );
 
-	// Set our connection configuration
-	$cfg->set_connections( $config['database']['connections'] );
+		// Set our connection configuration
+		$cfg->set_connections( $config['database']['connections'] );
 
-	// Set our default connection
-	$cfg->set_default_connection( $config['database']['default_connection'] );
-});
+		// Set our default connection
+		$cfg->set_default_connection( $config['database']['default_connection'] );
+	});
+}
+
 
 /*
  * Let's use Klein's router to lazily load some objects and make them available elsewhere
