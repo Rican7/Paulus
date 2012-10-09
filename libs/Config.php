@@ -60,12 +60,14 @@ class Config implements ArrayAccess {
 	// Interface handler for when trying to write to a key in the object
 	public function offsetSet( $key, $value ) {
 		// Let's not let them directly write to the config
+		error_log( 'Illegal access to Config. Trying to write to a purposefully protected resource.' );
 		return false;
 	}
 
 	// Interface handler for when trying to write to a key in the object
 	public function offsetUnset( $key ) {
 		// Let's not let them directly unset/delete anything in the config
+		error_log( 'Illegal access to Config. Trying to write to a purposefully protected resource.' );
 		return false;
 	}
 
