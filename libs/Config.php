@@ -9,6 +9,7 @@ class Config implements ArrayAccess {
 	protected $config_files = array(
 		'app-meta',
 		'external-libs',
+		'autoload-directories',
 		'database',
 		'rest',
 		'routes',

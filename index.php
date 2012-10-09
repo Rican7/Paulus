@@ -32,17 +32,24 @@ if (isset($config['external-libs'])) {
 /*
  * Create an autoloader and autoload all of our internal classes/libraries
  */
-spl_autoload_register( function($class) {
+spl_autoload_register( function($class) use ( $config ) {
 	// Convert the namespace to a sub-directory path
 	if ( strpos( $class, '\\' ) !== false) {
 		$class = str_replace( '\\', '/', $class );
 	}
 
-	// Define our file path
-	$file_path = BASE_DIR . 'controllers/' . $class . '.php';
+	// Loop through each autoload-directory
+	foreach( $config['autoload-directories'] as $autoload_directory ) {
+		// Define our file path
+		$file_path = BASE_DIR . $autoload_directory . $class . '.php';
 
-	if ( file_exists($file_path) ) {
-		require_once( $file_path );
+		if ( file_exists($file_path) ) {
+			require_once( $file_path );
+
+			// We don't want to include multiple versions of the same class,
+			// so let's just stop once we find one that exists
+			break;
+		}
 	}
 });
 
