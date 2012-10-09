@@ -15,26 +15,8 @@ define( 'BASE_DIR', __DIR__ . '/' );
 /*
  * Let's load our configuration files
  */
-$config = array();
-$config_files = array(
-	'app-meta',
-	'external-libs',
-	'database',
-	'rest',
-	'routes',
-	'template',
-);
-
-foreach( $config_files as $file ) {
-	// Include the file
-	require_once( BASE_DIR . 'configs/' . $file . '.php');
-
-	// Set the file's returned configuration in a namespaced key
-	$config[ $file ] = $load_config();
-
-	// Garbage collect
-	unset( $load_config );
-}
+require_once( BASE_DIR . 'libs/Config.php' ); // Load our configuration class
+$config = new Config(); // Create our config
 
 
 /*
