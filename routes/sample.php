@@ -1,12 +1,14 @@
 <?php
 
+use	Api\Sample;
+
 // Base response (Make the trailing splash optional to catch accidents and laziness)
 respond( '/[a:key]', function( $request, $response, $app ) {
 	// Get our sent parameter
 	$key_to_encrypt = $request->key;
 
 	// Show some sample data
-	$response->data = Api::get_sample_data( $key_to_encrypt );
+	$response->data = Sample::get_sample_data( $key_to_encrypt );
 });
 
 // Get a sample of user data
@@ -20,7 +22,7 @@ respond( 'POST', '/user/profile', function( $request, $response, $app ) {
 	}
 
 	// Let's get the "user's profile"
-	$sample_profile = Api::get_sample_user_data( $user_id );
+	$sample_profile = Sample::get_sample_user_data( $user_id );
 
 	if ( !is_null($sample_profile) ) {
 		// Show some data for testing
@@ -34,5 +36,5 @@ respond( 'POST', '/user/profile', function( $request, $response, $app ) {
 // Get a sample of database data
 respond( '/user/db', function( $request, $response, $app ) {
 	// Show some data to test our DB connection
-	$response->data = Api::get_sample_db_data();
+	$response->data = Sample::get_sample_db_data();
 });
