@@ -7,5 +7,7 @@ $load_config = function() {
 		'routes' => array(
 			'sample',
 		),
+		'auto_start_controllers' => true,
+		'controller_base_namespace' => 'Api',
 	);
 };

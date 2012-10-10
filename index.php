@@ -33,7 +33,7 @@ if ( isset($config['external-libs']) ) {
  * Create an autoloader and autoload all of our internal classes/libraries
  * ( PHP Closure's can use the "use" keyword to allow the usage of an out-of-closure scope var )
  */
-spl_autoload_register( function($class) use ( $config ) {
+spl_autoload_register( function( $class ) use ( $config ) {
 	// Convert the namespace to a sub-directory path
 	if ( strpos( $class, '\\' ) !== false) {
 		$class = str_replace( '\\', '/', $class );
@@ -81,6 +81,28 @@ if ( class_exists( 'ActiveRecord', false ) ) { // Set to false to not try and au
 respond( function( $request, $response, $app ) use ( $config ) {
 	// Let's give all of our routes easy access to our configuration definitions
 	$app->config = $config;
+
+	// Let's keep track of a potential route controller
+	$app->controller = null;
+
+	// Define a function for instanciating a route controller if one exists
+	$app->new_route_controller = function( $namespace ) use ( $app, $config ) {
+		// Do we want to auto start our controllers?
+		if ( $config['routing']['auto_start_controllers'] ) {
+			// Let's get our class name from the namespace
+			$name_parts = explode( '/', $namespace ); 
+			$classname = implode( '\\', array_map( 'ucwords', $name_parts ) );
+			$class = $config['routing']['controller_base_namespace'] . $classname;
+
+			// Does the class exist? (Autoload it if its not loaded/included yet)
+			if ( class_exists( $class, true ) ) {
+				// Instanciate the controller and keep an easy reference to it
+				$app->controller = new $class( $request, $response, $app );
+			}
+		}
+
+		return null;
+	};
 });
 
 // Include all of our rest functions for use with the API
@@ -104,7 +126,16 @@ if ( $config['routing']['load_all_automatically'] ) {
 			// Define our endpoint base
 			$route_base_url = '/' . basename( $route, '.php' );
 
+			// Include our routes from namespaced, separate files
 			with( $route_base_url, $route_dir . $route );
+
+			// Instanciate the route's controller... but do it as a responder so it only instanciate's what is needed for that matched response. :)
+			with( $route_base_url, function() use ( $route_base_url ) {
+				respond( function( $request, $respond, $app ) use ( $route_base_url ) {
+					// Instanciate the route's controller
+					$app->new_route_controller( $route_base_url );
+				});
+			});
 		}
 	}
 }
@@ -115,7 +146,16 @@ else {
 		$route_base_url = '/' . $route;
 		$route_path = BASE_DIR . 'routes/' . $route . '.php';
 
+		// Include our routes from namespaced, separate files
 		with( $route_base_url, $route_path );
+
+		// Instanciate the route's controller... but do it as a responder so it only instanciate's what is needed for that matched response. :)
+		with( $route_base_url, function() use ( $route_base_url ) {
+			respond( function( $request, $respond, $app ) use ( $route_base_url ) {
+				// Instanciate the route's controller
+				$app->new_route_controller( $route_base_url );
+			});
+		});
 	}
 }
 
