@@ -86,7 +86,7 @@ respond( function( $request, $response, $app ) use ( $config ) {
 	$app->controller = null;
 
 	// Define a function for instanciating a route controller if one exists
-	$app->new_route_controller = function( $namespace ) use ( $app, $config ) {
+	$app->new_route_controller = function( $namespace ) use ( $request, $response, $app, $config ) {
 		// Do we want to auto start our controllers?
 		if ( $config['routing']['auto_start_controllers'] ) {
 			// Let's get our class name from the namespace
@@ -126,9 +126,6 @@ if ( $config['routing']['load_all_automatically'] ) {
 			// Define our endpoint base
 			$route_base_url = '/' . basename( $route, '.php' );
 
-			// Include our routes from namespaced, separate files
-			with( $route_base_url, $route_dir . $route );
-
 			// Instanciate the route's controller... but do it as a responder so it only instanciate's what is needed for that matched response. :)
 			with( $route_base_url, function() use ( $route_base_url ) {
 				respond( function( $request, $respond, $app ) use ( $route_base_url ) {
@@ -136,6 +133,9 @@ if ( $config['routing']['load_all_automatically'] ) {
 					$app->new_route_controller( $route_base_url );
 				});
 			});
+
+			// Include our routes from namespaced, separate files
+			with( $route_base_url, $route_dir . $route );
 		}
 	}
 }
@@ -146,9 +146,6 @@ else {
 		$route_base_url = '/' . $route;
 		$route_path = BASE_DIR . 'routes/' . $route . '.php';
 
-		// Include our routes from namespaced, separate files
-		with( $route_base_url, $route_path );
-
 		// Instanciate the route's controller... but do it as a responder so it only instanciate's what is needed for that matched response. :)
 		with( $route_base_url, function() use ( $route_base_url ) {
 			respond( function( $request, $respond, $app ) use ( $route_base_url ) {
@@ -156,6 +153,9 @@ else {
 				$app->new_route_controller( $route_base_url );
 			});
 		});
+
+		// Include our routes from namespaced, separate files
+		with( $route_base_url, $route_path );
 	}
 }
 
