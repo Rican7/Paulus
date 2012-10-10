@@ -60,7 +60,7 @@ spl_autoload_register( function( $class ) use ( $config ) {
  * ( PHP Closure's can use the "use" keyword to allow the usage of an out-of-closure scope var )
  */
 // Check to see if ActiveRecord exists... the app/developer might not want to use it
-if ( class_exists( 'ActiveRecord', false ) ) { // Set to false to not try and autoload the class
+if ( class_exists( 'ActiveRecord\Config', false ) ) { // Set to false to not try and autoload the class
 	ActiveRecord\Config::initialize( function($cfg) use ( $config ) {
 		// Set the directory of our data models
 		$cfg->set_model_directory( BASE_DIR . 'models' );
