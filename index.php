@@ -91,7 +91,22 @@ respond( function( $request, $response, $app ) use ( $config ) {
 		if ( $config['routing']['auto_start_controllers'] ) {
 			// Let's get our class name from the namespace
 			$name_parts = explode( '/', $namespace ); 
-			$classname = implode( '\\', array_map( 'ucwords', $name_parts ) );
+
+			// Let's convert our url endpoint name to a legit classname
+			$name_parts = array_map(
+				function( $string ) {
+					$string = str_replace( '-', '_', $string ); // Turn all hyphens to underscores
+					$string = str_replace( '_', ' ', $string ); // Turn all underscores to spaces (for easy casing)
+					$string = ucwords( $string ); // Uppercase each first letter of each "word"
+					$string = str_replace( ' ', '', $string ); // Remove spaces. BOOM! Zend-compatible camel casing
+
+					return $string;
+				},
+				$name_parts
+			);
+
+			// Create a callable classname
+			$classname = implode( '\\', $name_parts );
 			$class = $config['routing']['controller_base_namespace'] . $classname;
 
 			// Does the class exist? (Autoload it if its not loaded/included yet)
