@@ -206,7 +206,26 @@ respond( function( $request, $response, $app ) use ( $config ) {
 	};
 
 	// Handle exceptions RESTfully
-	$response->onError( function($response, $error_message) {
+	$response->onError( function( $response, $error_message, $error_type, $exception ) use ( $app ) {
+		// Let's see if we have a current controller instanciated
+		if ( is_object( $app->controller ) && !is_null( $app->controller ) ) {
+
+			// Define a callable method as an array
+			$callable = array( $app->controller, 'exception_handler' ); // Give the controller class and the name of the method
+
+			// Check if the current controller has a callable error handler of its own
+			$check_callable = is_callable( $callable, false ); // Make sure it actually exists
+
+			// If we found a callable handler
+			if ( $check_callable ) {
+				// Call the found handler
+				return call_user_func_array(
+					$callable, // The array of the callable
+					array( $error_message, $error_type, $exception ) // Arguments
+				);
+			}
+		}
+
 		// Log the error
 		$response->error_log( $error_message );
 
