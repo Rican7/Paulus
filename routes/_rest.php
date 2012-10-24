@@ -5,6 +5,7 @@ respond( function( $request, $response, $app ) use ( $config ) {
 
 	// Declare API response properties
 	$response->status = null;
+	$response->possible_methods = null;
 	$response->message = null;
 	$response->more_info = null;
 	$response->data = null;
@@ -108,6 +109,9 @@ respond( function( $request, $response, $app ) use ( $config ) {
 		// Set our data response header
 		$response->header( 'Content-Type', $config['rest']['mime-types'][$response->type] );
 
+		// Set our allowed methods response header
+		$response->header( 'Allow', implode( ', ', ( $response->possible_methods ?: $config['rest']['defaults']['allowed-methods'] ) ) );
+
 		// Send our access control headers
 		$response->header( 'Access-Control-Allow-Headers', $config['rest']['http-access-control']['allow-headers']);
 		$response->header( 'Access-Control-Allow-Methods', $config['rest']['http-access-control']['allow-methods']);
@@ -188,15 +192,18 @@ respond( function( $request, $response, $app ) use ( $config ) {
 				$possible_methods = array_map( 'strtoupper', $possible_methods );
 
 				// Add them to our response
-				$response->more_info->possible_methods = $possible_methods;
+				$response->possible_methods = $possible_methods;
 			}
 			elseif ( is_string($possible_methods) && !empty($possible_methods) ) {
 				// Uppercase whatever was passed, for good measure
 				$possible_methods = strtoupper($possible_methods);
 
 				// Add it to our response as an array so that it stays consistent
-				$response->more_info->possible_methods = array( $possible_methods );
+				$response->possible_methods = array( $possible_methods );
 			}
+
+			// Also add the possible methods to our "more_info" for readability
+			$response->more_info->possible_methods = $response->possible_methods;
 
 			// Log the abort..ion :/
 			$response->error_log( $response->message );
