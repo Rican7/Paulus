@@ -187,5 +187,10 @@ respond( function( $request, $response, $app, $matches ) {
 });
 
 // Finally, call "dispatch" to have Klein route the request appropriately
-dispatch( $_SERVER['PATH_INFO'] );
+dispatch(
+	substr(
+		$_SERVER['REQUEST_URI'],
+		( strlen( $config['app-meta']['base_url'] ) - 1 ) // Remove the starting slash
+	)
+);
 
