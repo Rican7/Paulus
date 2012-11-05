@@ -190,7 +190,7 @@ respond( function( $request, $response, $app, $matches ) {
 dispatch(
 	substr(
 		$_SERVER['REQUEST_URI'],
-		( strlen( $config['app-meta']['base_url'] ) - 1 ) // Remove the starting slash
+		strlen( rtrim( $config['app-meta']['base_url'], '/' ) ) // Remove a potential trailing slash
 	)
 );
 
