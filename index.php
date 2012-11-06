@@ -174,14 +174,14 @@ else {
 	}
 }
 
+// 404 - We didn't match a route
+respond( '404', function( $request, $response, $app ) {
+	// Respond with a 404 error... we didn't match their request
+	$response->abort( 404, NULL, 'Unable to find the endpoint you requested' );
+});
+
 // To always be RESTful, respond in our designated format ALWAYS
 respond( function( $request, $response, $app, $matches ) {
-	// If none of our routes were matched
-	if ( $matches < 1 ) {
-		// Respond with a 404 error... we didn't find it
-		$response->abort( 404, NULL, 'Unable to find the endpoint you requested' );
-	}
-
 	// ALWAYS respond with our formatting function
 	$response->api_respond();
 });
