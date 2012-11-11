@@ -15,8 +15,8 @@ define( 'BASE_DIR', __DIR__ . '/' );
 /*
  * Let's load our configuration files
  */
-require_once( BASE_DIR . 'libs/Config.php' ); // Load our configuration class
-$config = new Config(); // Create our config
+require_once( BASE_DIR . 'libs/Paulus/Config.php' ); // Load our configuration class
+$config = \Paulus\Config::instance(); // Create our config
 
 
 /*

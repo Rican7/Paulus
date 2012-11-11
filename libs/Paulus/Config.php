@@ -1,8 +1,15 @@
 <?php
 
+namespace Paulus;
+
+use \ArrayAccess;
+
+// Explicitly require our required base abstract class
+require_once 'Singleton.php';
+
 // Config class
 // Class for loading and defining access to configuration files
-class Config implements ArrayAccess {
+class Config extends Singleton implements ArrayAccess {
 
 	// Declare properties
 	protected $config = array();
@@ -17,7 +24,7 @@ class Config implements ArrayAccess {
 	);
 
 	// Constructor
-	public function __construct() {
+	protected function __construct() {
 		// Let's load our configuration files
 		$this->load_config();
 	}
