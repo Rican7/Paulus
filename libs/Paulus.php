@@ -45,27 +45,38 @@ class Paulus {
 		$this->response->paging = null;
 	}
 
+	// Function to check if our current controller has a callable method and return it if it does
+	private function get_controller_callable( $method_name ) {
+		// Let's see if we have a current controller instanciated
+		if ( is_object( $this->controller ) && !is_null( $this->controller ) ) {
+
+			// Define a callable method as an array
+			$callable = array( $this->controller, $method_name ); // Give the controller class and the name of the method
+
+			// Check if the method is actually callable/exists
+			if ( is_callable( $callable, false ) ) {
+				return $callable;
+			}
+		}
+
+		return false;
+	}
+
 	// Function to setup our Paulus exception handler
 	private function setup_exception_handler() {
 		// Handle exceptions RESTfully
 		$this->response->onError( function( $response, $error_message, $error_type, $exception ) {
-			// Let's see if we have a current controller instanciated
-			if ( is_object( $this->controller ) && !is_null( $this->controller ) ) {
 
-				// Define a callable method as an array
-				$callable = array( $this->controller, 'exception_handler' ); // Give the controller class and the name of the method
+			// Check if we have a callable handler in our controller
+			$callable = $this->get_controller_callable( 'exception_handler' );
 
-				// Check if the current controller has a callable error handler of its own
-				$check_callable = is_callable( $callable, false ); // Make sure it actually exists
-
-				// If we found a callable handler
-				if ( $check_callable ) {
-					// Call the found handler
-					return call_user_func_array(
-						$callable, // The array of the callable
-						array( $error_message, $error_type, $exception ) // Arguments
-					);
-				}
+			// Did we actually get a callable?
+			if ( $callable !== false ) {
+				// Call the found handler
+				return call_user_func_array(
+					$callable, // The array of the callable
+					array( $error_message, $error_type, $exception ) // Arguments
+				);
 			}
 
 			// Log the error
