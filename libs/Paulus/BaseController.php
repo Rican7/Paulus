@@ -6,11 +6,19 @@ namespace Paulus;
 // To be extended by controllers in the controllers directory
 abstract class BaseController {
 
-	// Declare properties
-	private $request;
-	private $response;
-	private $service;
-	private $app;
+	/*
+	 * Declare properties
+	 */
+	protected	$config;
+
+	// Klein objects
+	private	$request;
+	private	$response;
+	private	$service;
+
+	// Reference to our parent application
+	private	$app;
+
 
 	// Constructor
 	public function __construct( &$request, &$response, &$service, &$app ) {
@@ -21,6 +29,9 @@ abstract class BaseController {
 
 		// Make the application object easily accessible
 		$this->app = $app;
+
+		// Let's keep a quick reference to our config for accessibility
+		$this->config = &$app->config;
 	}
 
 } // End class BaseController
