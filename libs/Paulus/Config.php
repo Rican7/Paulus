@@ -4,9 +4,6 @@ namespace Paulus;
 
 use \ArrayAccess;
 
-// Explicitly require our required base abstract class
-require_once 'Singleton.php';
-
 // Config class
 // Class for loading and defining access to configuration files
 class Config extends Singleton implements ArrayAccess {
@@ -35,7 +32,7 @@ class Config extends Singleton implements ArrayAccess {
 		// Loop through each config file
 		foreach( $this->config_files as $file ) {
 			// Include the file
-			require_once( BASE_DIR . 'configs/' . $file . '.php');
+			require_once( PAULUS_CONFIG_DIR . $file . '.php');
 
 			// Set the file's returned configuration in a namespaced key
 			$this->config[ $file ] = $load_config();
