@@ -260,6 +260,26 @@ class Paulus {
 			var_dump( $response_data );
 		}
 
+		// Finally, should we include our execution time header?
+		if ( defined( 'PAULUS_ALLOW_BENCHMARK_HEADER' ) === true ) {
+			// If our benchmark header is set to true
+			if ( $this->request->header( PAULUS_BENCHMARK_HEADER_NAME, false ) ) {
+				// Set our benchmark header to the time difference between the app start and now
+				$this->response->header(
+					PAULUS_BENCHMARK_HEADER_NAME,
+					( microtime( true) - PAULUS_START_TIME )
+				);
+			}
+		}
+		// If its been flagged to always show
+		elseif ( defined( 'PAULUS_BENCHMARK_ALWAYS' ) === true ) {
+			// Set our benchmark header to the time difference between the app start and now
+			$this->response->header(
+				PAULUS_BENCHMARK_HEADER_NAME,
+				( microtime( true) - PAULUS_START_TIME )
+			);
+		}
+
 		// We need to EXIT here, since we want this to be our last output
 		exit;
 	}

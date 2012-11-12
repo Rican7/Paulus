@@ -9,6 +9,10 @@
 //                                       //
 /*****************************************/
 
+// First things first... get our init time
+define( 'PAULUS_START_TIME', microtime( true ) );
+
+
 /*
  * Set some low-level configurations that we
  * may want to change before loading our
@@ -35,9 +39,14 @@ define( 'PAULUS_ROUTES_DIR', dir_rel_path( 'routes' ) );
 define( 'PAULUS_AUTOLOADER_LOCATION', PAULUS_LIB_DIR . 'Paulus/AutoLoader.php' );
 define( 'PAULUS_ROUTER_LOCATION', PAULUS_EXTERNAL_LIB_DIR . 'klein/klein.php' );
 
+// Define our benchmark header (for both request and response here)
+define( 'PAULUS_BENCHMARK_HEADER_NAME', 'X-Script-Benchmark' );
+
 // Optional settings here (uncomment them to enable)
-// define( 'PAULUS_INTERNAL_AUTOLOAD_DISABLED', true );
-// define( 'PAULUS_AUTOLOAD_DISABLED', true );
+// define( 'PAULUS_INTERNAL_AUTOLOAD_DISABLED', null );
+// define( 'PAULUS_AUTOLOAD_DISABLED', null );
+// define( 'PAULUS_ALLOW_BENCHMARK_HEADER', null );
+// define( 'PAULUS_BENCHMARK_ALWAYS', null );
 
 
 // Let's bootstrap all the things
