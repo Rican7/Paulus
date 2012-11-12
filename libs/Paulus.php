@@ -9,7 +9,7 @@ class Paulus {
 	/*
 	 * Declare properties
 	 */
-	private	$config; // Configuration array
+	public	$config; // Configuration array
 	public	$controller; // Let's keep track of a potential route controller
 
 	// Routing variable references
@@ -308,44 +308,37 @@ class Paulus {
 		}
 	}
 
-	// Function to easily handle a response for when the wrong method is used to call on a route endpoint
-	public function wrong_method( $possible_methods = array() ) {
-			// Set our HTTP status code and status
-			$this->response->code( 405 );
-
-			// Set our message as our response data
-			$this->response->message = 'The wrong method was called on this endpoint.';
-
-			// Any defined possible methods?
-			if ( is_array($possible_methods) && count($possible_methods) > 0 ) {
-				// Uppercase whatever was passed, for good measure
-				$possible_methods = array_map( 'strtoupper', $possible_methods );
-
-				// Add them to our response
-				$this->response->possible_methods = $possible_methods;
-			}
-			elseif ( is_string($possible_methods) && !empty($possible_methods) ) {
-				// Uppercase whatever was passed, for good measure
-				$possible_methods = strtoupper($possible_methods);
-
-				// Add it to our response as an array so that it stays consistent
-				$this->response->possible_methods = array( $possible_methods );
-			}
-
-			// Also add the possible methods to our "more_info" for readability
-			$this->response->more_info->possible_methods = $this->response->possible_methods;
-
-			// Log the abort..ion :/
-			$this->error_log( $this->response->message );
-
-			// Abort
-			$this->api_respond();
-	}
-
 	// Function to handle an endpoint not being found
 	public function endpoint_not_found() {
 		// Respond with a 404 error... we didn't match their request
-		$this->abort( 404, NULL, 'Unable to find the endpoint you requested' );
+		$this->abort( 404, null, 'Unable to find the endpoint you requested' );
+	}
+
+	// Function to easily handle a response for when the wrong method is used to call on a route endpoint
+	public function wrong_method( $possible_methods = array() ) {
+		// Any defined possible methods?
+		if ( is_array($possible_methods) && count($possible_methods) > 0 ) {
+			// Uppercase whatever was passed, for good measure
+			$possible_methods = array_map( 'strtoupper', $possible_methods );
+
+			// Add them to our response
+			$this->response->possible_methods = $possible_methods;
+		}
+		elseif ( is_string($possible_methods) && !empty($possible_methods) ) {
+			// Uppercase whatever was passed, for good measure
+			$possible_methods = strtoupper($possible_methods);
+
+			// Add it to our response as an array so that it stays consistent
+			$this->response->possible_methods = array( $possible_methods );
+		}
+
+		// Also add the possible methods to our "more_info" for readability
+		$more_info = array(
+			'possible_methods' => $this->response->possible_methods
+		);
+
+		// Abort with a 405 error, we didn't match their requested method
+		$this->abort( 405, null, 'The wrong method was called on this endpoint.', $more_info );
 	}
 
 	// Function to handle formatting and sending of API error logs
