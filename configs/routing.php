@@ -8,6 +8,7 @@ $load_config = function() {
 			'sample',
 		),
 		'auto_start_controllers' => true,
+		'pass_app_to_service' => false,
 		'controller_base_namespace' => 'Api',
 	);
 };

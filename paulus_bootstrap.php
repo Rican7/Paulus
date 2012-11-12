@@ -49,8 +49,11 @@ respond( function( $request, $response, $service ) use ( $config ) {
 	// Initialize our router
 	Router::__init__( $request, $response, $service, $app );
 
-	// Register our app as a persistent service, for ease of use/accessibility
-	$service->app = $app;
+	// Only pass our "app" to the service register if we've configured it to do so
+	if ( $config['routing']['pass_app_to_service'] ) {
+		// Register our app as a persistent service, for ease of use/accessibility
+		$service->app = $app;
+	}
 });
 
 
