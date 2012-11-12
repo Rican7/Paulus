@@ -31,6 +31,14 @@ define( 'PAULUS_LIB_DIR', dir_rel_path( 'libs' ) );
 define( 'PAULUS_EXTERNAL_LIB_DIR', dir_rel_path( 'external-libs' ) );
 define( 'PAULUS_ROUTES_DIR', dir_rel_path( 'routes' ) );
 
+// Set some important include/require locations explicitly here
+define( 'PAULUS_AUTOLOADER_LOCATION', PAULUS_LIB_DIR . 'Paulus/AutoLoader.php' );
+define( 'PAULUS_ROUTER_LOCATION', PAULUS_EXTERNAL_LIB_DIR . 'klein/klein.php' );
+
+// Optional settings here (uncomment them to enable)
+// define( 'PAULUS_INTERNAL_AUTOLOAD_DISABLED', true );
+// define( 'PAULUS_AUTOLOAD_DISABLED', true );
+
 
 // Let's bootstrap all the things
 require_once( BASE_DIR . 'paulus_bootstrap.php' );

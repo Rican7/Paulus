@@ -96,4 +96,4 @@ class Router {
 		return self::route( 'OPTIONS', $route, $callback );
 	}
 
-}
+} // End class Router

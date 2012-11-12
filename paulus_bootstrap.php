@@ -10,36 +10,38 @@
 /*****************************************/
 
 // Which classes to use
-use	\Paulus\Config,
+use	\Paulus\AutoLoader,
+	\Paulus\Config,
 	\Paulus\Router;
 
 
+// Load our autoloader... since it can't be autoloaded itself. ... WTF?!?!
+require_once( PAULUS_AUTOLOADER_LOCATION );
+
+// Instanciate our AutoLoader (regardless of settings)
+$autoloader = new AutoLoader();
+
 // If we haven't disabled our autoloader
-if ( !defined( 'PAULUS_INTERNAL_AUTOLOAD_DISABLED' ) ) {
+if ( defined( 'PAULUS_INTERNAL_AUTOLOAD_DISABLED' ) !== true ) {
 
-	// Create an autoloader for Paulus
-	spl_autoload_register( function( $class ) {
-		// Convert the namespace to a sub-directory path
-		if ( strpos( $class, '\\' ) !== false) {
-			$class = str_replace( '\\', DIRECTORY_SEPARATOR, $class );
-		}
+	// Register our internal autoloader (Paulus' autoloader)
+	$autoloader->register_internal_autoloader();
+}
 
-		// Define our file path
-		$file_path = PAULUS_LIB_DIR . $class . '.php';
+// If we haven't disabled our autoloader
+if ( defined( 'PAULUS_AUTOLOAD_DISABLED' ) !== true ) {
 
-		if ( is_readable($file_path) ) {
-			require_once( $file_path );
-		}
-	});
+	// Register our external library autoloader (and pass our configuration)
+	$autoloader->register_external_autoloader();
 }
 
 /*
  * Let's load our configuration files
  */
-$config = Config::instance(); // Create our config
+$config = Config::instance();
 
 // Explicitly require our routing library (especially since it can't be autoloaded)
-require_once BASE_DIR . 'external-libs/klein/klein.php';
+require_once( PAULUS_ROUTER_LOCATION );
 
 // Use an empty route (catch-all) to initialize our Router class and App
 respond( function( $request, $response, $service ) use ( $config ) {
@@ -61,36 +63,9 @@ respond( function( $request, $response, $service ) use ( $config ) {
  * Load our external libraries explicitly
  * ( Great for the libraries that can't be auto-loaded)
  */
-if ( isset($config['external-libs']) ) {
-	foreach( $config['external-libs'] as $lib_path ) {
-		require_once( BASE_DIR . 'external-libs/' . $lib_path );
-	}
-}
-
-// If we haven't disabled our autoloader
-if ( !defined( 'PAULUS_AUTOLOAD_DISABLED' ) ) {
-
-	// Create an autoloader and autoload all of our classes/libraries
-	spl_autoload_register( function( $class ) use ( $config ) {
-		// Convert the namespace to a sub-directory path
-		if ( strpos( $class, '\\' ) !== false) {
-			$class = str_replace( '\\', '/', $class );
-		}
-
-		// Loop through each autoload-directory
-		foreach( $config['autoload-directories'] as $autoload_directory ) {
-			// Define our file path
-			$file_path = BASE_DIR . $autoload_directory . $class . '.php';
-
-			if ( is_readable($file_path) ) {
-				require_once( $file_path );
-
-				// We don't want to include multiple versions of the same class,
-				// so let's just stop once we find one that exists
-				break;
-			}
-		}
-	});
+if ( isset( $config['external-libs'] ) ) {
+	// Load our external libraries explicitly
+	$autoloader->explicitly_load_externals();
 }
 
 
@@ -100,7 +75,7 @@ if ( !defined( 'PAULUS_AUTOLOAD_DISABLED' ) ) {
  */
 // Check to see if ActiveRecord exists... the app/developer might not want to use it
 if ( class_exists( 'ActiveRecord\Config', false ) ) { // Set to false to not try and autoload the class
-	ActiveRecord\Config::initialize( function($cfg) use ( $config ) {
+	ActiveRecord\Config::initialize( function( $cfg ) use ( $config ) {
 		// Set the directory of our data models
 		$cfg->set_model_directory( $config['database']['model_directory'] );
 
@@ -113,53 +88,9 @@ if ( class_exists( 'ActiveRecord\Config', false ) ) { // Set to false to not try
 }
 
 
-// Grab all of our routes
-if ( $config['routing']['load_all_automatically'] ) {
-	// Define our routes directory
-	$route_dir = PAULUS_ROUTES_DIR;
+// Load and define all of our routes
+$autoloader->load_routes();
 
-	// Get an array of all of the files in the routes directory
-	$found_routes = scandir( $route_dir );
-
-	// Loop through each found route
-	foreach( $found_routes as $route ) {
-		// Is the route a file?
-		if ( is_file( $route_dir . $route ) && ( strpos( $route, '_' ) !== 0 ) ) {
-			// Define our endpoint base
-			$route_base_url = '/' . basename( $route, '.php' );
-
-			// Instanciate the route's controller... but do it as a responder so it only instanciate's what is needed for that matched response. :)
-			Router::with( $route_base_url, function() use ( $route_base_url ) {
-				Router::route( function( $request, $respond, $service ) use ( $route_base_url ) {
-					// Instanciate the route's controller
-					Router::app()->new_route_controller( $route_base_url );
-				});
-			});
-
-			// Include our routes from namespaced, separate files
-			Router::with( $route_base_url, $route_dir . $route );
-		}
-	}
-}
-else {
-	// Grab all of our manually assigned routes
-	foreach( $config['routing']['routes'] as $route ) {
-		// Define our endpoint base and include path
-		$route_base_url = '/' . $route;
-		$route_path = PAULUS_ROUTES_DIR . $route . '.php';
-
-		// Instanciate the route's controller... but do it as a responder so it only instanciate's what is needed for that matched response. :)
-		Router::with( $route_base_url, function() use ( $route_base_url ) {
-			Router::route( function( $request, $respond, $service ) use ( $route_base_url ) {
-				// Instanciate the route's controller
-				Router::app()->new_route_controller( $route_base_url );
-			});
-		});
-
-		// Include our routes from namespaced, separate files
-		Router::with( $route_base_url, $route_path );
-	}
-}
 
 // 404 - We didn't match a route
 Router::route( '404', function( $request, $response, $service ) {
@@ -173,11 +104,10 @@ Router::route( function( $request, $response, $service, $matches ) {
 	Router::app()->api_respond();
 });
 
-// Finally, call "dispatch" to have Klein route the request appropriately
+// Finally, call "dispatch" to have our App's Router route the request appropriately
 Router::dispatch(
 	substr(
 		$_SERVER['REQUEST_URI'],
 		strlen( rtrim( $config['app-meta']['base_url'], '/' ) ) // Remove a potential trailing slash
 	)
 );
-
