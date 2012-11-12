@@ -9,13 +9,13 @@ class Paulus {
 	/*
 	 * Declare properties
 	 */
-	private $config; // Configuration array
-	private $controller; // Let's keep track of a potential route controller
+	private	$config; // Configuration array
+	public	$controller; // Let's keep track of a potential route controller
 
 	// Routing variable references
-	private $request;
-	private $response;
-	private $service;
+	private	$request;
+	private	$response;
+	private	$service;
 
 	// Constructor
 	public function __construct( $config = null, $request = null, $response = null, $service = null ) {
