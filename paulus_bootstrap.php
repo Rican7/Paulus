@@ -93,8 +93,8 @@ $autoloader->load_routes();
 
 // 404 - We didn't match a route
 Router::route( '404', function( $request, $response, $service ) {
-	// Respond with a 404 error... we didn't match their request
-	Router::app()->abort( 404, NULL, 'Unable to find the endpoint you requested' );
+	// We didn't match the endpoint/route
+	Router::app()->endpoint_not_found();
 });
 
 // To always be RESTful, respond in our designated format ALWAYS

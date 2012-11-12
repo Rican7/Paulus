@@ -322,6 +322,12 @@ class Paulus {
 			$this->api_respond();
 	}
 
+	// Function to handle an endpoint not being found
+	public function endpoint_not_found() {
+		// Respond with a 404 error... we didn't match their request
+		$this->abort( 404, NULL, 'Unable to find the endpoint you requested' );
+	}
+
 	// Function to handle formatting and sending of API error logs
 	public function error_log( $error_message ) {
 		// Log the abort..ion :/
