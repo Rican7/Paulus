@@ -8,13 +8,15 @@ class Router {
 	// Declare properties
 	protected static $request;
 	protected static $response;
+	protected static $service;
 	protected static $app;
 
 	// Initializer
-	public static function __init__( &$request, &$response, &$app ) {
+	public static function __init__( &$request, &$response, &$service, &$app ) {
 		// Let's make our Klein objects available to our class
 		self::$request = $request;
 		self::$response = $response;
+		self::$service = $service;
 		self::$app = $app;
 	}
 

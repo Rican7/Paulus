@@ -7,14 +7,14 @@ class Api {
 	// Declare properties
 	private $request;
 	private $response;
-	private $app;
+	private $service;
 
 	// Constructor
-	public function __construct( &$request, &$response, &$app ) {
+	public function __construct( &$request, &$response, &$service ) {
 		// Let's make our Klein objects available to our class
 		$this->request = $request;
 		$this->response = $response;
-		$this->app = $app;
+		$this->service = $service;
 	}
 
 } // End class Api

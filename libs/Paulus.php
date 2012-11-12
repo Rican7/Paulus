@@ -226,7 +226,7 @@ class Paulus {
 		}
 		else {
 			// Set our HTTP status code and status
-			$this->code( $error_code );
+			$this->response->code( $error_code );
 			$this->response->status = $status;
 
 			// Set our message and more info for verbosity
@@ -278,10 +278,10 @@ class Paulus {
 	// Handle exceptions RESTfully
 	// $this->response->onError( function( $response, $error_message, $error_type, $exception ) {
 	// 	// Let's see if we have a current controller instanciated
-	// 	if ( is_object( $this->app->controller ) && !is_null( $this->app->controller ) ) {
+	// 	if ( is_object( $this->controller ) && !is_null( $this->controller ) ) {
 
 	// 		// Define a callable method as an array
-	// 		$callable = array( $this->app->controller, 'exception_handler' ); // Give the controller class and the name of the method
+	// 		$callable = array( $this->controller, 'exception_handler' ); // Give the controller class and the name of the method
 
 	// 		// Check if the current controller has a callable error handler of its own
 	// 		$check_callable = is_callable( $callable, false ); // Make sure it actually exists

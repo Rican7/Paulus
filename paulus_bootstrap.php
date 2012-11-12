@@ -42,12 +42,15 @@ $config = Config::instance(); // Create our config
 require_once BASE_DIR . 'external-libs/klein/klein.php';
 
 // Use an empty route (catch-all) to initialize our Router class and App
-respond( function( $request, $response, $app ) use ( $config ) {
+respond( function( $request, $response, $service ) use ( $config ) {
 	// Create our App!
-	$api_app = new Paulus( $config, $request, $response );
+	$app = new Paulus( $config, $request, $response );
 
 	// Initialize our router
-	Router::__init__( $request, $response, $api_app );
+	Router::__init__( $request, $response, $service, $app );
+
+	// Register our app as a persistent service, for ease of use/accessibility
+	$service->app = $app;
 });
 
 
@@ -124,9 +127,9 @@ if ( $config['routing']['load_all_automatically'] ) {
 
 			// Instanciate the route's controller... but do it as a responder so it only instanciate's what is needed for that matched response. :)
 			Router::with( $route_base_url, function() use ( $route_base_url ) {
-				Router::route( function( $request, $respond, $app ) use ( $route_base_url ) {
+				Router::route( function( $request, $respond, $service ) use ( $route_base_url ) {
 					// Instanciate the route's controller
-					$app->new_route_controller( $route_base_url );
+					Router::app()->new_route_controller( $route_base_url );
 				});
 			});
 
@@ -144,7 +147,7 @@ else {
 
 		// Instanciate the route's controller... but do it as a responder so it only instanciate's what is needed for that matched response. :)
 		Router::with( $route_base_url, function() use ( $route_base_url ) {
-			Router::route( function( $request, $respond, $app ) use ( $route_base_url ) {
+			Router::route( function( $request, $respond, $service ) use ( $route_base_url ) {
 				// Instanciate the route's controller
 				Router::app()->new_route_controller( $route_base_url );
 			});
@@ -156,13 +159,13 @@ else {
 }
 
 // 404 - We didn't match a route
-Router::route( '404', function( $request, $response, $app ) {
+Router::route( '404', function( $request, $response, $service ) {
 	// Respond with a 404 error... we didn't match their request
 	Router::app()->abort( 404, NULL, 'Unable to find the endpoint you requested' );
 });
 
 // To always be RESTful, respond in our designated format ALWAYS
-Router::route( function( $request, $response, $app, $matches ) {
+Router::route( function( $request, $response, $service, $matches ) {
 	// ALWAYS respond with our formatting function
 	Router::app()->api_respond();
 });
