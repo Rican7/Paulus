@@ -44,7 +44,7 @@ require_once BASE_DIR . 'external-libs/klein/klein.php';
 // Use an empty route (catch-all) to initialize our Router class and App
 respond( function( $request, $response, $service ) use ( $config ) {
 	// Create our App!
-	$app = new Paulus( $config, $request, $response );
+	$app = new Paulus( $config, $request, $response, $service );
 
 	// Initialize our router
 	Router::__init__( $request, $response, $service, $app );
@@ -113,7 +113,7 @@ if ( class_exists( 'ActiveRecord\Config', false ) ) { // Set to false to not try
 // Grab all of our routes
 if ( $config['routing']['load_all_automatically'] ) {
 	// Define our routes directory
-	$route_dir = BASE_DIR . 'routes/';
+	$route_dir = PAULUS_ROUTES_DIR;
 
 	// Get an array of all of the files in the routes directory
 	$found_routes = scandir( $route_dir );
@@ -143,7 +143,7 @@ else {
 	foreach( $config['routing']['routes'] as $route ) {
 		// Define our endpoint base and include path
 		$route_base_url = '/' . $route;
-		$route_path = BASE_DIR . 'routes/' . $route . '.php';
+		$route_path = PAULUS_ROUTES_DIR . $route . '.php';
 
 		// Instanciate the route's controller... but do it as a responder so it only instanciate's what is needed for that matched response. :)
 		Router::with( $route_base_url, function() use ( $route_base_url ) {

@@ -15,15 +15,17 @@ class Paulus {
 	// Routing variable references
 	private $request;
 	private $response;
+	private $service;
 
 	// Constructor
-	public function __construct( $config = null, $request = null, $response = null ) {
+	public function __construct( $config = null, $request = null, $response = null, $service = null ) {
 		// Either grab the passed config or use our Singleton Config
 		$this->config = $config ?: Config::instance();
 
 		// Grab our Router's variables and make quick/easy references to them
 		$this->request = &$request;
 		$this->response = &$response;
+		$this->service = &$service;
 
 		// Initialize some response properties
 		$this->init_response_properties();
@@ -67,7 +69,7 @@ class Paulus {
 			// Does the class exist? (Autoload it if its not loaded/included yet)
 			if ( class_exists( $class, true ) ) {
 				// Instanciate the controller and keep an easy reference to it
-				$this->controller = new $class( $this->request, $this->response, $this );
+				$this->controller = new $class( $this->request, $this->response, $this->service, $this );
 			}
 		}
 

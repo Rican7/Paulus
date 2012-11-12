@@ -19,7 +19,7 @@ Router::route( 'POST', '/user/profile', function( $request, $response, $service 
 
 	// Did we get our required params?
 	if ( is_null( $user_id ) ) {
-		$response->abort( 400, null, 'A requested user id was not sent' );
+		$service->app->abort( 400, null, 'A requested user id was not sent' );
 	}
 
 	// Let's get the "user's profile"
@@ -30,7 +30,7 @@ Router::route( 'POST', '/user/profile', function( $request, $response, $service 
 		$response->data = $sample_profile;
 	}
 	else {
-		$response->abort( 404, null, 'A user with that id was not found.' );
+		$service->app->abort( 404, null, 'A user with that id was not found.' );
 	}
 });
 
