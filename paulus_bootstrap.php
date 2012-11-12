@@ -41,12 +41,14 @@ $config = Config::instance(); // Create our config
 // Explicitly require our routing library (especially since it can't be autoloaded)
 require_once BASE_DIR . 'external-libs/klein/klein.php';
 
-// Use an empty route (catch-all) to initialize our Router class
-respond( function( $request, $response, $app ) {
-	Router::__init__( $request, $response, $app );
-});
+// Use an empty route (catch-all) to initialize our Router class and App
+respond( function( $request, $response, $app ) use ( $config ) {
+	// Create our App!
+	$api_app = new Paulus( $config, $request, $response );
 
-$rest_app = new Paulus( $config ); // Start our Paulus app
+	// Initialize our router
+	Router::__init__( $request, $response, $api_app );
+});
 
 
 /*
@@ -105,58 +107,6 @@ if ( class_exists( 'ActiveRecord\Config', false ) ) { // Set to false to not try
 }
 
 
-/*
- * Let's use Klein's router to lazily load some objects and make them available elsewhere
- * ( PHP Closure's can use the "use" keyword to allow the usage of an out-of-closure scope var )
- */
-respond( function( $request, $response, $app ) use ( $config ) {
-	// Let's give all of our routes easy access to our configuration definitions
-	$app->config = $config;
-
-	// Let's keep track of a potential route controller
-	$app->controller = null;
-
-	// Define a function for instanciating a route controller if one exists
-	$app->new_route_controller = function( $namespace ) use ( $request, $response, $app, $config ) {
-		// Do we want to auto start our controllers?
-		if ( $config['routing']['auto_start_controllers'] ) {
-			// Let's get our class name from the namespace
-			$name_parts = explode( '/', $namespace ); 
-
-			// Let's convert our url endpoint name to a legit classname
-			$name_parts = array_map(
-				function( $string ) {
-					$string = str_replace( '-', '_', $string ); // Turn all hyphens to underscores
-					$string = str_replace( '_', ' ', $string ); // Turn all underscores to spaces (for easy casing)
-					$string = ucwords( $string ); // Uppercase each first letter of each "word"
-					$string = str_replace( ' ', '', $string ); // Remove spaces. BOOM! Zend-compatible camel casing
-
-					return $string;
-				},
-				$name_parts
-			);
-
-			// Create a callable classname
-			$classname = implode( '\\', $name_parts );
-			$class = $config['routing']['controller_base_namespace'] . $classname;
-
-			// Does the class exist? (Autoload it if its not loaded/included yet)
-			if ( class_exists( $class, true ) ) {
-				// Instanciate the controller and keep an easy reference to it
-				$app->controller = new $class( $request, $response, $app );
-			}
-		}
-
-		return null;
-	};
-});
-
-// Include all of our rest functions for use with the API
-require_once( BASE_DIR . 'routes/_rest.php' );
-
-// Include all of our generic routing functions for use with every route
-require_once( BASE_DIR . 'routes/_generic.php' );
-
 // Grab all of our routes
 if ( $config['routing']['load_all_automatically'] ) {
 	// Define our routes directory
@@ -173,15 +123,15 @@ if ( $config['routing']['load_all_automatically'] ) {
 			$route_base_url = '/' . basename( $route, '.php' );
 
 			// Instanciate the route's controller... but do it as a responder so it only instanciate's what is needed for that matched response. :)
-			with( $route_base_url, function() use ( $route_base_url ) {
-				respond( function( $request, $respond, $app ) use ( $route_base_url ) {
+			Router::with( $route_base_url, function() use ( $route_base_url ) {
+				Router::route( function( $request, $respond, $app ) use ( $route_base_url ) {
 					// Instanciate the route's controller
 					$app->new_route_controller( $route_base_url );
 				});
 			});
 
 			// Include our routes from namespaced, separate files
-			with( $route_base_url, $route_dir . $route );
+			Router::with( $route_base_url, $route_dir . $route );
 		}
 	}
 }
@@ -193,32 +143,32 @@ else {
 		$route_path = BASE_DIR . 'routes/' . $route . '.php';
 
 		// Instanciate the route's controller... but do it as a responder so it only instanciate's what is needed for that matched response. :)
-		with( $route_base_url, function() use ( $route_base_url ) {
-			respond( function( $request, $respond, $app ) use ( $route_base_url ) {
+		Router::with( $route_base_url, function() use ( $route_base_url ) {
+			Router::route( function( $request, $respond, $app ) use ( $route_base_url ) {
 				// Instanciate the route's controller
-				$app->new_route_controller( $route_base_url );
+				Router::app()->new_route_controller( $route_base_url );
 			});
 		});
 
 		// Include our routes from namespaced, separate files
-		with( $route_base_url, $route_path );
+		Router::with( $route_base_url, $route_path );
 	}
 }
 
 // 404 - We didn't match a route
-respond( '404', function( $request, $response, $app ) {
+Router::route( '404', function( $request, $response, $app ) {
 	// Respond with a 404 error... we didn't match their request
-	$response->abort( 404, NULL, 'Unable to find the endpoint you requested' );
+	Router::app()->abort( 404, NULL, 'Unable to find the endpoint you requested' );
 });
 
 // To always be RESTful, respond in our designated format ALWAYS
-respond( function( $request, $response, $app, $matches ) {
+Router::route( function( $request, $response, $app, $matches ) {
 	// ALWAYS respond with our formatting function
-	$response->api_respond();
+	Router::app()->api_respond();
 });
 
 // Finally, call "dispatch" to have Klein route the request appropriately
-dispatch(
+Router::dispatch(
 	substr(
 		$_SERVER['REQUEST_URI'],
 		strlen( rtrim( $config['app-meta']['base_url'], '/' ) ) // Remove a potential trailing slash

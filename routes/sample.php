@@ -1,9 +1,10 @@
 <?php
 
-use	Api\Sample;
+use	Api\Sample,
+	\Paulus\Router;
 
 // Base response (Make the trailing splash optional to catch accidents and laziness)
-respond( '/[a:key]', function( $request, $response, $app ) {
+Router::route( '/[a:key]', function( $request, $response, $app ) {
 	// Get our sent parameter
 	$key_to_encrypt = $request->key;
 
@@ -12,7 +13,7 @@ respond( '/[a:key]', function( $request, $response, $app ) {
 });
 
 // Get a sample of user data
-respond( 'POST', '/user/profile', function( $request, $response, $app ) {
+Router::route( 'POST', '/user/profile', function( $request, $response, $app ) {
 	// Get our sent parameter
 	$user_id = $request->param( 'id' );
 
@@ -34,7 +35,7 @@ respond( 'POST', '/user/profile', function( $request, $response, $app ) {
 });
 
 // Get a sample of database data
-respond( '/user/db', function( $request, $response, $app ) {
+Router::route( '/user/db', function( $request, $response, $app ) {
 	// Show some data to test our DB connection
 	$response->data = Sample::get_sample_db_data();
 });

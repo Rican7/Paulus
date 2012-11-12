@@ -2,21 +2,13 @@
 
 namespace Paulus;
 
-// Explicitly require our routing library (especially since it can't be autoloaded)
-require_once BASE_DIR . 'external-libs/klein/klein.php';
-
-// Use an empty route (catch-all) to initialize our Router class
-respond( function( $request, $response, $app ) {
-	Router::__init__( $request, $response, $app );
-});
-
 // Router class that controls our routing library (Klein)
 class Router {
 
 	// Declare properties
-	private static $request;
-	private static $response;
-	private static $app;
+	protected static $request;
+	protected static $response;
+	protected static $app;
 
 	// Initializer
 	public static function __init__( &$request, &$response, &$app ) {
@@ -33,9 +25,73 @@ class Router {
 		return self::$request;
 	}
 	public static function response() {
-		return self::$request;
+		return self::$response;
 	}
 	public static function app() {
-		return self::$request;
+		return self::$app;
 	}
+
+	// Route method
+	// To push to our Klein/Routing library
+	public static function route( $method, $route = null, $callback = null ) {
+		// Mirror klein's ease of use by making multiple params optional
+		// if ( is_callable( $method ) ) {
+		// 	$callback = $method;
+		// 	$method = $route = null;
+		// 	$count_match = false;
+		// }
+		// elseif ( is_callable( $route ) ) {
+		// 	$callback = $route;
+		// 	$route = $method;
+		// 	$method = null;
+		// }
+
+		// Pass off to our Klein/Routing library
+		return respond( $method, $route, $callback );
+	}
+
+	// With Klein method alias
+	public static function with( $namespace, $routes ) {
+		return with( $namespace, $routes );
+	}
+
+	// Dispatch Klein method alias
+	public static function dispatch( $uri = null, $req_method = null, array $params = null, $capture = false ) {
+		return dispatch( $uri, $req_method, $params, $capture );
+	}
+
+	/*
+	 * Route aliases for ease of use
+	 */
+
+	// GET route
+	public static function get( $route = null, $callback = null ) {
+		return self::route( 'GET', $route, $callback );
+	}
+
+	// POST route
+	public static function post( $route = null, $callback = null ) {
+		return self::route( 'POST', $route, $callback );
+	}
+
+	// PUT route
+	public static function put( $route = null, $callback = null ) {
+		return self::route( 'PUT', $route, $callback );
+	}
+
+	// DELETE route
+	public static function delete( $route = null, $callback = null ) {
+		return self::route( 'DELETE', $route, $callback );
+	}
+
+	// HEAD route
+	public static function head( $route = null, $callback = null ) {
+		return self::route( 'HEAD', $route, $callback );
+	}
+
+	// OPTIONS route
+	public static function options( $route = null, $callback = null ) {
+		return self::route( 'OPTIONS', $route, $callback );
+	}
+
 }
