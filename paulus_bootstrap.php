@@ -71,7 +71,6 @@ if ( isset( $config['external-libs'] ) ) {
 
 /*
  * Let's setup ActiveRecord and pass it our configuration
- * ( PHP Closure's can use the "use" keyword to allow the usage of an out-of-closure scope var )
  */
 // Check to see if ActiveRecord exists... the app/developer might not want to use it
 if ( class_exists( 'ActiveRecord\Config', false ) ) { // Set to false to not try and autoload the class

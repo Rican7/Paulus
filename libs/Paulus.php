@@ -29,6 +29,9 @@ class Paulus {
 
 		// Initialize some response properties
 		$this->init_response_properties();
+
+		// Setup our exception handler
+		$this->setup_exception_handler();
 	}
 
 	// Function to initialize the response properties
@@ -40,6 +43,37 @@ class Paulus {
 		$this->response->more_info = null;
 		$this->response->data = null;
 		$this->response->paging = null;
+	}
+
+	// Function to setup our Paulus exception handler
+	private function setup_exception_handler() {
+		// Handle exceptions RESTfully
+		$this->response->onError( function( $response, $error_message, $error_type, $exception ) {
+			// Let's see if we have a current controller instanciated
+			if ( is_object( $this->controller ) && !is_null( $this->controller ) ) {
+
+				// Define a callable method as an array
+				$callable = array( $this->controller, 'exception_handler' ); // Give the controller class and the name of the method
+
+				// Check if the current controller has a callable error handler of its own
+				$check_callable = is_callable( $callable, false ); // Make sure it actually exists
+
+				// If we found a callable handler
+				if ( $check_callable ) {
+					// Call the found handler
+					return call_user_func_array(
+						$callable, // The array of the callable
+						array( $error_message, $error_type, $exception ) // Arguments
+					);
+				}
+			}
+
+			// Log the error
+			$this->error_log( $error_message );
+
+			// Let's handle the exception gracefully
+			$this->abort( 500, 'EXCEPTION_THROWN', $error_message );
+		});
 	}
 
 	// Function for instanciating a route controller if one exists
@@ -277,36 +311,8 @@ class Paulus {
 			$this->api_respond();
 	}
 
-	// Handle exceptions RESTfully
-	// $this->response->onError( function( $response, $error_message, $error_type, $exception ) {
-	// 	// Let's see if we have a current controller instanciated
-	// 	if ( is_object( $this->controller ) && !is_null( $this->controller ) ) {
-
-	// 		// Define a callable method as an array
-	// 		$callable = array( $this->controller, 'exception_handler' ); // Give the controller class and the name of the method
-
-	// 		// Check if the current controller has a callable error handler of its own
-	// 		$check_callable = is_callable( $callable, false ); // Make sure it actually exists
-
-	// 		// If we found a callable handler
-	// 		if ( $check_callable ) {
-	// 			// Call the found handler
-	// 			return call_user_func_array(
-	// 				$callable, // The array of the callable
-	// 				array( $error_message, $error_type, $exception ) // Arguments
-	// 			);
-	// 		}
-	// 	}
-
-	// 	// Log the error
-	// 	$this->error_log( $error_message );
-
-	// 	// Let's handle the exception gracefully
-	// 	$this->abort( 500, 'EXCEPTION_THROWN', $error_message );
-	// })
-
 	// Function to handle formatting and sending of API error logs
-	private function error_log( $error_message ) {
+	public function error_log( $error_message ) {
 		// Log the abort..ion :/
 		return error_log(
 			'API Response Error: Code '
