@@ -97,6 +97,12 @@ Router::route( '404', function( $request, $response, $service ) {
 	Router::app()->endpoint_not_found();
 });
 
+// 405 - We didn't match a route, but one WOULD have matched with a different method
+Router::route( '405', function( $request, $response, $service, $matches, $methods ) {
+	// We didn't match the right method for the endpoint/route
+	Router::app()->wrong_method( $methods );
+});
+
 // To always be RESTful, respond in our designated format ALWAYS
 Router::route( function( $request, $response, $service, $matches ) {
 	// ALWAYS respond with our formatting function
