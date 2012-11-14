@@ -33,38 +33,66 @@ class Router {
 		return self::$app;
 	}
 
+	// Quick method to more intelligently deal with optional parameters in routes
+	private static function smart_parameters( &$method, &$route, &$callback ) {
+		// Mirror Klein's native behavior
+		if ( is_callable( $method ) ) {
+			$callback = $method;
+			$method = $route = null;
+		}
+		elseif ( is_callable($route) ) {
+			$callback = $route;
+			$route = $method;
+			$method = null;
+		}
+	}
+
 	// Route method
 	// To push to our Klein/Routing library
 	public static function route( $method, $route = null, $callback = null ) {
-		// Mirror klein's ease of use by making multiple params optional
-		// if ( is_callable( $method ) ) {
-		// 	$callback = $method;
-		// 	$method = $route = null;
-		// 	$count_match = false;
-		// }
-		// elseif ( is_callable( $route ) ) {
-		// 	$callback = $route;
-		// 	$route = $method;
-		// 	$method = null;
-		// }
-
 		// Pass off to our Klein/Routing library
 		return respond( $method, $route, $callback );
 	}
 
+	// Special Route method
+	// Checks to see if we have a callable in our app/current controller
+	public static function hub( $method, $route = null, $callback = null ) {
+		// Route our new callback
+		return self::route(
+			$method,
+			$route,
+			function( $request, $response, $service, $matched, $methods_matched ) use ( $callback ) {
+				// Get the callable from our app/current controller
+				$responder_callable = self::app()->get_route_responder();
+
+				// Call the callable with our callback as the argument (What is this sorcery?!)
+				$responder_callable(
+					$callback( $request, $response, $service, $matched, $methods_matched )
+				);
+			}
+		);
+	}
+
 	// With Klein method alias
 	public static function with( $namespace, $routes ) {
+		// Pass off to our Klein/Routing library
 		return with( $namespace, $routes );
 	}
 
 	// Dispatch Klein method alias
 	public static function dispatch( $uri = null, $req_method = null, array $params = null, $capture = false ) {
+		// Pass off to our Klein/Routing library
 		return dispatch( $uri, $req_method, $params, $capture );
 	}
 
 	/*
 	 * Route aliases for ease of use
 	 */
+
+	// All-method route
+	public static function any( $route = null, $callback = null ) {
+		return self::route( $route, $callback );
+	}
 
 	// GET route
 	public static function get( $route = null, $callback = null ) {

@@ -87,6 +87,22 @@ class Paulus {
 		});
 	}
 
+	// Function to get our controller's route responder
+	public function get_route_responder() {
+
+		// Check if we have a callable handler in our controller
+		$callable = $this->get_controller_callable( 'route_respond' );
+
+		// Did we actually get a callable?
+		if ( $callable !== false ) {
+			// Call the found handler
+			return $callable;
+		}
+
+		// Default to just returning a closure
+		return function( $arg ) {};
+	}
+
 	// Function for instanciating a route controller if one exists
 	public function new_route_controller( $namespace ) {
 		// Do we want to auto start our controllers?

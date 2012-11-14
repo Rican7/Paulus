@@ -39,3 +39,12 @@ Router::route( '/user/db', function( $request, $response, $service ) {
 	// Show some data to test our DB connection
 	$response->data = Sample::get_sample_db_data();
 });
+
+// Showing off the aliasing
+Router::head( '/test/donkey', array('Api\Sample', 'get_sample_data'));
+
+// Controller special
+Router::hub( 'GET', '/test/donkey', function( $request, $response, $service ) {
+	// Let's return false so we can test/show how our controller's responder works
+	return false;
+});

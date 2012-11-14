@@ -34,4 +34,29 @@ abstract class BaseController {
 		$this->config = &$app->config;
 	}
 
+	// Route responder for filtering routes directed through a controller
+	public function route_respond( $result_data ) {
+		// Logic depends on the contents/state of result_data
+		if ( !is_null( $result_data ) ) {
+
+			// True response
+			if ( $result_data === true ) {
+				// True case WITHOUT any returned data
+			}
+			elseif ( $result_data === false ) {
+				// Let's abort with the response data
+				$this->app->abort( 400, 'INVALID_API_PARAMETERS', 'The posted data did not pass validation' );
+			}
+			else {
+				// Prepare our data for response
+				$this->response->data = $result_data;
+			}
+
+		}
+		else {
+			// The response is null, we should abort
+			$this->app->abort( 404, null, 'Object does not exist.' );
+		}
+	}
+
 } // End class BaseController
