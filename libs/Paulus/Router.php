@@ -40,7 +40,7 @@ class Router {
 			$callback = $method;
 			$method = $route = null;
 		}
-		elseif ( is_callable($route) ) {
+		elseif ( is_callable( $route ) ) {
 			$callback = $route;
 			$route = $method;
 			$method = null;
@@ -57,6 +57,9 @@ class Router {
 	// Special Route method
 	// Checks to see if we have a callable in our app/current controller
 	public static function hub( $method, $route = null, $callback = null ) {
+		// Make sure that our parameters are what they say they are
+		self::smart_parameters( $method, $route, $callback );
+
 		// Route our new callback
 		return self::route(
 			$method,
