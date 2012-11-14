@@ -56,7 +56,8 @@ class Router {
 
 	// Special Route method
 	// Checks to see if we have a callable in our app/current controller
-	public static function hub( $method, $route = null, $callback = null ) {
+	// and (if it does have one) channels the callback through that callable
+	public static function channel( $method, $route = null, $callback = null ) {
 		// Make sure that our parameters are what they say they are
 		self::smart_parameters( $method, $route, $callback );
 

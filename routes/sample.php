@@ -40,17 +40,17 @@ Router::route( '/user/db', function( $request, $response, $service ) {
 	$response->data = Sample::get_sample_db_data();
 });
 
-// Showing off the aliasing
-Router::hub( 'GET', '/test/quick', '\Api\Sample::get_sample_data');
+// Controller special
+Router::channel( 'GET', '/test/quick', array( '\Api\Sample', 'get_sample_data' ) );
 
 // Controller special
-Router::hub( 'GET', '/test/donkey', function( $request, $response, $service ) {
+Router::channel( 'GET', '/test/donkey', function( $request, $response, $service ) {
 	// Let's return false so we can test/show how our controller's responder works
 	return false;
 });
 
 // Controller special
-Router::hub( '/test/donk', function( $request, $response, $service ) {
+Router::channel( '/test/donk', function( $request, $response, $service ) {
 	// Let's return false so we can test/show how our controller's responder works
 	return 'donk';
 });
