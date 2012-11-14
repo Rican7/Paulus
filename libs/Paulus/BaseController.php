@@ -2,6 +2,9 @@
 
 namespace Paulus;
 
+use	\Paulus\Exceptions\InvalidApiParameters,
+	\Paulus\Exceptions\ObjectNotFound;
+
 // BaseController abstract class for Paulus
 // To be extended by controllers in the controllers directory
 abstract class BaseController {
@@ -44,8 +47,8 @@ abstract class BaseController {
 				// True case WITHOUT any returned data
 			}
 			elseif ( $result_data === false ) {
-				// Let's abort with the response data
-				$this->app->abort( 400, 'INVALID_API_PARAMETERS', 'The posted data did not pass validation' );
+				// Throw an exception
+				throw new InvalidApiParameters( 'The posted data did not pass validation' );
 			}
 			else {
 				// Prepare our data for response
@@ -54,8 +57,54 @@ abstract class BaseController {
 
 		}
 		else {
-			// The response is null, we should abort
+			// The response is null, throw an exception
+			throw new ObjectNotFound( 'Object does not exist.' );
+		}
+	}
+
+	// Function to handle exceptions from the API
+	public function exception_handler( $error_message, $error_type, $exception ) {
+		// Log the error
+		$this->app->error_log( $error_type . ' - ' .$error_message );
+
+		// Let's do different things, based on the type of the error
+
+		// Paulus - InvalidApiParameters
+		if ( strstr( $error_type, 'Paulus\Exceptions' ) !== false ) {
+			// Define a slug variable for passing to our API response
+			$error_slug = null;
+
+			// Let's try and get the slug
+			try {
+				// This should work, if the exception implements our interface correctly
+				$error_slug = $exception->getSlug();
+			}
+			catch ( Exception $e ) {
+				// Pass the new exception right back to this handler
+				$this->exception_handler( $e->getMessage(), get_class( $e ), $e );
+			}
+
+			// Let's handle the exception gracefully
+			$this->app->abort(
+				$exception->getCode(),
+				$error_slug,
+				$exception->getMessage()
+			);
+		}
+		// ActiveRecord - RecordNotFound
+		elseif ( $error_type === 'ActiveRecord\RecordNotFound' ) {
+			// Let the api_respond method handle it
 			$this->app->abort( 404, null, 'Object does not exist.' );
+		}
+		// ActiveRecord - DatabaseException
+		elseif ( $error_type === 'ActiveRecord\DatabaseException' ) {
+			// Let's handle the exception gracefully
+			$this->app->abort( 502, null, 'There was an error connecting to or retrieving from the Database' );
+		}
+		// Any other exceptions
+		else {
+			// Let's handle the exception gracefully
+			$this->app->abort( 500, 'EXCEPTION_THROWN', $error_message );
 		}
 	}
 
