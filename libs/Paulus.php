@@ -236,7 +236,9 @@ class Paulus {
 		$this->response->header( 'Content-Type', $this->config['rest']['mime-types'][$this->response->type] );
 
 		// Set our allowed methods response header
-		$this->response->header( 'Allow', implode( ', ', ( $this->response->possible_methods ?: $this->config['rest']['defaults']['allowed-methods'] ) ) );
+		if ( !is_null( $this->response->possible_methods ) ) {
+			$this->response->header( 'Allow', implode( ', ', $this->response->possible_methods ) );
+		}
 
 		// Send our access control headers
 		$this->response->header( 'Access-Control-Allow-Headers', $this->config['rest']['http-access-control']['allow-headers']);
