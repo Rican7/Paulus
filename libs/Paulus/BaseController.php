@@ -2,7 +2,8 @@
 
 namespace Paulus;
 
-use	\Paulus\Exceptions\InvalidApiParameters,
+use	\Paulus\ApiException,
+	\Paulus\Exceptions\InvalidApiParameters,
 	\Paulus\Exceptions\ObjectNotFound;
 
 // BaseController abstract class for Paulus
@@ -70,26 +71,9 @@ abstract class BaseController {
 		// Let's do different things, based on the type of the error
 
 		// Paulus - Handle all of our "ApiException"s
-		if ( strstr( $error_type, 'Paulus\Exceptions' ) !== false ) {
-			// Define a slug variable for passing to our API response
-			$error_slug = null;
-
-			// Let's try and get the slug
-			try {
-				// This should work, if the exception implements our interface correctly
-				$error_slug = $exception->getSlug();
-			}
-			catch ( Exception $e ) {
-				// Pass the new exception right back to this handler
-				$this->exception_handler( $e->getMessage(), get_class( $e ), $e );
-			}
-
-			// Let's handle the exception gracefully
-			$this->app->abort(
-				$exception->getCode(),
-				$error_slug,
-				$exception->getMessage()
-			);
+		if ( $exception instanceOf ApiException ) {
+			// Handle our ApiException interface exceptions from Paulus
+			$this->app->api_exception_handler( $exception );
 		}
 		// ActiveRecord - RecordNotFound
 		elseif ( $error_type === 'ActiveRecord\RecordNotFound' ) {
