@@ -50,7 +50,31 @@ Router::channel( 'GET', '/test/donkey', function( $request, $response, $service 
 });
 
 // Controller special
+Router::channel( 'GET', '/test/nothing', function( $request, $response, $service ) {
+	// Let's return null so we can test/show how our controller's responder works
+	return null;
+});
+
+// Controller special
 Router::channel( '/test/donk', function( $request, $response, $service ) {
-	// Let's return false so we can test/show how our controller's responder works
+	// Let's return some random data so we can test/show how our controller's responder works
 	return 'donk';
+});
+
+// Controller special
+Router::channel( '/test/copyright', function( $request, $response, $service ) {
+	// Let's return some template data so we can test/show how our template parser works
+	return array(
+		'Copyright' => '{COPYRIGHT}',
+		'creator_website' => '{TREVOR_URL}',
+	);
+});
+
+// Controller special
+Router::channel( '/test/copyright/manual', function( $request, $response, $service ) {
+	// Let's return some template data so we can test/show how our template parser works
+	return array(
+		'Copyright' => $service->app->parse( '{COPYRIGHT}' ),
+		'creator_website' => $service->app->parse( '{TREVOR_URL}' ),
+	);
 });
