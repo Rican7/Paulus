@@ -64,7 +64,7 @@ class Paulus {
 
 	// Function to setup our Paulus exception handler
 	private function setup_exception_handler() {
-		// Handle exceptions RESTfully
+		// Register an error handler through our Router's catcher
 		$this->response->onError( function( $response, $error_message, $error_type, $exception ) {
 
 			// Check if we have a callable handler in our controller
@@ -82,7 +82,7 @@ class Paulus {
 			// Log the error
 			$this->error_log( $error_message );
 
-			// Let's handle the exception gracefully
+			// Let's handle the exception gracefully (RESTfully)
 			$this->abort( 500, 'EXCEPTION_THROWN', $error_message );
 		});
 	}
@@ -334,6 +334,17 @@ class Paulus {
 			// Respond restfully
 			$this->api_respond();
 		}
+	}
+
+	// Function to handle our ApiException interface exceptions
+	public function api_exception_handler( $exception ) {
+
+		// Let's handle the exception gracefully
+		$this->abort(
+			$exception->getCode(),
+			$exception->getSlug(), // ApiException interface method
+			$exception->getMessage()
+		);
 	}
 
 	// Function to handle an endpoint not being found
