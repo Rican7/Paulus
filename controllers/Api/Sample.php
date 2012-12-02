@@ -4,6 +4,7 @@ namespace Api;
 
 // Tell PHP to look for class names in the following namespace
 use	Api,
+	\User,
 	stdClass;
 
 // Members class

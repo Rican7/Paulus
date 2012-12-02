@@ -7,10 +7,6 @@ $load_config = function() {
 			'status' => 'NULL',
 			'data-type' => 'json',
 			'jsonp-padding' => 'callback',
-			'allowed-methods' => array(
-				'GET',
-				'POST',
-			),
 		),
 		'status-codes' => array(
 			200 => 'OK',

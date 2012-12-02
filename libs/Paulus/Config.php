@@ -1,8 +1,12 @@
 <?php
 
+namespace Paulus;
+
+use \ArrayAccess;
+
 // Config class
 // Class for loading and defining access to configuration files
-class Config implements ArrayAccess {
+class Config extends Singleton implements ArrayAccess {
 
 	// Declare properties
 	protected $config = array();
@@ -17,7 +21,7 @@ class Config implements ArrayAccess {
 	);
 
 	// Constructor
-	public function __construct() {
+	protected function __construct() {
 		// Let's load our configuration files
 		$this->load_config();
 	}
@@ -28,7 +32,7 @@ class Config implements ArrayAccess {
 		// Loop through each config file
 		foreach( $this->config_files as $file ) {
 			// Include the file
-			require_once( BASE_DIR . 'configs/' . $file . '.php');
+			require_once( PAULUS_CONFIG_DIR . $file . '.php');
 
 			// Set the file's returned configuration in a namespaced key
 			$this->config[ $file ] = $load_config();
