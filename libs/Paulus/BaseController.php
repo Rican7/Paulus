@@ -69,7 +69,7 @@ abstract class BaseController {
 
 		// Let's do different things, based on the type of the error
 
-		// Paulus - InvalidApiParameters
+		// Paulus - Handle all of our "ApiException"s
 		if ( strstr( $error_type, 'Paulus\Exceptions' ) !== false ) {
 			// Define a slug variable for passing to our API response
 			$error_slug = null;
