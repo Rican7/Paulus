@@ -138,7 +138,7 @@ class Paulus {
 	}
 
 	// Function to process a string as a template variable
-	private function parse( $unprocessed_string ) {
+	public function parse( $unprocessed_string ) {
 		// Copy the string so we can refer to both the processed and original
 		$processed_string = $unprocessed_string;
 
@@ -162,7 +162,7 @@ class Paulus {
 	}
 
 	// Function to process an entire array as a template 
-	private function process_template( $unprocessed_data ) {
+	public function process_template( $unprocessed_data ) {
 		// Quickly create a function to convert the object to an array
 		// Source: http://goo.gl/uTLGf
 		function objectToArray($d) {
@@ -187,7 +187,7 @@ class Paulus {
 		}
 
 		// Copy array for the processed data
-		$processed_data = objectToArray( $unprocessed_data );
+		$processed_data = (array) objectToArray( $unprocessed_data );
 
 		// Let's walk through each item, recursively
 		array_walk_recursive(
@@ -249,9 +249,9 @@ class Paulus {
 			'status_code' => (int) $this->response->code(),
 			'status' => (string) $this->get_status(),
 			'message' => (string) $this->response->message ?: (string) null,
-			'more_info' => $this->response->more_info ?: null,
+			'more_info' => $this->response->more_info ?: (object) null,
 		);
-		$response_data->data = $this->response->data ?: null;
+		$response_data->data = $this->response->data ?: (object) null;
 
 		// Only add paging data if it exists
 		if ( isset($this->response->paging) ) {
@@ -260,8 +260,18 @@ class Paulus {
 
 		// If global template processing is turned on
 		if ( $this->config['template']['global_template_processing'] ) {
+			// If we only want to process our returned "data"
+			if ( $this->config['template']['only_process_returned_data'] ) {
+				// Set our data to be processed as the "data" property of our response data
+				$raw_data = &$response_data->data;
+			}
+			else {
+				// Otherwise, set our raw data as our entire response data object
+				$raw_data = &$response_data;
+			}
+
 			// Process our data for templating
-			$response_data = $this->process_template( $response_data );
+			$raw_data = $this->process_template( $raw_data );
 		}
 
 		// Let's encode our response based on our set type
