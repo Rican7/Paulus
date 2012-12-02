@@ -79,10 +79,10 @@ class Paulus {
 			// All other exceptions
 			else {
 				// Log the error
-				$this->error_log( $error_message );
+				$this->error_log( $exception->getMessage() );
 
 				// Let's handle the exception gracefully (RESTfully)
-				$this->abort( 500, 'EXCEPTION_THROWN', $error_message );
+				$this->abort( 500, 'EXCEPTION_THROWN', $exception->getMessage() );
 			}
 		});
 
