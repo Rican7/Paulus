@@ -1,7 +1,11 @@
 <?php
 
 use	\Paulus\Config,
-	\Paulus\Router;
+	\Paulus\Router,
+	\Paulus\ApiException,
+	\Paulus\ApiVerboseException,
+	\Paulus\Exceptions\EndpointNotFound,
+	\Paulus\Exceptions\WrongMethod;
 
 // Main Paulus class
 class Paulus {
@@ -338,19 +342,27 @@ class Paulus {
 
 	// Function to handle our ApiException interface exceptions
 	public function api_exception_handler( $exception ) {
+		// If we have a verbose exception
+		if ( $exception instanceOf ApiVerboseException ) {
+			$more_info = $exception->getMoreInfo();
+		}
+		else {
+			$more_info = null;
+		}
 
 		// Let's handle the exception gracefully
 		$this->abort(
 			$exception->getCode(),
 			$exception->getSlug(), // ApiException interface method
-			$exception->getMessage()
+			$exception->getMessage(),
+			$more_info
 		);
 	}
 
 	// Function to handle an endpoint not being found
 	public function endpoint_not_found() {
-		// Respond with a 404 error... we didn't match their request
-		$this->abort( 404, null, 'Unable to find the endpoint you requested' );
+		// We didn't match their request, throw an exception
+		throw new EndpointNotFound( 'Unable to find the endpoint you requested' );
 	}
 
 	// Function to easily handle a response for when the wrong method is used to call on a route endpoint
@@ -376,8 +388,10 @@ class Paulus {
 			'possible_methods' => $this->response->possible_methods
 		);
 
-		// Abort with a 405 error, we didn't match their requested method
-		$this->abort( 405, null, 'The wrong method was called on this endpoint.', $more_info );
+		// We didn't match their request, create and throw an exception
+		$wrong_method_exception = new WrongMethod( 'The wrong method was called on this endpoint' );
+		$wrong_method_exception->set_more_info( $more_info );
+		throw $wrong_method_exception;
 	}
 
 	// Function to handle formatting and sending of API error logs
