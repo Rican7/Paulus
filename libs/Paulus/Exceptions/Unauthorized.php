@@ -11,6 +11,7 @@ class Unauthorized extends InvalidArgumentException implements ApiException {
 	// Define unique properties
 	protected $code = 401;
 	protected $slug = 'UNAUTHORIZED';
+	protected $message = 'You are not authorized to access or modify this';
 
 	// Return the slug
 	public function getSlug() {

@@ -11,6 +11,7 @@ class Forbidden extends OutOfBoundsException implements ApiException {
 	// Define unique properties
 	protected $code = 403;
 	protected $slug = 'FORBIDDEN';
+	protected $message = 'You are forbidden to access or modify this';
 
 	// Return the slug
 	public function getSlug() {

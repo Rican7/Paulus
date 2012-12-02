@@ -11,6 +11,7 @@ class InvalidApiParameters extends InvalidArgumentException implements ApiExcept
 	// Define unique properties
 	protected $code = 400;
 	protected $slug = 'INVALID_API_PARAMETERS';
+	protected $message = 'The posted data did not pass validation';
 
 	// Return the slug
 	public function getSlug() {

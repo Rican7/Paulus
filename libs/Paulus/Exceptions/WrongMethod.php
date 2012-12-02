@@ -12,6 +12,7 @@ class WrongMethod extends OutOfBoundsException implements ApiVerboseException {
 	// Define unique properties
 	protected $code = 405;
 	protected $slug = 'METHOD_NOT_ALLOWED';
+	protected $message = 'The wrong method was called on this endpoint';
 	protected $more_info = array();
 
 	// Return the slug
