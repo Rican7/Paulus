@@ -49,7 +49,7 @@ abstract class BaseController {
 			}
 			elseif ( $result_data === false ) {
 				// Throw an exception
-				throw new InvalidApiParameters( 'The posted data did not pass validation' );
+				throw new InvalidApiParameters();
 			}
 			else {
 				// Prepare our data for response
@@ -59,7 +59,7 @@ abstract class BaseController {
 		}
 		else {
 			// The response is null, throw an exception
-			throw new ObjectNotFound( 'Object does not exist.' );
+			throw new ObjectNotFound();
 		}
 	}
 

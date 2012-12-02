@@ -380,7 +380,7 @@ class Paulus {
 	// Function to handle an endpoint not being found
 	public function endpoint_not_found() {
 		// We didn't match their request, throw an exception
-		throw new EndpointNotFound( 'Unable to find the endpoint you requested' );
+		throw new EndpointNotFound();
 	}
 
 	// Function to easily handle a response for when the wrong method is used to call on a route endpoint
@@ -407,7 +407,7 @@ class Paulus {
 		);
 
 		// We didn't match their request, create and throw an exception
-		$wrong_method_exception = new WrongMethod( 'The wrong method was called on this endpoint' );
+		$wrong_method_exception = new WrongMethod();
 		$wrong_method_exception->set_more_info( $more_info );
 		throw $wrong_method_exception;
 	}
