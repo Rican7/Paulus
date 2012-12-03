@@ -72,3 +72,11 @@ _Define our application's REST response-style configuration_
  - **'allow-headers'** - Set the allowable headers as a comma-delimitted string
  - **'allow-methods'** - Set the allowable methods as a comma-delimitted string
  - **'allow-origin'** - Set the allowable origin (client access location)
+
+### Routing
+_Define our Router's (Klein by default) configuration_
+- **'load_all_automatically'** - Boolean deciding whether all routes in the **PAULUS_ROUTES_DIR** should be automatically loaded
+- **'routes'** - Set an array of all the routes that should be loaded manually (if **'load_all_automatically'** isn't **true**)
+- **'auto_start_controllers'** - Boolean deciding whether controllers matching the route's namespace should automatically be loaded and instanciated
+- **'pass_app_to_service'** - Boolean deciding whether the 'app' property (referring to the Paulus instance) should be passed to each route through the 'service' argument
+- **'controller_base_namespace'** - Set a string defining the base namespace used when loading and instanciating controllers for each route
