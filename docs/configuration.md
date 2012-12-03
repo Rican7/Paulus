@@ -80,3 +80,9 @@ _Define our Router's (Klein by default) configuration_
 - **'auto_start_controllers'** - Boolean deciding whether controllers matching the route's namespace should automatically be loaded and instanciated
 - **'pass_app_to_service'** - Boolean deciding whether the 'app' property (referring to the Paulus instance) should be passed to each route through the 'service' argument
 - **'controller_base_namespace'** - Set a string defining the base namespace used when loading and instanciating controllers for each route
+
+### Template
+_Define our built-in, quick templating engine's configuration_
+- **'global_template_processing'** - Boolean deciding whether the template processor should run on every response
+- **'only_process_returned_data'** - Boolean deciding whether the template processor should only process the data that is returned in the 'data' property of the response
+- **'keys'** - Set an array of all the template keys and their replaced values for our template processor
