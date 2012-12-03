@@ -1,7 +1,7 @@
 <?php
 
 /*****************************************/
-//          PHP Api Boilerplate          //
+//                Paulus                 //
 //                                       //
 //        Created by Trevor Suarez       //
 //     Inspired by and Helped by Many    //
