@@ -25,6 +25,10 @@ _The header name is used for both requests and responses_
 #### You can also enable/disable some optional behaviors here by commenting/un-commenting them here:
 _They need no value, as they're simply checked if they are defined or not_
 - PAULUS_INTERNAL_AUTOLOAD_DISABLED
+ - Disables Paulus' autoloader responsible for autoloading all of its internal libraries (not recommended)
 - PAULUS_AUTOLOAD_DISABLED
+ - Disables the external autoloader responsible for autoloading all of the high-level defined external libraries (not recommended)
 - PAULUS_ALLOW_BENCHMARK_HEADER
+ - Allows the client to send a header that enables the response to output a similar header containing the speed of script execution (time)
 - PAULUS_BENCHMARK_ALWAYS
+ - Enables Paulus to always (regardless of sent headers) respond with a header containing benchmark/speed-of-execution information.
