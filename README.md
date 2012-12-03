@@ -15,7 +15,7 @@ Its meant to work as a sort of ["boilerplate"](http://en.wikipedia.org/wiki/Boil
 
 ## Attributions
 
-- [Plymouth WebApp](https://github.com/plymouthstate/plymouth-webapp) - Much of the structure/organization inspired by or taken and modified from the MIS team at Plymouth State University,
+- [Plymouth WebApp](https://github.com/plymouthstate/plymouth-webapp) - Much of the structure/organization was **originally** (it has since deviated pretty significantly) inspired by or taken and modified from the MIS team at Plymouth State University,
 with most of the credit going to past member's of the team: [Matthew Batchelder](https://github.com/borkweb) and [Adam Backstrom](https://github.com/abackstrom)
 	- Copyright (C) 2012 [Plymouth State University](https://github.com/plymouthstate)
 - [Klein.php](https://github.com/chriso/klein.php) - URL routing provided by Klein
