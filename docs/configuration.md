@@ -32,3 +32,25 @@ _They need no value, as they're simply checked if they are defined or not_
  - Allows the client to send a header that enables the response to output a similar header containing the speed of script execution (time)
 - PAULUS_BENCHMARK_ALWAYS
  - Enables Paulus to always (regardless of sent headers) respond with a header containing benchmark/speed-of-execution information.
+
+## High Level
+
+Paulus allows for easy configuration via name-spaced files that define and return arrays of configuration information. These items are designed to make it easy to alter Paulus' behavior and response/output
+
+### App Meta
+_Define some of our application's meta-information_
+- **'base_url'** - Set the base url of the application
+- **'app_protocol'** - Set the application's protocol (scheme). It will auto-detect by default.
+- **'app_url'** - Set the application's full url. It will compile itself from the other options by default.
+- **'title'** - Set the application's title
+
+### Autoload Directories
+_Define the directories that Paulus will search in when using the external-autoloader_
+Paulus follows the [PSR-0](http://phpmaster.com/autoloading-and-the-psr-0-standard/) style for autoloading, so classes will be autoloaded according to their [Namespace](http://php.net/manual/en/language.namespaces.php) and class name.
+
+### Database
+_Define the configuration that is passed to PHP ActiveRecord (by default... but you can use whatever ORM/DB-class you want)_
+- **'connections'** - Set an array of connection slugs/aliases. Key = Slug name. Value = Connection parameters.
+ - For more details on syntax and driver support, see [PHP AR: Configuration Setup](http://www.phpactiverecord.org/projects/main/wiki/Configuration__Setup)
+- **'default_connection'** - Set the default connection to use for PHP AR (value should match a slug from the 'connections' array).
+- **'model_directory'** - Set the directory that you will store your ActiveRecord Models in, so PHP AR can auto-load them correctly.
