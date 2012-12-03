@@ -54,3 +54,21 @@ _Define the configuration that is passed to PHP ActiveRecord (by default... but 
  - For more details on syntax and driver support, see [PHP AR: Configuration Setup](http://www.phpactiverecord.org/projects/main/wiki/Configuration__Setup)
 - **'default_connection'** - Set the default connection to use for PHP AR (value should match a slug from the 'connections' array).
 - **'model_directory'** - Set the directory that you will store your ActiveRecord Models in, so PHP AR can auto-load them correctly.
+
+### External Libs
+_Define the external libraries to be explicitly loaded_
+Not all libraries that you may use will be autoload-able (lol). This configuration allows for some external libraries to be defined so that they can be explicitly loaded on app startup.
+**Note**: Feel free to disable PHP ActiveRecord if you'd rather use another ORM/DB-class
+
+### REST
+_Define our application's REST response-style configuration_
+- **'defaults'** - Set an array of response defaults
+ - **'status'** - Set a default status message (for when one isn't set in the application logic, or when one doesn't match to our pre-defined status-codes)
+ - **'data-type'** - Set the default format/type that the application will respond in
+ - **'jsonp-padding'** - Set the name of the JSONP callback function "padding"
+- **'status-codes'** - Set an array of status messages (value) matched to their corresponding HTTP Status Codes (key)
+- **'mime-types'** - Set an array of MIME types (value) matched to their corresponding data-type (key)
+- **'http-access-control'** - Set an array of [CORS](http://en.wikipedia.org/wiki/Cross-origin_resource_sharing) related access control headers
+ - **'allow-headers'** - Set the allowable headers as a comma-delimitted string
+ - **'allow-methods'** - Set the allowable methods as a comma-delimitted string
+ - **'allow-origin'** - Set the allowable origin (client access location)
