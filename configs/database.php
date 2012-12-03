@@ -9,5 +9,6 @@ $load_config = function() {
 			'test' => 'mysql://username:password@localhost/test',
 		),
 		'default_connection' => 'development',
+		'model_directory' => 'models',
 	);
 };
