@@ -10,6 +10,6 @@ $load_config = function() {
 
 	return array_merge( $temp_array, array(
 		'app_url' => $temp_array['app_protocol'] . $_SERVER['HTTP_HOST'] . $temp_array['base_url'],
-		'title' => 'PHP API BoilerPlate',
+		'title' => 'Paulus',
 	));
 };
