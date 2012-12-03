@@ -1,8 +1,17 @@
-# PHP API BoilerPlate
+# Paulus
 
 ## What is it?
 
-A PHP boilerplate for creating RESTful API servers, also enabling the ability for a PHP localhost script to call upon the API easily through a RESTful client interface.
+A PHP micro-framework (well, more like a "mini" framework) for creating RESTful API services quickly and efficiently.
+Its meant to work as a sort of ["boilerplate"](http://en.wikipedia.org/wiki/Boilerplate_code) for REST-like API services in PHP.
+
+## Getting Started
+
+- PHP 5.4.x is required
+- Download the current [stable release](//github.com/Rican7/Paulus/archive/master.zip)
+- Setup [URL rewriting](https://gist.github.com/4191715) for the [routing engine (Klein)](https://github.com/chriso/klein.php)
+- Configure the framework to your needs <!-- TODO -->
+- Create a route (and optionally, a controller) and start hitting your newly created API!
 
 ## Attributions
 
