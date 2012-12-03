@@ -1,7 +1,5 @@
 # Paulus
 
-## What is it?
-
 A PHP micro-framework (well, more like a "mini" framework) for creating RESTful API services quickly and efficiently.
 Its meant to work as a sort of ["boilerplate"](http://en.wikipedia.org/wiki/Boilerplate_code) for REST-like API services in PHP.
 
