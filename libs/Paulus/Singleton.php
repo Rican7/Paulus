@@ -5,9 +5,6 @@ namespace Paulus;
 // PHP 5.3+ Singleton Pattern
 abstract class Singleton {
 
-	// Class properties
-	protected static $instance; // Keep track of the instance
-
 	// Constructor
 	private function __construct() {
 		// Do nothing
@@ -20,14 +17,17 @@ abstract class Singleton {
 
 	// Get the instance of the class
 	final public static function instance() {
+		// Create an instance var to keep track of the instance
+		static $instance = null;
+
 		// If the instance doesn't exist yet
-		if ( is_null( static::$instance ) ) {
+		if ( is_null( $instance ) ) {
 			// Create it and keep a reference to it
-			static::$instance = new static();
+			$instance = new static();
 		}
 
 		// Always return the instance
-		return static::$instance;
+		return $instance;
 	}
 
 	// Alias the instance method
