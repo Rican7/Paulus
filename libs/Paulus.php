@@ -74,7 +74,7 @@ class Paulus {
 			// Paulus - Handle all of our "ApiException"s
 			if ( $exception instanceOf ApiException ) {
 				// Handle our ApiException interface exceptions from Paulus
-				$this->app->api_exception_handler( $exception );
+				$this->api_exception_handler( $exception );
 			}
 			// All other exceptions
 			else {
@@ -100,12 +100,11 @@ class Paulus {
 					array( $error_message, $error_type, $exception ) // Arguments
 				);
 			}
-
-			// Log the error
-			$this->error_log( $error_message );
-
-			// Let's handle the exception gracefully (RESTfully)
-			$this->abort( 500, 'EXCEPTION_THROWN', $error_message );
+			// We didn't get a callable
+			else {
+				// Re-throw the exception to catch it in our Paulus-defined exception handler
+				throw $exception;
+			}
 		});
 	}
 
