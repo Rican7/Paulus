@@ -16,12 +16,12 @@ abstract class BaseController {
 	protected	$config;
 
 	// Klein objects
-	private	$request;
-	private	$response;
-	private	$service;
+	protected	$request;
+	protected	$response;
+	protected	$service;
 
 	// Reference to our parent application
-	private	$app;
+	protected	$app;
 
 
 	// Constructor
