@@ -77,6 +77,7 @@ _Define our application's REST response-style configuration_
 _Define our Router's (Klein by default) configuration_
 - **'load_all_automatically'** - Boolean deciding whether all routes in the **PAULUS_ROUTES_DIR** should be automatically loaded
 - **'routes'** - Set an array of all the routes that should be loaded manually (if **'load_all_automatically'** isn't **true**)
+- **'top_level_route'** - Set a specific route to handle top-level requests (non-namespaced)
 - **'auto_start_controllers'** - Boolean deciding whether controllers matching the route's namespace should automatically be loaded and instanciated
 - **'pass_app_to_service'** - Boolean deciding whether the 'app' property (referring to the Paulus instance) should be passed to each route through the 'service' argument
 - **'controller_base_namespace'** - Set a string defining the base namespace used when loading and instanciating controllers for each route
