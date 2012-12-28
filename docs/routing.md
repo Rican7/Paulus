@@ -23,3 +23,45 @@ Router::route( '/?', function( $request, $response, $service ) {
 	$response->data = 'You queried/searched for: ' . $search_query;
 });
 ```
+
+For added legibility and overall convenience, their are many ways to achieve a similar result through the routing engine. For example, all of the following do the same thing/respond to this type of request: "*GET* /"
+
+```php
+<?php
+
+Router::route( function( $request, $response, $service ) {
+	// Exit with a message, raw-style
+	exit( 'yup, this works' );
+});
+
+Router::route( '/?', function( $request, $response, $service ) {
+	// Exit with a message, raw-style
+	exit( 'this also works' );
+});
+
+Router::route( 'GET', '/?', function( $request, $response, $service ) {
+	// Exit with a message, raw-style
+	exit( 'this also works' );
+});
+
+Router::get( function( $request, $response, $service ) {
+	// Exit with a message, raw-style
+	exit( 'this also works' );
+});
+
+Router::get( '/?', function( $request, $response, $service ) {
+	// Exit with a message, raw-style
+	exit( 'this also works' );
+});
+
+Router::any( function( $request, $response, $service ) {
+	// Exit with a message, raw-style
+	exit( 'this also works' );
+});
+
+Router::any( '/?', function( $request, $response, $service ) {
+	// Exit with a message, raw-style
+	exit( 'this also works' );
+});
+
+```
