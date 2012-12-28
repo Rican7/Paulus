@@ -63,5 +63,36 @@ Router::any( '/?', function( $request, $response, $service ) {
 	// Exit with a message, raw-style
 	exit( 'this also works' );
 });
-
 ```
+
+See more **Klein** capabilities at its [official documentation](//github.com/chriso/klein.php/blob/master/README.md)
+
+## Namespacing
+_Or different routing files and why you'll want to use them._
+
+A full-featured REST API can become quite large pretty easily. Also, a properly RESTful API should seperate its different accessible objects as their own pseudo-subdirectory.
+In order to allow the easy seperation of different endpoints or parts of your API, the routing engine can handle splitting up your different routing files into "namespaces".
+
+### Top Level Routing
+
+Most of the time, a REST API will have its different accesible endpoints under different namespaces. However, there may be some cases where you'll want to have route responders for the top-level ( "/" ). In that case, there is a special [configuration option](configuration.md#routing) for defining a specific route file to respond to the top-level requests. If unchanged, the default behavior is to default to "index" (routes/index.php).
+
+If you'd prefer, or you just have a smaller/lighter app, you can actually define all of your routes in this one file. Just keep in mind that if you also have namespaced route files that those responses could clash with the top-level responses.
+
+_Example_ - index.php
+
+```php
+<?php
+
+Router::route( '/?', function( $request, $response, $service ) {
+	// Do something
+});
+
+Router::route( '/users/?', function( $request, $response, $service ) {
+	// Could possibly clash with a "users.php" route file
+});
+```
+
+### Namespaced Route Files
+
+
