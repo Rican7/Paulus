@@ -138,12 +138,20 @@ class AutoLoader {
 				if ( is_file( $route_dir . $route ) && ( strpos( $route, '_' ) !== 0 ) ) {
 					// Define our endpoint base
 					$route_base_url = '/' . basename( $route, '.php' );
+					$route_namespace_url = $route_base_url;
+					$route_name = ltrim( $route_namespace_url, '/' );
+
+					// Is this our top-level route?
+					if ( $route_name == $routing_config['top_level_route'] ) {
+						// Set our base url to the top level
+						$route_base_url = null;
+					}
 
 					// Instanciate the route's controller... but do it as a responder so it only instanciate's what is needed for that matched response. :)
-					Router::with( $route_base_url, function() use ( $route_base_url ) {
-						Router::route( function( $request, $respond, $service ) use ( $route_base_url ) {
+					Router::with( $route_base_url, function() use ( $route_namespace_url ) {
+						Router::route( function( $request, $respond, $service ) use ( $route_namespace_url ) {
 							// Instanciate the route's controller
-							Router::app()->new_route_controller( $route_base_url );
+							Router::app()->new_route_controller( $route_namespace_url );
 						});
 					});
 
@@ -158,13 +166,20 @@ class AutoLoader {
 			foreach( $routing_config['routes'] as $route ) {
 				// Define our endpoint base and include path
 				$route_base_url = '/' . $route;
+				$route_namespace_url = $route_base_url;
 				$route_path = PAULUS_ROUTES_DIR . $route . '.php';
 
+				// Is this our top-level route?
+				if ( $route == $routing_config['top_level_route'] ) {
+					// Set our base url to the top level
+					$route_base_url = null;
+				}
+
 				// Instanciate the route's controller... but do it as a responder so it only instanciate's what is needed for that matched response. :)
-				Router::with( $route_base_url, function() use ( $route_base_url ) {
-					Router::route( function( $request, $respond, $service ) use ( $route_base_url ) {
+				Router::with( $route_base_url, function() use ( $route_namespace_url ) {
+					Router::route( function( $request, $respond, $service ) use ( $route_namespace_url ) {
 						// Instanciate the route's controller
-						Router::app()->new_route_controller( $route_base_url );
+						Router::app()->new_route_controller( $route_namespace_url );
 					});
 				});
 
