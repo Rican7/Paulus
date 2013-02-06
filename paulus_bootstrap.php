@@ -12,6 +12,7 @@
 // Which classes to use
 use	\Paulus\AutoLoader,
 	\Paulus\Config,
+	\Paulus\Paulus,
 	\Paulus\Router;
 
 
