@@ -1,6 +1,6 @@
 <?php
 
-use	Api\Sample,
+use	\Controllers\Api\Sample,
 	\Paulus\Router;
 
 // Base response (Make the trailing splash optional to catch accidents and laziness)

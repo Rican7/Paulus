@@ -1,10 +1,10 @@
 <?php
 
-namespace Api;
+namespace Controllers\Api;
 
 // Tell PHP to look for class names in the following namespace
-use	Api,
-	\User,
+use	\Controllers\Api,
+	\Models\User,
 	stdClass;
 
 // Members class

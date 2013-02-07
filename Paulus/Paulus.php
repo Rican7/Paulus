@@ -1,11 +1,14 @@
 <?php
 
+namespace Paulus;
+
 use	\Paulus\Config,
 	\Paulus\Router,
 	\Paulus\ApiException,
 	\Paulus\ApiVerboseException,
 	\Paulus\Exceptions\EndpointNotFound,
-	\Paulus\Exceptions\WrongMethod;
+	\Paulus\Exceptions\WrongMethod,
+	\stdClass;
 
 // Main Paulus class
 class Paulus {

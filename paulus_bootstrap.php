@@ -12,6 +12,7 @@
 // Which classes to use
 use	\Paulus\AutoLoader,
 	\Paulus\Config,
+	\Paulus\Paulus,
 	\Paulus\Router;
 
 
@@ -29,7 +30,14 @@ if ( defined( 'PAULUS_INTERNAL_AUTOLOAD_DISABLED' ) !== true ) {
 }
 
 // If we haven't disabled our autoloader
-if ( defined( 'PAULUS_AUTOLOAD_DISABLED' ) !== true ) {
+if ( defined( 'PAULUS_APPLICATION_AUTOLOAD_DISABLED' ) !== true ) {
+
+	// Register our application library autoloader
+	$autoloader->register_application_autoloader();
+}
+
+// If we haven't disabled our autoloader
+if ( defined( 'PAULUS_EXTERNAL_AUTOLOAD_DISABLED' ) !== true ) {
 
 	// Register our external library autoloader (and pass our configuration)
 	$autoloader->register_external_autoloader();

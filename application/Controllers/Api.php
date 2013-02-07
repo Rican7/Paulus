@@ -1,5 +1,7 @@
 <?php
 
+namespace Controllers;
+
 use	\Paulus\BaseController;
 
 // Api class
