@@ -2,7 +2,7 @@
 
 namespace Paulus\Exceptions;
 
-use	\Paulus\ApiException,
+use	\Paulus\Exceptions\Interfaces\ApiException,
 	\OutOfBoundsException;
 
 // ObjectNotFound Exception 

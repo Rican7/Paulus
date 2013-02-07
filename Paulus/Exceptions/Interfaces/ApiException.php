@@ -1,6 +1,6 @@
 <?php
 
-namespace Paulus;
+namespace Paulus\Exceptions\Interfaces;
 
 // ApiException Exception Interface
 interface ApiException {

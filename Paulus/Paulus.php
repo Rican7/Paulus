@@ -4,8 +4,8 @@ namespace Paulus;
 
 use	\Paulus\Config,
 	\Paulus\Router,
-	\Paulus\ApiException,
-	\Paulus\ApiVerboseException,
+	\Paulus\Exceptions\Interfaces\ApiException,
+	\Paulus\Exceptions\Interfaces\ApiVerboseException,
 	\Paulus\Exceptions\EndpointNotFound,
 	\Paulus\Exceptions\WrongMethod,
 	\stdClass;

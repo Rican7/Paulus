@@ -2,8 +2,8 @@
 
 namespace Paulus\Exceptions;
 
-use	\Paulus\ApiException,
-	\Paulus\ApiVerboseException,
+use	\Paulus\Exceptions\Interfaces\ApiException,
+	\Paulus\Exceptions\Interfaces\ApiVerboseException,
 	\OutOfBoundsException;
 
 // WrongMethod Exception 
