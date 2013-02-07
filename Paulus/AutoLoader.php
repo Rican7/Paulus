@@ -43,6 +43,18 @@ class AutoLoader {
 		return $classname;
 	}
 
+	// Function to get the parts of a namespace of a given classname
+	public function get_namespace_parts( $classname, $first_only = false ) {
+		// Trim any left-slashes from our string
+		$classname = ltrim( $classname, '\\' );
+
+		if ( $first_only === true ) {
+			return substr( $classname, 0, strpos( $classname, '\\' ) );
+		}
+
+		return explode( '\\', $classname );
+	}
+
 	// Function to register an autoloader from this class
 	private function register_autoloader( $method_name ) {
 		// Register a new autoloader with the Standard PHP Library
