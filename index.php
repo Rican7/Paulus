@@ -31,12 +31,12 @@ function dir_rel_path( $dir_name ) {
 
 // Set some Paulus directories here
 define( 'PAULUS_CONFIG_DIR', dir_rel_path( 'configs' ) );
-define( 'PAULUS_LIB_DIR', dir_rel_path( 'libs' ) );
+define( 'PAULUS_LIB_DIR', dir_rel_path( 'Paulus' ) );
 define( 'PAULUS_EXTERNAL_LIB_DIR', dir_rel_path( 'external-libs' ) );
 define( 'PAULUS_ROUTES_DIR', dir_rel_path( 'routes' ) );
 
 // Set some important include/require locations explicitly here
-define( 'PAULUS_AUTOLOADER_LOCATION', PAULUS_LIB_DIR . 'Paulus/AutoLoader.php' );
+define( 'PAULUS_AUTOLOADER_LOCATION', PAULUS_LIB_DIR . 'AutoLoader.php' );
 define( 'PAULUS_ROUTER_LOCATION', PAULUS_EXTERNAL_LIB_DIR . 'klein/klein.php' );
 
 // Define our benchmark header (for both request and response here)

@@ -60,7 +60,7 @@ class AutoLoader {
 		$classname = $this->classname_to_path( $classname );
 
 		// Define our file path
-		$file_path = PAULUS_LIB_DIR . $classname . '.php';
+		$file_path = $classname . '.php';
 
 		// If the file is readable
 		if ( is_readable($file_path) ) {
