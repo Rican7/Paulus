@@ -4,7 +4,7 @@ namespace Controllers\Api;
 
 // Tell PHP to look for class names in the following namespace
 use	\Controllers\Api,
-	\User,
+	\Models\User,
 	stdClass;
 
 // Members class
