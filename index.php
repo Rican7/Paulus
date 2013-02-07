@@ -32,8 +32,10 @@ function dir_rel_path( $dir_name ) {
 // Set some Paulus directories here
 define( 'PAULUS_CONFIG_DIR', dir_rel_path( 'configs' ) );
 define( 'PAULUS_LIB_DIR', dir_rel_path( 'Paulus' ) );
+define( 'PAULUS_APP_DIR',  dir_rel_path( 'application' ) );
 define( 'PAULUS_EXTERNAL_LIB_DIR', dir_rel_path( 'external-libs' ) );
-define( 'PAULUS_ROUTES_DIR', dir_rel_path( 'routes' ) );
+define( 'PAULUS_MODELS_DIR', PAULUS_APP_DIR . 'Models' . DIRECTORY_SEPARATOR );
+define( 'PAULUS_ROUTES_DIR', PAULUS_APP_DIR . 'routes' . DIRECTORY_SEPARATOR );
 
 // Set some important include/require locations explicitly here
 define( 'PAULUS_AUTOLOADER_LOCATION', PAULUS_LIB_DIR . 'AutoLoader.php' );
@@ -44,7 +46,8 @@ define( 'PAULUS_BENCHMARK_HEADER_NAME', 'X-Script-Benchmark' );
 
 // Optional settings here (uncomment them to enable)
 // define( 'PAULUS_INTERNAL_AUTOLOAD_DISABLED', null );
-// define( 'PAULUS_AUTOLOAD_DISABLED', null );
+// define( 'PAULUS_APPLICATION_AUTOLOAD_DISABLED', null );
+// define( 'PAULUS_EXTERNAL_AUTOLOAD_DISABLED', null );
 // define( 'PAULUS_ALLOW_BENCHMARK_HEADER', null );
 // define( 'PAULUS_BENCHMARK_ALWAYS', null );
 

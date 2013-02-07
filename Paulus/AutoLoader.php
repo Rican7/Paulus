@@ -81,6 +81,21 @@ class AutoLoader {
 		}
 	}
 
+	// The application autoloader for all app-level classes/libraries
+	protected function application_autoloader( $classname ) {
+		// Convert the namespace to a sub-directory path
+		$classname = $this->classname_to_path( $classname );
+
+		// Define our file path
+		$file_path = PAULUS_APP_DIR . $classname . '.php';
+
+		// If the file is readable
+		if ( is_readable($file_path) ) {
+			// Require... just once. ;)
+			require_once( $file_path );
+		}
+	}
+
 	// External autoloader for all external libs
 	protected function external_autoloader( $classname ) {
 		// Convert the namespace to a sub-directory path
@@ -105,6 +120,12 @@ class AutoLoader {
 	public function register_internal_autoloader() {
 		// Register the autoloader with this class and method named...
 		return $this->register_autoloader( 'internal_autoloader' );
+	}
+
+	// Register our application autoloader
+	public function register_application_autoloader() {
+		// Register the autoloader with this class and method named...
+		return $this->register_autoloader( 'application_autoloader' );
 	}
 
 	// Register our external libs autoloader

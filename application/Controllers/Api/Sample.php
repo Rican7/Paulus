@@ -1,9 +1,9 @@
 <?php
 
-namespace Api;
+namespace Controllers\Api;
 
 // Tell PHP to look for class names in the following namespace
-use	Api,
+use	\Controllers\Api,
 	\User,
 	stdClass;
 
