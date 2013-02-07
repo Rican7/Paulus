@@ -11,6 +11,6 @@ $load_config = function() {
 		'top_level_route' => 'index',
 		'auto_start_controllers' => true,
 		'pass_app_to_service' => true,
-		'controller_base_namespace' => 'Api',
+		'controller_base_namespace' => '\Controllers\Api',
 	);
 };
