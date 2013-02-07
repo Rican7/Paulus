@@ -1,8 +1,6 @@
 <?php
 
-namespace Paulus;
-
-use	\Paulus\ApiException;
+namespace Paulus\Exceptions\Interfaces;
 
 // ApiVerboseException Exception Interface
 interface ApiVerboseException extends ApiException {

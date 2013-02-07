@@ -33,7 +33,7 @@ function dir_rel_path( $dir_name ) {
 define( 'PAULUS_CONFIG_DIR', dir_rel_path( 'configs' ) );
 define( 'PAULUS_LIB_DIR', dir_rel_path( 'Paulus' ) );
 define( 'PAULUS_APP_DIR',  dir_rel_path( 'application' ) );
-define( 'PAULUS_EXTERNAL_LIB_DIR', dir_rel_path( 'external-libs' ) );
+define( 'PAULUS_EXTERNAL_LIB_DIR', dir_rel_path( 'vendor' ) );
 define( 'PAULUS_MODELS_DIR', PAULUS_APP_DIR . 'Models' . DIRECTORY_SEPARATOR );
 define( 'PAULUS_ROUTES_DIR', PAULUS_APP_DIR . 'routes' . DIRECTORY_SEPARATOR );
 

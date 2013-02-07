@@ -2,7 +2,7 @@
 
 namespace Paulus;
 
-use	\Paulus\ApiException,
+use	\Paulus\Exceptions\Interfaces\ApiException,
 	\Paulus\Exceptions\InvalidApiParameters,
 	\Paulus\Exceptions\ObjectNotFound;
 
