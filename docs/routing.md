@@ -77,6 +77,26 @@ _Or different routing files and why you'll want to use them._
 A full-featured REST API can become quite large pretty easily. Also, a properly RESTful API should seperate its different accessible objects as their own pseudo-subdirectory.
 In order to allow the easy seperation of different endpoints or parts of your API, the routing engine can handle splitting up your different routing files into "namespaces".
 
+### Namespaced Route Files
+
+Although you could define all of your routes in one "top level" route file, that could get quite messy and large. The solution, is to separate your routes into different files. How this works, is you simply name the file in your routes folder with a filename that corresponds with the endpoint.
+
+_Example_ - http://api.example.com/users - users.php
+
+```php
+<?php
+
+// Will match/respond to /users because its defined in the "users.php" route file
+Router::route( '/?', function( $request, $response, $service ) {
+	// Do something
+});
+
+// Will match/respond to /users/12345 (and other integers) because its defined in the "users.php" route file
+Router::route( '/[i:id]', function( $request, $response, $service ) {
+	// Do something else
+});
+```
+
 ### Top Level Routing
 
 Most of the time, a REST API will have its different accesible endpoints under different namespaces. However, there may be some cases where you'll want to have route responders for the top-level ( "/" ). In that case, there is a special [configuration option](configuration.md#routing) for defining a specific route file to respond to the top-level requests. If unchanged, the default behavior is to default to "index" (routes/index.php).
@@ -96,7 +116,3 @@ Router::route( '/users/?', function( $request, $response, $service ) {
 	// Could possibly clash with a "users.php" route file
 });
 ```
-
-### Namespaced Route Files
-
-
