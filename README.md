@@ -13,6 +13,7 @@ Its meant to work as a sort of ["boilerplate"](http://en.wikipedia.org/wiki/Boil
 
 ## Attributions
 
+- [One Mighty Roar](https://github.com/onemightyroar) - For giving me the "20% time" to create this, the influence in its development direction, and the trust for using this internally.
 - [Plymouth WebApp](https://github.com/plymouthstate/plymouth-webapp) - Much of the structure/organization was **originally** (it has since deviated pretty significantly) inspired by or taken and modified from the MIS team at Plymouth State University,
 with most of the credit going to past member's of the team: [Matthew Batchelder](https://github.com/borkweb) and [Adam Backstrom](https://github.com/abackstrom)
 	- Copyright (C) 2012 [Plymouth State University](https://github.com/plymouthstate)
