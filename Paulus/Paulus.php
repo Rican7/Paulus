@@ -19,7 +19,13 @@ use	\Paulus\Config,
 	\Paulus\Exceptions\WrongMethod,
 	\stdClass;
 
-// Main Paulus class
+/**
+ * Paulus 
+ *
+ * Main Paulus system class
+ * 
+ * @package		Paulus
+ */
 class Paulus {
 
 	/*
@@ -33,7 +39,18 @@ class Paulus {
 	private	$response;
 	private	$service;
 
-	// Constructor
+	/**
+	 * __construct
+	 *
+	 * Paulus constructor
+	 * 
+	 * @param mixed $config		Configuration array (or ArrayAccess class) defining Paulus' many options
+	 * @param mixed $request	The router's request object
+	 * @param mixed $response	The router's response object
+	 * @param mixed $service 	The router's service object
+	 * @access public
+	 * @return Paulus
+	 */
 	public function __construct( $config = null, $request = null, $response = null, $service = null ) {
 		// Either grab the passed config or use our Singleton Config
 		$this->config = $config ?: Config::instance();
@@ -50,7 +67,14 @@ class Paulus {
 		$this->setup_exception_handler();
 	}
 
-	// Function to initialize the response properties
+	/**
+	 * init_response_properties
+	 *
+	 * Initialize our API's response properties in the "response" object
+	 * 
+	 * @access private
+	 * @return void
+	 */
 	private function init_response_properties() {
 		// Initialze some properties
 		$this->response->status = null;
@@ -61,7 +85,15 @@ class Paulus {
 		$this->response->paging = null;
 	}
 
-	// Function to check if our current controller has a callable method and return it if it does
+	/**
+	 * get_controller_callable
+	 *
+	 * Check if our current controller has a callable method and return it if it does
+	 * 
+	 * @param string $method_name	The name of the potential callable method in the controller
+	 * @access private
+	 * @return callable | false
+	 */
 	private function get_controller_callable( $method_name ) {
 		// Let's see if we have a current controller instanciated
 		if ( is_object( $this->controller ) && !is_null( $this->controller ) ) {
@@ -78,7 +110,14 @@ class Paulus {
 		return false;
 	}
 
-	// Function to setup our Paulus exception handler
+	/**
+	 * setup_exception_handler
+	 *
+	 * Setup our Paulus exception handler
+	 * 
+	 * @access private
+	 * @return void
+	 */
 	private function setup_exception_handler() {
 		// Setup our classes default exception handler, in case anything escapes our other catches
 		set_exception_handler( function( $exception ) {
@@ -120,7 +159,16 @@ class Paulus {
 		});
 	}
 
-	// Function to get our controller's route responder
+	/**
+	 * get_route_responder
+	 *
+	 * Get our controller's route responder
+	 *
+	 * This sees if our current controller has a callable method "route_respond", and returns it if possible
+	 * 
+	 * @access public
+	 * @return callable
+	 */
 	public function get_route_responder() {
 
 		// Check if we have a callable handler in our controller
@@ -136,7 +184,15 @@ class Paulus {
 		return function( $arg ) {};
 	}
 
-	// Function for instanciating a route controller if one exists
+	/**
+	 * new_route_controller
+	 *
+	 * Instanciate a route controller if one exists
+	 * 
+	 * @param string $namespace		The namespace of the current route
+	 * @access public
+	 * @return null
+	 */
 	public function new_route_controller( $namespace ) {
 		// Do we want to auto start our controllers?
 		if ( $this->config['routing']['auto_start_controllers'] ) {
@@ -170,7 +226,15 @@ class Paulus {
 		return null;
 	}
 
-	// Function to process a string as a template variable
+	/**
+	 * parse
+	 *
+	 * Process a string as a template variable
+	 * 
+	 * @param string $unprocessed_string	The string to process and return
+	 * @access public
+	 * @return string
+	 */
 	public function parse( $unprocessed_string ) {
 		// Copy the string so we can refer to both the processed and original
 		$processed_string = $unprocessed_string;
@@ -194,7 +258,15 @@ class Paulus {
 		return $processed_string;
 	}
 
-	// Function to process an entire array as a template 
+	/**
+	 * process_template
+	 *
+	 * Process an entire array/object as a template
+	 * 
+	 * @param mixed $unprocessed_data	The array/object to run through our template processor
+	 * @access public
+	 * @return array
+	 */
 	public function process_template( $unprocessed_data ) {
 		// Quickly create a function to convert the object to an array
 		// Source: http://goo.gl/uTLGf
@@ -238,7 +310,14 @@ class Paulus {
 		return $processed_data;
 	}
 
-	// Function to get the status message given a status code
+	/**
+	 * get_status
+	 *
+	 * Get the status message of our response, or generate one
+	 * 
+	 * @access public
+	 * @return string
+	 */
 	public function get_status() {
 		// If a status is already set
 		if ( isset($this->response->status) && !is_null($this->response->status) ) {
@@ -257,8 +336,15 @@ class Paulus {
 		}
 	}
 
-	// Function to handle all REST Api responses
-	public function api_respond() { 
+	/**
+	 * api_respond
+	 *
+	 * Handle all REST Api responses by combining our data from our response object into a consistent format
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function api_respond() {
 		// Is a data response type not defined or not available?
 		if ( !isset($this->response->type) || !array_key_exists($this->response->type, $this->config['rest']['mime-types']) ) {
 			// Use a short-style ternary (PHP 5.3) to either grab the default or use this hard-coded default
@@ -345,7 +431,18 @@ class Paulus {
 		exit;
 	}
 
-	// Function to handle an abort in the API ( an error response )
+	/**
+	 * abort
+	 *
+	 * Handle an abort in the API ( an error response )
+	 * 
+	 * @param int $error_code	The numeric code of the API error
+	 * @param string $status 	The status message/slug of the API error
+	 * @param string $message	The human readable error message
+	 * @param mixed $more_info	The extraneous info to be returned with the error
+	 * @access public
+	 * @return void
+	 */
 	public function abort( $error_code, $status = null, $message = null, $more_info = null ) {
 		// If no error code was provided
 		if ( empty($error_code) || is_nan($error_code) ) {
@@ -369,7 +466,15 @@ class Paulus {
 		}
 	}
 
-	// Function to handle our ApiException interface exceptions
+	/**
+	 * api_exception_handler
+	 *
+	 * Handle our ApiException interface exceptions for easy API error handling via exception throws
+	 * 
+	 * @param Exception $exception	The exception object instance
+	 * @access public
+	 * @return void
+	 */
 	public function api_exception_handler( $exception ) {
 		// If we have a verbose exception
 		if ( $exception instanceOf ApiVerboseException ) {
@@ -388,13 +493,28 @@ class Paulus {
 		);
 	}
 
-	// Function to handle an endpoint not being found
+	/**
+	 * endpoint_not_found
+	 *
+	 * Throws an EndpointNotFound error
+	 * 
+	 * @access public
+	 * @return void
+	 */
 	public function endpoint_not_found() {
 		// We didn't match their request, throw an exception
 		throw new EndpointNotFound();
 	}
 
-	// Function to easily handle a response for when the wrong method is used to call on a route endpoint
+	/**
+	 * wrong_method
+	 *
+	 * Easily handle a response for when the wrong HTTP method is used to call on a route endpoint
+	 * 
+	 * @param mixed $possible_methods	The string or array containing the possible allowable methods for that route/endpoint
+	 * @access public
+	 * @return void
+	 */
 	public function wrong_method( $possible_methods = array() ) {
 		// Any defined possible methods?
 		if ( is_array($possible_methods) && count($possible_methods) > 0 ) {
@@ -423,7 +543,15 @@ class Paulus {
 		throw $wrong_method_exception;
 	}
 
-	// Function to handle formatting and sending of API error logs
+	/**
+	 * error_log
+	 *
+	 * Handle formatting and sending of API error logs
+	 * 
+	 * @param string $error_message 
+	 * @access public
+	 * @return boolean
+	 */
 	public function error_log( $error_message ) {
 		// Log the abort..ion :/
 		return error_log(
