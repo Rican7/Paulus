@@ -79,7 +79,7 @@ In order to allow the easy seperation of different endpoints or parts of your AP
 
 ### Namespaced Route Files
 
-Although you could define all of your routes in one "top level" route file, that could get quite messy and large. The solution, is to separate your routes into different files. How this works, is you simply name the file in your routes folder with a filename that corresponds with the endpoint.
+Although you could define all of your routes in one "top level" route file, that could get quite messy and large. The solution is to separate your routes into different files. This works by simply naming a file in your routes folder with a filename that corresponds with the endpoint.
 
 _Example_ - http://api.example.com/users - users.php
 
