@@ -114,5 +114,6 @@ Router::route( '/?', function( $request, $response, $service ) {
 
 Router::route( '/users/?', function( $request, $response, $service ) {
 	// Could possibly clash with a "users.php" route file
+	// WILL DEFINITELY clash with the example "users.php" route file defined above
 });
 ```
