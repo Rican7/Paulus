@@ -11,20 +11,52 @@
 
 namespace Paulus;
 
-// PHP 5.3+ Singleton Pattern
+/**
+ * Singleton 
+ *
+ * PHP 5.3+ Singleton Pattern
+ * 
+ * @abstract
+ * @package		Paulus
+ */
 abstract class Singleton {
 
-	// Constructor
+	/**
+	 * __construct
+	 *
+	 * Singleton constructor
+	 * 
+	 * @access private
+	 * @return void
+	 */
 	private function __construct() {
 		// Do nothing
 	}
 
-	// Don't allow cloning
+	/**
+	 * __clone
+	 *
+	 * Don't allow cloning
+	 * 
+	 * @final
+	 * @access private
+	 * @return void
+	 */
 	final private function __clone() {
 		// Do nothing
+		//TODO: Possibly throw an exception here..
 	}
 
-	// Get the instance of the class
+	/**
+	 * instance
+	 *
+	 * Get the instance of the class, or create one if one doesn't exist yet
+	 * 
+	 * @static
+	 * @final
+	 * @access public
+	 * @return Singleton
+	 */
 	final public static function instance() {
 		// Create an instance var to keep track of the instance
 		static $instance = null;
@@ -38,6 +70,8 @@ abstract class Singleton {
 		// Always return the instance
 		return $instance;
 	}
+
+	// TODO: Convert these to "inherit" the docs
 
 	// Alias the instance method
 	final public static function getInstance() {
