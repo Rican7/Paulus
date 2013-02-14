@@ -99,7 +99,7 @@ class AutoLoader {
 	 * @param string $classname 	The classname to convert
 	 * @param boolean $first_only	Only grab the first part of the namespace
 	 * @access public
-	 * @return string | array
+	 * @return string|array
 	 */
 	public function get_namespace_parts( $classname, $first_only = false ) {
 		// Trim any left-slashes from our string

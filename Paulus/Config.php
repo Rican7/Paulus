@@ -80,8 +80,6 @@ class Config extends Singleton implements ArrayAccess {
 	 * ArrayAccess Methods (MUST implement)
 	 */
 
-	// TODO: Convert these to "inherit" the docs
-
 	/**
 	 * offsetExists
 	 *
@@ -102,7 +100,7 @@ class Config extends Singleton implements ArrayAccess {
 	 * 
 	 * @param mixed $key 
 	 * @access public
-	 * @return mixed | null
+	 * @return mixed|null
 	 */
 	public function offsetGet( $key ) {
 		// Make sure its set first

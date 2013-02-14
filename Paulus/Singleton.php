@@ -71,14 +71,31 @@ abstract class Singleton {
 		return $instance;
 	}
 
-	// TODO: Convert these to "inherit" the docs
 
-	// Alias the instance method
+	/**
+	 * getInstance
+	 *
+	 * Alias the instance method
+	 * 
+	 * @static
+	 * @final
+	 * @access public
+	 * @return Singleton
+	 */
 	final public static function getInstance() {
 		return static::instance();
 	}
 
-	// Alias the instance method
+	/**
+	 * get_instance
+	 *
+	 * Alias the instance method
+	 * 
+	 * @static
+	 * @final
+	 * @access public
+	 * @return Singleton
+	 */
 	final public static function get_instance() {
 		return static::instance();
 	}

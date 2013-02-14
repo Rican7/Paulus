@@ -92,7 +92,7 @@ class Paulus {
 	 * 
 	 * @param string $method_name	The name of the potential callable method in the controller
 	 * @access private
-	 * @return callable | false
+	 * @return callable|false
 	 */
 	private function get_controller_callable( $method_name ) {
 		// Let's see if we have a current controller instanciated

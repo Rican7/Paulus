@@ -191,7 +191,7 @@ class Router {
 	 * @param boolean $capture		Whether or not the output should be captured by the buffer
 	 * @static
 	 * @access public
-	 * @return boolean | void
+	 * @return boolean|void
 	 */
 	public static function dispatch( $uri = null, $req_method = null, array $params = null, $capture = false ) {
 		// Pass off to our Klein/Routing library
@@ -202,39 +202,121 @@ class Router {
 	 * Route aliases for ease of use
 	 */
 
-	// TODO: Convert these to "inherit" the docs
-
-	// All-method route
+	/**
+	 * any
+	 *
+	 * All-method route
+	 *
+	 * @see route()				Documetation of self::route();
+	 * 
+	 * @param mixed $route		The matched "route" found by the routing engine
+	 * @param mixed $callback	The callback function definition
+	 * @static
+	 * @access public
+	 * @return callable
+	 */
 	public static function any( $route = null, $callback = null ) {
 		return self::route( $route, $callback );
 	}
 
-	// GET route
+	/**
+	 * get
+	 *
+	 * GET route
+	 *
+	 * @see route()				Documetation of self::route();
+	 * 
+	 * @param mixed $route		The matched "route" found by the routing engine
+	 * @param mixed $callback	The callback function definition
+	 * @static
+	 * @access public
+	 * @return callable
+	 */
 	public static function get( $route = null, $callback = null ) {
 		return self::route( 'GET', $route, $callback );
 	}
 
-	// POST route
+	/**
+	 * post
+	 *
+	 * POST route
+	 *
+	 * @see route()				Documetation of self::route();
+	 * 
+	 * @param mixed $route		The matched "route" found by the routing engine
+	 * @param mixed $callback	The callback function definition
+	 * @static
+	 * @access public
+	 * @return callable
+	 */
 	public static function post( $route = null, $callback = null ) {
 		return self::route( 'POST', $route, $callback );
 	}
 
-	// PUT route
+	/**
+	 * put
+	 *
+	 * PUT route
+	 *
+	 * @see route()				Documetation of self::route();
+	 * 
+	 * @param mixed $route		The matched "route" found by the routing engine
+	 * @param mixed $callback	The callback function definition
+	 * @static
+	 * @access public
+	 * @return callable
+	 */
 	public static function put( $route = null, $callback = null ) {
 		return self::route( 'PUT', $route, $callback );
 	}
 
-	// DELETE route
+	/**
+	 * delete
+	 *
+	 * DELETE route
+	 *
+	 * @see route()				Documetation of self::route();
+	 * 
+	 * @param mixed $route		The matched "route" found by the routing engine
+	 * @param mixed $callback	The callback function definition
+	 * @static
+	 * @access public
+	 * @return callable
+	 */
 	public static function delete( $route = null, $callback = null ) {
 		return self::route( 'DELETE', $route, $callback );
 	}
 
-	// HEAD route
+	/**
+	 * head
+	 *
+	 * HEAD route
+	 *
+	 * @see route()				Documetation of self::route();
+	 * 
+	 * @param mixed $route		The matched "route" found by the routing engine
+	 * @param mixed $callback	The callback function definition
+	 * @static
+	 * @access public
+	 * @return callable
+	 */
 	public static function head( $route = null, $callback = null ) {
 		return self::route( 'HEAD', $route, $callback );
 	}
 
-	// OPTIONS route
+	/**
+	 * options
+	 *
+	 * OPTIONS route
+	 *
+	 * @see route()				Documetation of self::route();
+	 * 
+	 * @param mixed $route		The matched "route" found by the routing engine
+	 * @param mixed $callback	The callback function definition
+	 * @static
+	 * @access public
+	 * @return callable
+	 */
 	public static function options( $route = null, $callback = null ) {
 		return self::route( 'OPTIONS', $route, $callback );
 	}
