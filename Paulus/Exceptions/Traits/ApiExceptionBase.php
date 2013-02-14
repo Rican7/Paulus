@@ -2,17 +2,38 @@
 
 namespace Paulus\Exceptions\Traits;
 
-// ApiExceptionBase Exception Trait
+/**
+ * ApiExceptionBase 
+ *
+ * ApiExceptionBase Exception Trait
+ * 
+ * @package		Paulus\Exceptions\Traits
+ */
 trait ApiExceptionBase {
 
-	// Return the slug
+	/**
+	 * getSlug
+	 *
+	 * Returns the exception's "slug" property/attribute
+	 * 
+	 * @access public
+	 * @return string|null
+	 */
 	public function getSlug() {
 		return $this->slug;
-	}
+	} // End function getSlug
 
-	// Alias of getSlug
+	/**
+	 * get_slug
+	 *
+	 * Alias of getSlug
+	 * 
+	 * @see getSlug()		Documentation for self::getSlug()
+	 * @access public
+	 * @return string|null
+	 */
 	public function get_slug() {
 		return $this->getSlug();
-	}
+	} // End function get_slug
 
 } // End trait ApiExceptionBase

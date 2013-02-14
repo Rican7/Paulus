@@ -2,29 +2,68 @@
 
 namespace Paulus\Exceptions\Traits;
 
-// ApiVerboseExceptionBase Exception Trait
+/**
+ * ApiVerboseExceptionBase
+ *
+ * ApiVerboseExceptionBase Exception Trait
+ * 
+ * @package		Paulus\Exceptions\Traits
+ * @see			ApiExceptionBase
+ */
 trait ApiVerboseExceptionBase {
 	// Use trait
 	use ApiExceptionBase;
 
-	// Return the more_info
+	/**
+	 * getMoreInfo
+	 *
+	 * Returns the exception's "more_info" property/attribute
+	 * 
+	 * @access public
+	 * @return array
+	 */
 	public function getMoreInfo() {
 		return $this->more_info;
-	}
+	} // End function getMoreInfo
 
-	// Set the more_info
+	/**
+	 * setMoreInfo
+	 * 
+	 * Sets the exception's "more_info" property/attribute
+	 *
+	 * @param array $more_info 
+	 * @access public
+	 * @return array
+	 */
 	public function setMoreInfo( array $more_info ) {
 		return $this->more_info = $more_info;
-	}
+	} // End function setMoreInfo
 
-	// Alias of getMoreInfo
+	/**
+	 * get_more_info
+	 *
+	 * Alias of getMoreInfo
+	 * 
+	 * @see getMoreInfo()	Documentation for self::getMoreInfo()
+	 * @access public
+	 * @return array
+	 */
 	public function get_more_info() {
 		return $this->getMoreInfo();
-	}
+	} // End function get_more_info
 
-	// Alias of setMoreInfo
+	/**
+	 * set_more_info
+	 *
+	 * Alias of setMoreInfo
+	 * 
+	 * @see setMoreInfo()	Documentation for self::setMoreInfo()
+	 * @param array $more_info 
+	 * @access public
+	 * @return array
+	 */
 	public function set_more_info( array $more_info ) {
 		return $this->setMoreInfo( $more_info );
-	}
+	} // End function set_more_info
 
 } // End trait ApiVerboseExceptionBase
