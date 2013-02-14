@@ -2,13 +2,33 @@
 
 namespace Paulus\Exceptions\Interfaces;
 
-// ApiException Exception Interface
+/**
+ * ApiException 
+ *
+ * ApiException Exception Interface
+ * 
+ * @package		Paulus\Exceptions\Interfaces
+ */
 interface ApiException {
 
-	// Force implementation of a "slug" property
+	/**
+	 * getSlug
+	 *
+	 * Force implementation of a "slug" property
+	 * 
+	 * @access public
+	 * @return string|mixed
+	 */
 	public function getSlug();
 
-	// Also force an alias for code-style
+	/**
+	 * get_slug
+	 *
+	 * Also force an alias for code-style
+	 * 
+	 * @access public
+	 * @return string|mixed
+	 */
 	public function get_slug();
 
 } // End interface ApiException
