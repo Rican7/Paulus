@@ -6,7 +6,15 @@ use	\Paulus\Exceptions\Interfaces\ApiException,
 	\Paulus\Exceptions\Traits\ApiExceptionBase,
 	\OutOfBoundsException;
 
-// EndpointNotFound Exception 
+/**
+ * EndpointNotFound 
+ *
+ * EndpointNotFound Exception 
+ * 
+ * @uses OutOfBoundsException
+ * @uses ApiException
+ * @package		Paulus\Exceptions
+ */
 class EndpointNotFound extends OutOfBoundsException implements ApiException {
 	// Use trait
 	use ApiExceptionBase;

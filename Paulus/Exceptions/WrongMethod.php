@@ -7,7 +7,15 @@ use	\Paulus\Exceptions\Interfaces\ApiException,
 	\Paulus\Exceptions\Traits\ApiVerboseExceptionBase,
 	\OutOfBoundsException;
 
-// WrongMethod Exception 
+/**
+ * WrongMethod 
+ *
+ * WrongMethod Exception 
+ * 
+ * @uses OutOfBoundsException
+ * @uses ApiVerboseException
+ * @package		Paulus\Exceptions
+ */
 class WrongMethod extends OutOfBoundsException implements ApiVerboseException {
 	// Use trait
 	use ApiVerboseExceptionBase;

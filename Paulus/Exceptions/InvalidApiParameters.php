@@ -6,7 +6,15 @@ use	\Paulus\Exceptions\Interfaces\ApiException,
 	\Paulus\Exceptions\Traits\ApiExceptionBase,
 	\InvalidArgumentException;
 
-// InvalidApiParameters Exception 
+/**
+ * InvalidApiParameters 
+ *
+ * InvalidApiParameters Exception 
+ * 
+ * @uses InvalidArgumentException
+ * @uses ApiException
+ * @package		Paulus\Exceptions
+ */
 class InvalidApiParameters extends InvalidArgumentException implements ApiException {
 	// Use trait
 	use ApiExceptionBase;

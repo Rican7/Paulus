@@ -6,7 +6,15 @@ use	\Paulus\Exceptions\Interfaces\ApiException,
 	\Paulus\Exceptions\Traits\ApiExceptionBase,
 	\OutOfBoundsException;
 
-// ObjectNotFound Exception 
+/**
+ * ObjectNotFound 
+ *
+ * ObjectNotFound Exception 
+ * 
+ * @uses OutOfBoundsException
+ * @uses ApiException
+ * @package		Paulus\Exceptions
+ */
 class ObjectNotFound extends OutOfBoundsException implements ApiException {
 	// Use trait
 	use ApiExceptionBase;

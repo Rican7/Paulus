@@ -6,7 +6,15 @@ use	\Paulus\Exceptions\Interfaces\ApiException,
 	\Paulus\Exceptions\Traits\ApiExceptionBase,
 	\InvalidArgumentException;
 
-// Unauthorized Exception 
+/**
+ * Unauthorized 
+ *
+ * Unauthorized Exception 
+ * 
+ * @uses InvalidArgumentException
+ * @uses ApiException
+ * @package		Paulus\Exceptions
+ */
 class Unauthorized extends InvalidArgumentException implements ApiException {
 	// Use trait
 	use ApiExceptionBase;

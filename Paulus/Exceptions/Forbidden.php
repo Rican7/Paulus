@@ -6,7 +6,15 @@ use	\Paulus\Exceptions\Interfaces\ApiException,
 	\Paulus\Exceptions\Traits\ApiExceptionBase,
 	\OutOfBoundsException;
 
-// Forbidden Exception 
+/**
+ * Forbidden 
+ *
+ * Forbidden Exception 
+ * 
+ * @uses OutOfBoundsException
+ * @uses ApiException
+ * @package		Paulus\Exceptions
+ */
 class Forbidden extends OutOfBoundsException implements ApiException {
 	// Use trait
 	use ApiExceptionBase;
