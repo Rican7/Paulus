@@ -1,13 +1,14 @@
 <?php
+/**
+ * Paulus - A PHP micro-framework for creating RESTful API services
+ *
+ * @author		Trevor Suarez (Rican7)
+ * @copyright	2013 Trevor Suarez
+ * @link		https://github.com/Rican7/Paulus/
+ * @license		https://github.com/Rican7/Paulus/blob/master/LICENSE
+ * @version		0.10.0
+ */
 
-/*****************************************/
-//                Paulus                 //
-//                                       //
-//        Created by Trevor Suarez       //
-//     Inspired by and Helped by Many    //
-//          Refer to the README          //
-//                                       //
-/*****************************************/
 
 // First things first... get our init time
 define( 'PAULUS_START_TIME', microtime( true ) );

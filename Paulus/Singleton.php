@@ -1,21 +1,62 @@
 <?php
+/**
+ * Paulus - A PHP micro-framework for creating RESTful API services
+ *
+ * @author		Trevor Suarez (Rican7)
+ * @copyright	2013 Trevor Suarez
+ * @link		https://github.com/Rican7/Paulus/
+ * @license		https://github.com/Rican7/Paulus/blob/master/LICENSE
+ * @version		0.10.0
+ */
 
 namespace Paulus;
 
-// PHP 5.3+ Singleton Pattern
+/**
+ * Singleton 
+ *
+ * PHP 5.3+ Singleton Pattern
+ * 
+ * @abstract
+ * @package		Paulus
+ */
 abstract class Singleton {
 
-	// Constructor
+	/**
+	 * __construct
+	 *
+	 * Singleton constructor
+	 * 
+	 * @access private
+	 * @return void
+	 */
 	private function __construct() {
 		// Do nothing
 	}
 
-	// Don't allow cloning
+	/**
+	 * __clone
+	 *
+	 * Don't allow cloning
+	 * 
+	 * @final
+	 * @access private
+	 * @return void
+	 */
 	final private function __clone() {
 		// Do nothing
+		//TODO: Possibly throw an exception here..
 	}
 
-	// Get the instance of the class
+	/**
+	 * instance
+	 *
+	 * Get the instance of the class, or create one if one doesn't exist yet
+	 * 
+	 * @static
+	 * @final
+	 * @access public
+	 * @return Singleton
+	 */
 	final public static function instance() {
 		// Create an instance var to keep track of the instance
 		static $instance = null;
@@ -30,12 +71,31 @@ abstract class Singleton {
 		return $instance;
 	}
 
-	// Alias the instance method
+
+	/**
+	 * getInstance
+	 *
+	 * Alias the instance method
+	 * 
+	 * @static
+	 * @final
+	 * @access public
+	 * @return Singleton
+	 */
 	final public static function getInstance() {
 		return static::instance();
 	}
 
-	// Alias the instance method
+	/**
+	 * get_instance
+	 *
+	 * Alias the instance method
+	 * 
+	 * @static
+	 * @final
+	 * @access public
+	 * @return Singleton
+	 */
 	final public static function get_instance() {
 		return static::instance();
 	}

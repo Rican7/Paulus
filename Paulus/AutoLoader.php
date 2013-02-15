@@ -1,25 +1,65 @@
 <?php
+/**
+ * Paulus - A PHP micro-framework for creating RESTful API services
+ *
+ * @author		Trevor Suarez (Rican7)
+ * @copyright	2013 Trevor Suarez
+ * @link		https://github.com/Rican7/Paulus/
+ * @license		https://github.com/Rican7/Paulus/blob/master/LICENSE
+ * @version		0.10.0
+ */
 
 namespace Paulus;
 
-// AutoLoader class that makes autoloading ALL THE THINGS easier/cleaner
+/**
+ * AutoLoader
+ *
+ * Paulus' autoloader class in charge of defining and registering the app's autoloading
+ * 
+ * @package		Paulus
+ */
 class AutoLoader {
 
-	// Declare properties
+	/*
+	 * Declare properties
+	 */
 	protected $config;
 
-	// Constructor
+	/**
+	 * __construct
+	 *
+	 * AutoLoader constructor
+	 * 
+	 * @access public
+	 * @return AutoLoader
+	 */
 	public function __construct() {
 		//
 	}
 
-	// Function to set our AutoLoader's configuration
+	/**
+	 * config
+	 *
+	 * Set our AutoLoader's configuration
+	 * 
+	 * @param mixed $config		Configuration array (or ArrayAccess class) defining this class's behaviors/options
+	 * @access private
+	 * @return void
+	 */
 	private function config( $config = null ) {
 		// Either grab the passed config or use our Singleton Config
 		return $this->config = $config ?: Config::instance();
 	}
 
-	// Function to verify a config is set and get it if it is
+	/**
+	 * get_config
+	 *
+	 * Verify a config is set and get it if it is
+	 * 
+	 * @param string $config_name	The name of our config option/property
+	 * @access private
+	 * @return mixed
+	 */
 	private function get_config( $config_name ) {
 		// Check that we have our config_name defined in our config
 		if ( isset( $this->config[ $config_name ] ) !== true ) {
@@ -33,7 +73,15 @@ class AutoLoader {
 		}
 	}
 
-	// Function to convert the passed classname (with Namespace) into an include path
+	/**
+	 * classname_to_path
+	 *
+	 * Convert the passed classname (with Namespace) into an include path
+	 * 
+	 * @param string $classname		The classname to convert
+	 * @access public
+	 * @return string
+	 */
 	public function classname_to_path( $classname ) {
 		// Convert the namespace to a sub-directory path
 		if ( strpos( $classname, '\\' ) !== false) {
@@ -43,7 +91,16 @@ class AutoLoader {
 		return $classname;
 	}
 
-	// Function to get the parts of a namespace of a given classname
+	/**
+	 * get_namespace_parts
+	 *
+	 * Get the parts of a namespace of a given classname
+	 * 
+	 * @param string $classname 	The classname to convert
+	 * @param boolean $first_only	Only grab the first part of the namespace
+	 * @access public
+	 * @return string|array
+	 */
 	public function get_namespace_parts( $classname, $first_only = false ) {
 		// Trim any left-slashes from our string
 		$classname = ltrim( $classname, '\\' );
@@ -55,7 +112,16 @@ class AutoLoader {
 		return explode( '\\', $classname );
 	}
 
-	// Function to register an autoloader from this class
+	// private register_autoloader(method_name) {{{ 
+	/**
+	 * register_autoloader
+	 *
+	 * Register an autoloader from this class
+	 * 
+	 * @param string $method_name	The name of this class's method
+	 * @access private
+	 * @return boolean
+	 */
 	private function register_autoloader( $method_name ) {
 		// Register a new autoloader with the Standard PHP Library
 		return spl_autoload_register(
@@ -67,6 +133,15 @@ class AutoLoader {
 	}
 
 	// Paulus' internal autoloader (necessary for all Paulus internal libs)
+	/**
+	 * internal_autoloader
+	 *
+	 * Paulus' internal autoloader (necessary for all Paulus internal libs)
+	 * 
+	 * @param string $classname		The name of the class (with namespace)
+	 * @access protected
+	 * @return void
+	 */
 	protected function internal_autoloader( $classname ) {
 		// Convert the namespace to a sub-directory path
 		$classname = $this->classname_to_path( $classname );
@@ -81,7 +156,15 @@ class AutoLoader {
 		}
 	}
 
-	// The application autoloader for all app-level classes/libraries
+	/**
+	 * application_autoloader
+	 *
+	 * The application autoloader for all app-level classes/libraries
+	 * 
+	 * @param string $classname		The name of the class (with namespace)
+	 * @access protected
+	 * @return void
+	 */
 	protected function application_autoloader( $classname ) {
 		// Convert the namespace to a sub-directory path
 		$classname = $this->classname_to_path( $classname );
@@ -96,7 +179,15 @@ class AutoLoader {
 		}
 	}
 
-	// External autoloader for all external libs
+	/**
+	 * external_autoloader
+	 *
+	 * External autoloader for all external libs
+	 * 
+	 * @param string $classname		The name of the class (with namespace)
+	 * @access protected
+	 * @return void
+	 */
 	protected function external_autoloader( $classname ) {
 		// Convert the namespace to a sub-directory path
 		$classname = $this->classname_to_path( $classname );
@@ -116,19 +207,41 @@ class AutoLoader {
 		}
 	}
 
-	// Register our internal autoloader
+	/**
+	 * register_internal_autoloader
+	 *
+	 * Register our internal autoloader
+	 * 
+	 * @access public
+	 * @return boolean
+	 */
 	public function register_internal_autoloader() {
 		// Register the autoloader with this class and method named...
 		return $this->register_autoloader( 'internal_autoloader' );
 	}
 
-	// Register our application autoloader
+	/**
+	 * register_application_autoloader
+	 * 
+	 * Register our application autoloader
+	 *
+	 * @access public
+	 * @return boolean
+	 */
 	public function register_application_autoloader() {
 		// Register the autoloader with this class and method named...
 		return $this->register_autoloader( 'application_autoloader' );
 	}
 
-	// Register our external libs autoloader
+	/**
+	 * register_external_autoloader
+	 *
+	 * Register our external libs autoloader
+	 * 
+	 * @param mixed $config		Configuration array (or ArrayAccess class) defining our behaviors/options
+	 * @access public
+	 * @return boolean
+	 */
 	public function register_external_autoloader( $config = null ) {
 		// Set our config
 		$this->config( $config );
@@ -137,7 +250,15 @@ class AutoLoader {
 		return $this->register_autoloader( 'external_autoloader' );
 	}
 
-	// Explicitly load our external libraries
+	/**
+	 * explicitly_load_externals
+	 *
+	 * Explicitly load our external libraries
+	 * 
+	 * @param mixed $config		Configuration array (or ArrayAccess class) defining our behaviors/options
+	 * @access public
+	 * @return boolean
+	 */
 	public function explicitly_load_externals( $config = null ) {
 		// Set our config
 		$this->config( $config );
@@ -149,7 +270,15 @@ class AutoLoader {
 		}
 	}
 
-	// Function to load all of the defined routes
+	/**
+	 * load_routes
+	 *
+	 * Function to load all of the defined routes
+	 * 
+	 * @param mixed $config		Configuration array (or ArrayAccess class) defining our behaviors/options
+	 * @access public
+	 * @return void
+	 */
 	public function load_routes( $config = null ) {
 		// Set our config
 		$this->config( $config );

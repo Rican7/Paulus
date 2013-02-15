@@ -1,4 +1,13 @@
 <?php
+/**
+ * Paulus - A PHP micro-framework for creating RESTful API services
+ *
+ * @author		Trevor Suarez (Rican7)
+ * @copyright	2013 Trevor Suarez
+ * @link		https://github.com/Rican7/Paulus/
+ * @license		https://github.com/Rican7/Paulus/blob/master/LICENSE
+ * @version		0.10.0
+ */
 
 namespace Paulus;
 
@@ -6,8 +15,15 @@ use	\Paulus\Exceptions\Interfaces\ApiException,
 	\Paulus\Exceptions\InvalidApiParameters,
 	\Paulus\Exceptions\ObjectNotFound;
 
-// BaseController abstract class for Paulus
-// To be extended by controllers in the controllers directory
+/**
+ * BaseController
+ *
+ * BaseController abstract class for Paulus
+ * To be extended by controllers in the controllers directory
+ * 
+ * @abstract
+ * @package		Paulus
+ */
 abstract class BaseController {
 
 	/*
@@ -24,7 +40,18 @@ abstract class BaseController {
 	protected	$app;
 
 
-	// Constructor
+	/**
+	 * __construct
+	 *
+	 * A controller's default/parent constructor
+	 * 
+	 * @param mixed $request	The router's request object
+	 * @param mixed $response	The router's response object
+	 * @param mixed $service 	The router's service object
+	 * @param mixed $app		Reference to the current application context
+	 * @access public
+	 * @return void
+	 */
 	public function __construct( &$request, &$response, &$service, &$app ) {
 		// Let's make our Klein objects available to our class
 		$this->request = $request;
@@ -38,7 +65,16 @@ abstract class BaseController {
 		$this->config = &$app->config;
 	}
 
-	// Route responder for filtering routes directed through a controller
+	/**
+	 * route_respond
+	 *
+	 * Route responder for filtering routes directed through a controller
+	 * 
+	 * @param mixed $result_data	The data returned from a route's "response"
+	 * callback to be evaluated in this method
+	 * @access public
+	 * @return void
+	 */
 	public function route_respond( $result_data ) {
 		// Logic depends on the contents/state of result_data
 		if ( !is_null( $result_data ) ) {
@@ -63,7 +99,17 @@ abstract class BaseController {
 		}
 	}
 
-	// Function to handle exceptions from the API
+	/**
+	 * exception_handler
+	 *
+	 * Function to handle exceptions from the API
+	 * 
+	 * @param string $error_message	The error message of the exception
+	 * @param string $error_type	The exception class
+	 * @param Exception $exception	The actual exception object itself
+	 * @access public
+	 * @return void
+	 */
 	public function exception_handler( $error_message, $error_type, $exception ) {
 		// Log the error
 		$this->app->error_log( $error_type . ' - ' .$error_message );
