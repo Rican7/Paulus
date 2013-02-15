@@ -6,7 +6,7 @@
  * @copyright	2013 Trevor Suarez
  * @link		https://github.com/Rican7/Paulus/
  * @license		https://github.com/Rican7/Paulus/blob/master/LICENSE
- * @version		0.10.0
+ * @version		0.9.1
  */
 
 
