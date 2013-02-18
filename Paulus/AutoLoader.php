@@ -147,7 +147,7 @@ class AutoLoader {
 		$classname = $this->classname_to_path( $classname );
 
 		// Define our file path
-		$file_path = $classname . '.php';
+		$file_path = BASE_DIR . $classname . '.php';
 
 		// If the file is readable
 		if ( is_readable($file_path) ) {
