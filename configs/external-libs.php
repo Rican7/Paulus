@@ -4,6 +4,6 @@
 $load_config = function() {
 	return array(
 		'klein/klein.php',
-		'php-activerecord/ActiveRecord.php',
+		// 'php-activerecord/php-activerecord/ActiveRecord.php',
 	);
 };

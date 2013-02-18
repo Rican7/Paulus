@@ -29,6 +29,9 @@
 		"php": ">=5.4.0",
 		"klein": "dev-master"
 	},
+	"require-dev": {
+		"php-activerecord/php-activerecord": "dev-master"
+	},
 	"suggest": {
 		"php-activerecord/php-activerecord": "Robust ActiveRecord pattern implemented in PHP. A great ORM that Paulus was designed to be used with"
 	}
