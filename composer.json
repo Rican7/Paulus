@@ -15,7 +15,7 @@
 		{
 			"type": "package",
 			"package": {
-				"name": "klein",
+				"name": "klein/klein",
 				"version": "dev-master",
 				"dist": {
 					"url": "https://github.com/Rican7/klein.php/archive/master.zip",
@@ -31,7 +31,7 @@
 	],
 	"require": {
 		"php": ">=5.4.0",
-		"klein": "dev-master"
+		"klein/klein": "dev-master"
 	},
 	"require-dev": {
 		"php-activerecord/php-activerecord": "dev-master"
