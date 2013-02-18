@@ -1,0 +1,35 @@
+{
+	"name": "paulus/paulus",
+	"description": "A PHP micro-framework (well, more like a \"mini\" framework) for creating RESTful API services quickly and efficiently.",
+	"keywords": ["microframework", "rest", "routing", "router", "api", "boilerplate"],
+	"homepage": "https://github.com/Rican7/Paulus",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Trevor N. Suarez",
+			"email": "rican7@gmail.com",
+			"homepage": "http://about.me/tnsuarez"
+		}
+	],
+	"repositories": [
+		{
+			"type": "package",
+			"package": {
+				"name": "klein",
+				"version": "dev-master",
+				"source": {
+					"url": "https://github.com/Rican7/klein.php",
+					"type": "git",
+					"reference": "master"
+				}
+			}
+		}
+	],
+	"require": {
+		"php": ">=5.4.0",
+		"klein": "dev-master"
+	},
+	"suggest": {
+		"php-activerecord/php-activerecord": "Robust ActiveRecord pattern implemented in PHP. A great ORM that Paulus was designed to be used with"
+	}
+}
