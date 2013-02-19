@@ -11,24 +11,6 @@
 			"homepage": "http://about.me/tnsuarez"
 		}
 	],
-	"repositories": [
-		{
-			"type": "package",
-			"package": {
-				"name": "klein/klein",
-				"version": "dev-master",
-				"dist": {
-					"url": "https://github.com/Rican7/klein.php/archive/master.zip",
-					"type": "zip"
-				},
-				"source": {
-					"url": "https://github.com/Rican7/klein.php",
-					"type": "git",
-					"reference": "master"
-				}
-			}
-		}
-	],
 	"require": {
 		"php": ">=5.4.0",
 		"klein/klein": "dev-master"
