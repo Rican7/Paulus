@@ -123,7 +123,7 @@ class Paulus {
 	private function define_constants() {
 		// Set our base directory here
 		if ( !defined( 'PAULUS_BASE_DIR' ) ) {
-			define( 'PAULUS_BASE_DIR', __DIR__ . DIRECTORY_SEPARATOR . '..' );
+			define( 'PAULUS_BASE_DIR', __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR );
 		}
 
 		// Quick function to make directory defining easier
