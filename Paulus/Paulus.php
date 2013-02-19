@@ -248,15 +248,15 @@ class Paulus {
 	private function setup_db_connection() {
 		// Check to see if ActiveRecord exists... the app/developer might not want to use it
 		if ( class_exists( '\ActiveRecord\Config', true ) ) { // Set to false to not try and autoload the class
-			\ActiveRecord\Config::initialize( function( $cfg ) use ( $config ) {
+			\ActiveRecord\Config::initialize( function( $cfg ) {
 				// Set the directory of our data models
-				$cfg->set_model_directory( $config['database']['model_directory'] );
+				$cfg->set_model_directory( $this->config['database']['model_directory'] );
 
 				// Set our connection configuration
-				$cfg->set_connections( $config['database']['connections'] );
+				$cfg->set_connections( $this->config['database']['connections'] );
 
 				// Set our default connection
-				$cfg->set_default_connection( $config['database']['default_connection'] );
+				$cfg->set_default_connection( $this->config['database']['default_connection'] );
 			});
 		}
 	}

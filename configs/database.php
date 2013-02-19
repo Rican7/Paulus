@@ -9,6 +9,6 @@ $load_config = function() {
 			'test' => 'mysql://username:password@localhost/test',
 		),
 		'default_connection' => 'development',
-		'model_directory' => PAULUS_MODELS_DIR,
+		'model_directory' => PAULUS_APP_DIR . 'Models/',
 	);
 };
