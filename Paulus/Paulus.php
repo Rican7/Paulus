@@ -87,9 +87,9 @@ class Paulus {
 			$this->setup_exception_handler();
 
 			// Only pass our "app" to the service register if we've configured it to do so
-			if ( $config['routing']['pass_app_to_service'] ) {
+			if ( $this->config['routing']['pass_app_to_service'] ) {
 				// Register our app as a persistent service, for ease of use/accessibility
-				$service->app = $app;
+				$service->app = $this;
 			}
 		});
 
@@ -704,7 +704,7 @@ class Paulus {
 		Router::dispatch(
 			substr(
 				$_SERVER['REQUEST_URI'],
-				strlen( rtrim( $config['app-meta']['base_url'], '/' ) ) // Remove a potential trailing slash
+				strlen( rtrim( $this->config['app-meta']['base_url'], '/' ) ) // Remove a potential trailing slash
 			)
 		);
 	}
