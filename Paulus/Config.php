@@ -28,15 +28,7 @@ class Config extends Singleton implements ArrayAccess {
 	 * Declare properties
 	 */
 	protected $config = array();
-	protected $config_files = array(
-		'app-meta',
-		'external-libs',
-		'autoload-directories',
-		'database',
-		'rest',
-		'routing',
-		'template',
-	);
+	protected $config_files = array();
 
 	/**
 	 * __construct
@@ -48,8 +40,42 @@ class Config extends Singleton implements ArrayAccess {
 	 * @return Config
 	 */
 	protected function __construct() {
-		// Let's load our configuration files
+		// Load our configuration files into an array
+		$this->load_config_files();
+
+		// Let's load our configuration files's data
 		$this->load_config();
+	}
+
+	/**
+	 * load_config_files
+	 *
+	 * Function to scan our config file directory and load the file list
+	 * 
+	 * @access protected
+	 * @return array
+	 */
+	protected function load_config_files() {
+		// Define our config directory
+		$config_dir = PAULUS_CONFIG_DIR;
+
+		// Get an array of all of the files in the config directory
+		$found_files = scandir( $config_dir );
+
+		// Create an array to return
+		$valid_files = array();
+
+		foreach( $found_files as $file ) {
+			// Is it a valid file?
+			if ( is_file( $config_dir . $file ) && ( strpos( $file, '_' ) !== 0 ) ) {
+				$valid_files[] = $file;
+			}
+		}
+
+		// Set our property
+		$this->config_files = $valid_files;
+
+		return $this->config_files;
 	}
 
 	/**
@@ -64,11 +90,14 @@ class Config extends Singleton implements ArrayAccess {
 
 		// Loop through each config file
 		foreach( $this->config_files as $file ) {
+			// Grab our file's basename
+			$file_base = basename( $file, '.php' );
+
 			// Include the file
-			require_once( PAULUS_CONFIG_DIR . $file . '.php');
+			require_once( PAULUS_CONFIG_DIR . $file );
 
 			// Set the file's returned configuration in a namespaced key
-			$this->config[ $file ] = $load_config();
+			$this->config[ $file_base ] = $load_config();
 
 			// Garbage collect
 			unset( $load_config );
