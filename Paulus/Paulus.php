@@ -93,8 +93,14 @@ class Paulus {
 			}
 		});
 
+		// If there are autoload directories set
+		if ( isset( $this->config['autoload-directories'] ) && count( $this->config['autoload-directories'] ) > 0 ) {
+			// Register our external autoloader
+			$autoloader->register_external_autoloader();
+		}
+
 		// Load any set external libraries explicitly
-		if ( isset( $config['external-libs'] ) ) {
+		if ( isset( $this->config['external-libs'] ) && count( $this->config['external-libs'] ) > 0 ) {
 			// Load our external libraries explicitly
 			$autoloader->explicitly_load_externals();
 		}

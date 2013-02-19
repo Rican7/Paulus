@@ -199,7 +199,7 @@ class AutoLoader {
 		// Loop through each autoload-directory
 		foreach( $this->get_config('autoload-directories') as $autoload_directory ) {
 			// Define our file path
-			$file_path = BASE_DIR . $autoload_directory . $classname . '.php';
+			$file_path = $autoload_directory . $classname . '.php';
 
 			if ( is_readable($file_path) ) {
 				require_once( $file_path );
