@@ -30,11 +30,15 @@ class AutoLoader {
 	 *
 	 * AutoLoader constructor
 	 * 
+	 * @param mixed $config		Configuration array (or ArrayAccess class) defining this class's behaviors/options
 	 * @access public
 	 * @return AutoLoader
 	 */
-	public function __construct() {
-		//
+	public function __construct( $config = null ) {
+		// Only set our config if it was passed
+		if ( !is_null( $config ) ) {
+			$this->config( $config );
+		}
 	}
 
 	/**
@@ -147,7 +151,7 @@ class AutoLoader {
 		$classname = $this->classname_to_path( $classname );
 
 		// Define our file path
-		$file_path = BASE_DIR . $classname . '.php';
+		$file_path = PAULUS_BASE_DIR . $classname . '.php';
 
 		// If the file is readable
 		if ( is_readable($file_path) ) {
@@ -248,6 +252,19 @@ class AutoLoader {
 
 		// Register the autoloader with this class and method named...
 		return $this->register_autoloader( 'external_autoloader' );
+	}
+
+	/**
+	 * load_routing_library
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function load_routing_library( $location = null ) {
+		// Set our location of our library
+		$lib_location = $location ?: $this->get_config('routing')['routing_library_location'];
+
+		require_once( $lib_location );
 	}
 
 	/**
