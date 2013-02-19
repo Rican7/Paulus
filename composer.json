@@ -20,5 +20,8 @@
 	},
 	"suggest": {
 		"php-activerecord/php-activerecord": "Robust ActiveRecord pattern implemented in PHP. A great ORM that Paulus was designed to be used with"
-	}
+	},
+   "autoload": {
+      "psr-0": { "Paulus": "." }
+   }
 }
