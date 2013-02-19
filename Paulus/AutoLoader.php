@@ -306,7 +306,7 @@ class AutoLoader {
 		// If we want to load them all automatically
 		if ( $routing_config['load_all_automatically'] ) {
 			// Define our routes directory
-			$route_dir = PAULUS_ROUTES_DIR;
+			$route_dir = $routing_config['route_directory'];
 
 			// Get an array of all of the files in the routes directory
 			$found_routes = scandir( $route_dir );
