@@ -43,6 +43,20 @@ class Config extends Singleton implements ArrayAccess {
 		$this->config = ( new FileArrayLoader( PAULUS_CONFIG_DIR, '_', 'load_config' ) )->load();
 	}
 
+	/**
+	 * merge_custom_config
+	 *
+	 * Merge a custom configuration array into our own array configuration
+	 * 
+	 * @param array $config_array	The configuration array to merge in
+	 * @access public
+	 * @return void
+	 */
+	public function merge_custom_config( array $config_array ) {
+		// Merge, set, and return our config
+		return $this->config = Util::array_merge_recursive_distinct( $this->config, $config_array );
+	}
+
 	/*
 	 * ArrayAccess Methods (MUST implement)
 	 */
