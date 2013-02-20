@@ -19,6 +19,7 @@ use \RuntimeException;
  * Class designed to load files from a specified directory
  * and load a callback's result into an array
  * 
+ * @uses		RuntimeException
  * @package		Paulus
  */
 class FileArrayLoader {
