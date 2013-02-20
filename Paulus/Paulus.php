@@ -137,9 +137,6 @@ class Paulus {
 		if ( !defined( 'PAULUS_CONFIG_DIR' ) ) {
 			define( 'PAULUS_CONFIG_DIR', $dir_rel_path( 'configs' ) );
 		}
-		if ( !defined( 'PAULUS_LIB_DIR' ) ) {
-			define( 'PAULUS_LIB_DIR', $dir_rel_path( 'Paulus' ) );
-		}
 		if ( !defined( 'PAULUS_APP_DIR' ) ) {
 			define( 'PAULUS_APP_DIR',  $dir_rel_path( 'application' ) );
 		}
