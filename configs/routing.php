@@ -3,10 +3,11 @@
 // Define all of our routes (we could do this automatically, but we'd like more control)
 $load_config = function() {
 	return array(
-		'load_all_automatically' => false,
+		'routing_library_location' => PAULUS_EXTERNAL_LIB_DIR . 'klein/klein/klein.php',
+		'route_directory' => PAULUS_APP_DIR . 'routes/',
+		'load_all_automatically' => true,
 		'routes' => array(
-			'index',
-			'sample',
+			// 'index',
 		),
 		'top_level_route' => 'index',
 		'auto_start_controllers' => true,

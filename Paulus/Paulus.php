@@ -12,11 +12,13 @@
 namespace Paulus;
 
 use	\Paulus\Config,
+	\Paulus\AutoLoader,
 	\Paulus\Router,
 	\Paulus\Exceptions\Interfaces\ApiException,
 	\Paulus\Exceptions\Interfaces\ApiVerboseException,
 	\Paulus\Exceptions\EndpointNotFound,
 	\Paulus\Exceptions\WrongMethod,
+	\Paulus\Util,
 	\stdClass;
 
 /**
@@ -44,27 +46,103 @@ class Paulus {
 	 *
 	 * Paulus constructor
 	 * 
-	 * @param mixed $config		Configuration array (or ArrayAccess class) defining Paulus' many options
-	 * @param mixed $request	The router's request object
-	 * @param mixed $response	The router's response object
-	 * @param mixed $service 	The router's service object
+	 * @param array $config		Configuration array defining Paulus' many options
 	 * @access public
 	 * @return Paulus
 	 */
-	public function __construct( $config = null, $request = null, $response = null, $service = null ) {
-		// Either grab the passed config or use our Singleton Config
-		$this->config = $config ?: Config::instance();
+	public function __construct( array $config = null ) {
+		// First things first... get our init time
+		if ( !defined( 'PAULUS_START_TIME' ) ) {
+			define( 'PAULUS_START_TIME', microtime( true ) );
+		}
 
-		// Grab our Router's variables and make quick/easy references to them
-		$this->request = &$request;
-		$this->response = &$response;
-		$this->service = &$service;
+		// Define our application's constants
+		$this->define_constants();
 
-		// Initialize some response properties
-		$this->init_response_properties();
+		// Set our application's configuration from our Config instance
+		$this->config = Config::instance();
 
-		// Setup our exception handler
-		$this->setup_exception_handler();
+		// If we passed a config, let's merge it in
+		if ( !is_null( $config ) ) {
+			Config::instance()->merge_custom_config( $config );
+		}
+
+		// Create our auto loader
+		$autoloader = new AutoLoader( $this->config );
+
+		// Load our all-important routing library
+		$autoloader->load_routing_library();
+
+		// Create a "first-hit" route responder to setup our app
+		Router::route( function( $request, $response, $service ) {
+			// Initialize our router's interval values
+			Router::__init__( $request, $response, $service, $this );
+
+			// Set some properties from our router
+			$this->request = &$request;
+			$this->response = &$response;
+			$this->service = &$service;
+
+			// Initialize some response properties
+			$this->init_response_properties();
+
+			// Setup our exception handler
+			$this->setup_exception_handler();
+
+			// Only pass our "app" to the service register if we've configured it to do so
+			if ( $this->config['routing']['pass_app_to_service'] ) {
+				// Register our app as a persistent service, for ease of use/accessibility
+				$service->app = $this;
+			}
+		});
+
+		// If there are autoload directories set
+		if ( isset( $this->config['autoload-directories'] ) && count( $this->config['autoload-directories'] ) > 0 ) {
+			// Register our external autoloader
+			$autoloader->register_external_autoloader();
+		}
+
+		// Load any set external libraries explicitly
+		if ( isset( $this->config['external-libs'] ) && count( $this->config['external-libs'] ) > 0 ) {
+			// Load our external libraries explicitly
+			$autoloader->explicitly_load_externals();
+		}
+
+		// Let's setup our database connection
+		$this->setup_db_connection();
+
+		// Load and define all of our routes
+		$autoloader->load_routes();
+	}
+
+	/**
+	 * define_constants
+	 *
+	 * Define our application constants
+	 * 
+	 * @access private
+	 * @return void
+	 */
+	private function define_constants() {
+		// Set our base directory here
+		if ( !defined( 'PAULUS_BASE_DIR' ) ) {
+			define( 'PAULUS_BASE_DIR', __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR );
+		}
+
+		// Quick function to make directory defining easier
+		$dir_rel_path = function( $dir_name ) {
+			return PAULUS_BASE_DIR . $dir_name . DIRECTORY_SEPARATOR;
+		};
+
+		if ( !defined( 'PAULUS_CONFIG_DIR' ) ) {
+			define( 'PAULUS_CONFIG_DIR', $dir_rel_path( 'configs' ) );
+		}
+		if ( !defined( 'PAULUS_APP_DIR' ) ) {
+			define( 'PAULUS_APP_DIR',  $dir_rel_path( 'application' ) );
+		}
+		if ( !defined( 'PAULUS_EXTERNAL_LIB_DIR' ) ) {
+			define( 'PAULUS_EXTERNAL_LIB_DIR', $dir_rel_path( 'vendor' ) );
+		}
 	}
 
 	/**
@@ -156,6 +234,52 @@ class Paulus {
 				// Re-throw the exception to catch it in our Paulus-defined exception handler
 				throw $exception;
 			}
+		});
+	}
+
+	/**
+	 * setup_db_connection
+	 *
+	 * Setup our DB/ORM and pass it our configuration
+	 * 
+	 * @access private
+	 * @return void
+	 */
+	private function setup_db_connection() {
+		// Check to see if ActiveRecord exists... the app/developer might not want to use it
+		if ( class_exists( '\ActiveRecord\Config', true ) ) { // Set to false to not try and autoload the class
+			\ActiveRecord\Config::initialize( function( $cfg ) {
+				// Set the directory of our data models
+				$cfg->set_model_directory( $this->config['database']['model_directory'] );
+
+				// Set our connection configuration
+				$cfg->set_connections( $this->config['database']['connections'] );
+
+				// Set our default connection
+				$cfg->set_default_connection( $this->config['database']['default_connection'] );
+			});
+		}
+	}
+
+	/**
+	 * setup_error_routes
+	 *
+	 * Setup our default error route responders and register them with our Router
+	 * 
+	 * @access private
+	 * @return void
+	 */
+	private function setup_error_routes() {
+		// 404 - We didn't match a route
+		Router::route( '404', function( $request, $response, $service ) {
+			// We didn't match the endpoint/route
+			Router::app()->endpoint_not_found();
+		});
+
+		// 405 - We didn't match a route, but one WOULD have matched with a different method
+		Router::route( '405', function( $request, $response, $service, $matches, $methods ) {
+			// We didn't match the right method for the endpoint/route
+			Router::app()->wrong_method( $methods );
 		});
 	}
 
@@ -268,31 +392,8 @@ class Paulus {
 	 * @return array
 	 */
 	public function process_template( $unprocessed_data ) {
-		// Quickly create a function to convert the object to an array
-		// Source: http://goo.gl/uTLGf
-		function objectToArray($d) {
-			if (is_object($d)) {
-				// Gets the properties of the given object
-				// with get_object_vars function
-				$d = get_object_vars($d);
-			}
-
-			if (is_array($d)) {
-				/*
-				 * Return array converted to object
-				 * Using __FUNCTION__ (Magic constant)
-				 * for recursive call
-				 */
-				return array_map(__FUNCTION__, $d);
-			}
-			else {
-				// Return array
-				return $d;
-			}
-		}
-
 		// Copy array for the processed data
-		$processed_data = (array) objectToArray( $unprocessed_data );
+		$processed_data = (array) Util::object_to_array( $unprocessed_data );
 
 		// Let's walk through each item, recursively
 		array_walk_recursive(
@@ -561,6 +662,33 @@ class Paulus {
 			. $error_message
 			. ' at '
 			. $this->request->uri()
+		);
+	}
+
+	/**
+	 * run
+	 *
+	 * Run the app
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function run() {
+		// Setup our default error route responders
+		$this->setup_error_routes();
+
+		// To always be RESTful, create a last-hit route responder to respond in our designated format ALWAYS
+		Router::route( function( $request, $response, $service, $matches ) {
+			// ALWAYS respond with our formatting function
+			Router::app()->api_respond();
+		});
+
+		// Finally, call "dispatch" to have our App's Router route the request appropriately
+		Router::dispatch(
+			substr(
+				$_SERVER['REQUEST_URI'],
+				strlen( rtrim( $this->config['app-meta']['base_url'], '/' ) ) // Remove a potential trailing slash
+			)
 		);
 	}
 

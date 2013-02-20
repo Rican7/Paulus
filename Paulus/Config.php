@@ -28,15 +28,6 @@ class Config extends Singleton implements ArrayAccess {
 	 * Declare properties
 	 */
 	protected $config = array();
-	protected $config_files = array(
-		'app-meta',
-		'external-libs',
-		'autoload-directories',
-		'database',
-		'rest',
-		'routing',
-		'template',
-	);
 
 	/**
 	 * __construct
@@ -48,32 +39,22 @@ class Config extends Singleton implements ArrayAccess {
 	 * @return Config
 	 */
 	protected function __construct() {
-		// Let's load our configuration files
-		$this->load_config();
+		// Let's load our configuration files's data
+		$this->config = ( new FileArrayLoader( PAULUS_CONFIG_DIR, '_', 'load_config' ) )->load();
 	}
 
 	/**
-	 * load_config
+	 * merge_custom_config
 	 *
-	 * Function to load our configuration files into our internal array
+	 * Merge a custom configuration array into our own array configuration
 	 * 
-	 * @access protected
+	 * @param array $config_array	The configuration array to merge in
+	 * @access public
 	 * @return void
 	 */
-	protected function load_config() {
-
-		// Loop through each config file
-		foreach( $this->config_files as $file ) {
-			// Include the file
-			require_once( PAULUS_CONFIG_DIR . $file . '.php');
-
-			// Set the file's returned configuration in a namespaced key
-			$this->config[ $file ] = $load_config();
-
-			// Garbage collect
-			unset( $load_config );
-		}
-
+	public function merge_custom_config( array $config_array ) {
+		// Merge, set, and return our config
+		return $this->config = Util::array_merge_recursive_distinct( $this->config, $config_array );
 	}
 
 	/*

@@ -30,11 +30,15 @@ class AutoLoader {
 	 *
 	 * AutoLoader constructor
 	 * 
+	 * @param mixed $config		Configuration array (or ArrayAccess class) defining this class's behaviors/options
 	 * @access public
 	 * @return AutoLoader
 	 */
-	public function __construct() {
-		//
+	public function __construct( $config = null ) {
+		// Only set our config if it was passed
+		if ( !is_null( $config ) ) {
+			$this->config( $config );
+		}
 	}
 
 	/**
@@ -147,7 +151,7 @@ class AutoLoader {
 		$classname = $this->classname_to_path( $classname );
 
 		// Define our file path
-		$file_path = $classname . '.php';
+		$file_path = PAULUS_BASE_DIR . $classname . '.php';
 
 		// If the file is readable
 		if ( is_readable($file_path) ) {
@@ -195,7 +199,7 @@ class AutoLoader {
 		// Loop through each autoload-directory
 		foreach( $this->get_config('autoload-directories') as $autoload_directory ) {
 			// Define our file path
-			$file_path = BASE_DIR . $autoload_directory . $classname . '.php';
+			$file_path = $autoload_directory . $classname . '.php';
 
 			if ( is_readable($file_path) ) {
 				require_once( $file_path );
@@ -251,6 +255,22 @@ class AutoLoader {
 	}
 
 	/**
+	 * load_routing_library
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function load_routing_library( $location = null ) {
+		// Set our location of our library
+		$lib_location = $location ?: $this->get_config('routing')['routing_library_location'];
+
+		// Let's first make sure that it hasn't already been loaded
+		if ( !function_exists( 'respond' ) && !function_exists( 'dispatch' ) ) {
+			require_once( $lib_location );
+		}
+	}
+
+	/**
 	 * explicitly_load_externals
 	 *
 	 * Explicitly load our external libraries
@@ -289,7 +309,7 @@ class AutoLoader {
 		// If we want to load them all automatically
 		if ( $routing_config['load_all_automatically'] ) {
 			// Define our routes directory
-			$route_dir = PAULUS_ROUTES_DIR;
+			$route_dir = $routing_config['route_directory'];
 
 			// Get an array of all of the files in the routes directory
 			$found_routes = scandir( $route_dir );
