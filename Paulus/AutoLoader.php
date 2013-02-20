@@ -264,7 +264,10 @@ class AutoLoader {
 		// Set our location of our library
 		$lib_location = $location ?: $this->get_config('routing')['routing_library_location'];
 
-		require_once( $lib_location );
+		// Let's first make sure that it hasn't already been loaded
+		if ( !function_exists( 'respond' ) && !function_exists( 'dispatch' ) ) {
+			require_once( $lib_location );
+		}
 	}
 
 	/**
