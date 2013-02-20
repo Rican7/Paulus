@@ -46,14 +46,11 @@ class Paulus {
 	 *
 	 * Paulus constructor
 	 * 
-	 * @param mixed $config		Configuration array (or ArrayAccess class) defining Paulus' many options
-	 * @param mixed $request	The router's request object
-	 * @param mixed $response	The router's response object
-	 * @param mixed $service 	The router's service object
+	 * @param array $config		Configuration array defining Paulus' many options
 	 * @access public
 	 * @return Paulus
 	 */
-	public function __construct( $config = null ) {
+	public function __construct( array $config = null ) {
 		// First things first... get our init time
 		if ( !defined( 'PAULUS_START_TIME' ) ) {
 			define( 'PAULUS_START_TIME', microtime( true ) );
@@ -62,8 +59,13 @@ class Paulus {
 		// Define our application's constants
 		$this->define_constants();
 
-		// Either grab the passed config or use our Singleton Config
-		$this->config = $config ?: Config::instance();
+		// Set our application's configuration from our Config instance
+		$this->config = Config::instance();
+
+		// If we passed a config, let's merge it in
+		if ( !is_null( $config ) ) {
+			Config::instance()->merge_custom_config( $config );
+		}
 
 		// Create our auto loader
 		$autoloader = new AutoLoader( $this->config );
