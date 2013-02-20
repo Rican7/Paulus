@@ -18,6 +18,7 @@ use	\Paulus\Config,
 	\Paulus\Exceptions\Interfaces\ApiVerboseException,
 	\Paulus\Exceptions\EndpointNotFound,
 	\Paulus\Exceptions\WrongMethod,
+	\Paulus\Util,
 	\stdClass;
 
 /**
@@ -392,31 +393,8 @@ class Paulus {
 	 * @return array
 	 */
 	public function process_template( $unprocessed_data ) {
-		// Quickly create a function to convert the object to an array
-		// Source: http://goo.gl/uTLGf
-		function objectToArray($d) {
-			if (is_object($d)) {
-				// Gets the properties of the given object
-				// with get_object_vars function
-				$d = get_object_vars($d);
-			}
-
-			if (is_array($d)) {
-				/*
-				 * Return array converted to object
-				 * Using __FUNCTION__ (Magic constant)
-				 * for recursive call
-				 */
-				return array_map(__FUNCTION__, $d);
-			}
-			else {
-				// Return array
-				return $d;
-			}
-		}
-
 		// Copy array for the processed data
-		$processed_data = (array) objectToArray( $unprocessed_data );
+		$processed_data = (array) Util::object_to_array( $unprocessed_data );
 
 		// Let's walk through each item, recursively
 		array_walk_recursive(
