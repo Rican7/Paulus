@@ -1,8 +1,9 @@
 <?php
+// Load our autoloader, and add our Test class namespace
 $autoloader = require( __DIR__ . '/../vendor/autoload.php' );
 $autoloader->add( 'Paulus\Tests', __DIR__ );
 
-// Setup my own config
+// Setup our test configuration
 $paulus_config = array(
     'database' => array(
         'model_directory' => '',
@@ -14,6 +15,7 @@ $paulus_config = array(
 		'exit_after_rest_response' => false,
 	),
 );
+
 
 // Overwrite Klein's "_Headers" class for PHPUnit testing
 // (PHPUnit doesn't like header output...)

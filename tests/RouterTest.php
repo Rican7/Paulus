@@ -1,10 +1,27 @@
 <?php
+/**
+ * Paulus - A PHP micro-framework for creating RESTful API services
+ *
+ * @author		Trevor Suarez (Rican7)
+ * @copyright	2013 Trevor Suarez
+ * @link		https://github.com/Rican7/Paulus/
+ * @license		https://github.com/Rican7/Paulus/blob/master/LICENSE
+ * @version		0.9.3
+ */
 
 namespace Paulus\Tests;
+
 
 use \Paulus\Paulus;
 use \Paulus\Router;
 
+
+/**
+ * RouterTest 
+ * 
+ * @uses \Paulus\AbstractPaulusTest
+ * @package 
+ */
 class RouterTest extends AbstractPaulusTest {
 
 	public function testBasicRoute() {
@@ -74,4 +91,4 @@ class RouterTest extends AbstractPaulusTest {
 		$this->assertEquals( true, $output->data->putcatchall );
 	}
 
-}
+} // End class RouterTest

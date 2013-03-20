@@ -1,10 +1,27 @@
 <?php
+/**
+ * Paulus - A PHP micro-framework for creating RESTful API services
+ *
+ * @author		Trevor Suarez (Rican7)
+ * @copyright	2013 Trevor Suarez
+ * @link		https://github.com/Rican7/Paulus/
+ * @license		https://github.com/Rican7/Paulus/blob/master/LICENSE
+ * @version		0.9.3
+ */
 
 namespace Paulus\Tests;
+
 
 use \Paulus\Paulus;
 use \Paulus\Router;
 
+
+/**
+ * ApiExceptionTest 
+ * 
+ * @uses \Paulus\AbstractPaulusTest
+ * @package Paulus\Tests
+ */
 class ApiExceptionTest extends AbstractPaulusTest {
 
 	public function testNotFoundException() {
@@ -47,4 +64,4 @@ class ApiExceptionTest extends AbstractPaulusTest {
 		$this->assertStringStartsWith( 'The wrong method',   $output->meta->message );
 	}
 
-}
+} // End class ApiExceptionTest
