@@ -129,7 +129,7 @@ class FileArrayLoader {
 		$file_path = $base_directory ? $base_directory . $file : $file;
 
 		// Include the file
-		require_once( $file_path );
+		require( $file_path );
 
 		// Set the file's returned configuration in a namespaced key
 		$array = array( $file_base => ${$this->callback_name}() );
