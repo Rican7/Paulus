@@ -198,22 +198,7 @@ class Paulus {
 	 */
 	private function setup_exception_handler() {
 		// Setup our classes default exception handler, in case anything escapes our other catches
-		set_exception_handler( function( $exception ) {
-
-			// Paulus - Handle all of our "ApiException"s
-			if ( $exception instanceOf ApiException ) {
-				// Handle our ApiException interface exceptions from Paulus
-				$this->api_exception_handler( $exception );
-			}
-			// All other exceptions
-			else {
-				// Log the error
-				$this->error_log( $exception->getMessage() );
-
-				// Let's handle the exception gracefully (RESTfully)
-				$this->abort( 500, 'EXCEPTION_THROWN', $exception->getMessage() );
-			}
-		});
+		set_exception_handler( array( $this, 'generic_exception_handler' ) );
 
 		// Register an error handler through our Router's catcher
 		$this->response->onError( function( $response, $error_message, $error_type, $exception ) {
@@ -231,8 +216,8 @@ class Paulus {
 			}
 			// We didn't get a callable
 			else {
-				// Re-throw the exception to catch it in our Paulus-defined exception handler
-				throw $exception;
+				// Pass the exception to our Paulus-defined exception handler
+				$this->generic_exception_handler( $exception );
 			}
 		});
 	}
@@ -564,6 +549,31 @@ class Paulus {
 
 			// Respond restfully
 			$this->api_respond();
+		}
+	}
+
+	/**
+	 * generic_exception_handler
+	 *
+	 * Handle any exceptions thrown in our application, so we always respond RESTfully
+	 * 
+	 * @param Exception $exception	The exception object instance
+	 * @access public
+	 * @return void
+	 */
+	public function generic_exception_handler( $exception ) {
+		// Paulus - Handle all of our "ApiException"s
+		if ( $exception instanceOf ApiException ) {
+			// Handle our ApiException interface exceptions from Paulus
+			$this->api_exception_handler( $exception );
+		}
+		// All other exceptions
+		else {
+			// Log the error
+			$this->error_log( $exception->getMessage() );
+
+			// Let's handle the exception gracefully (RESTfully)
+			$this->abort( 500, 'EXCEPTION_THROWN', $exception->getMessage() );
 		}
 	}
 
