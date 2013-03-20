@@ -33,5 +33,6 @@ $load_config = function() {
 			'allow_methods' => 'POST, GET',
 			'allow_origin' => '*',
 		),
+		'exit_after_rest_response' => true,
 	);
 };

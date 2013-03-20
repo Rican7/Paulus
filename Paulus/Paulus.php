@@ -514,7 +514,10 @@ class Paulus {
 		}
 
 		// We need to EXIT here, since we want this to be our last output
-		exit;
+		// ... but be able to turn it off...
+		if ( isset( $this->config['rest']['exit_after_rest_response'] ) && $this->config['rest']['exit_after_rest_response'] ) {
+			exit;
+		}
 	}
 
 	/**
