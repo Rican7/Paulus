@@ -133,8 +133,8 @@ abstract class BaseController {
 		}
 		// Any other exceptions
 		else {
-			// Let's handle the exception gracefully
-			$this->app->abort( 500, 'EXCEPTION_THROWN', $error_message );
+			// Fall back to our generic exception handler
+			$this->app->generic_exception_handler( $exception );
 		}
 	}
 

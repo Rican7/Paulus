@@ -198,22 +198,7 @@ class Paulus {
 	 */
 	private function setup_exception_handler() {
 		// Setup our classes default exception handler, in case anything escapes our other catches
-		set_exception_handler( function( $exception ) {
-
-			// Paulus - Handle all of our "ApiException"s
-			if ( $exception instanceOf ApiException ) {
-				// Handle our ApiException interface exceptions from Paulus
-				$this->api_exception_handler( $exception );
-			}
-			// All other exceptions
-			else {
-				// Log the error
-				$this->error_log( $exception->getMessage() );
-
-				// Let's handle the exception gracefully (RESTfully)
-				$this->abort( 500, 'EXCEPTION_THROWN', $exception->getMessage() );
-			}
-		});
+		set_exception_handler( array( $this, 'generic_exception_handler' ) );
 
 		// Register an error handler through our Router's catcher
 		$this->response->onError( function( $response, $error_message, $error_type, $exception ) {
@@ -231,8 +216,8 @@ class Paulus {
 			}
 			// We didn't get a callable
 			else {
-				// Re-throw the exception to catch it in our Paulus-defined exception handler
-				throw $exception;
+				// Pass the exception to our Paulus-defined exception handler
+				$this->generic_exception_handler( $exception );
 			}
 		});
 	}
@@ -425,8 +410,8 @@ class Paulus {
 			return $this->response->status;
 		}
 		// If the status code has a corresponding message in our config
-		elseif ( array_key_exists($this->response->code(), $this->config['rest']['status-codes']) ) {
-			return $this->config['rest']['status-codes'][$this->response->code()];
+		elseif ( array_key_exists($this->response->code(), $this->config['rest']['status_codes']) ) {
+			return $this->config['rest']['status_codes'][$this->response->code()];
 		}
 		// If there's a default
 		elseif ( isset($this->config['rest']['defaults']['status']) ) {
@@ -447,13 +432,13 @@ class Paulus {
 	 */
 	public function api_respond() {
 		// Is a data response type not defined or not available?
-		if ( !isset($this->response->type) || !array_key_exists($this->response->type, $this->config['rest']['mime-types']) ) {
+		if ( !isset($this->response->type) || !array_key_exists($this->response->type, $this->config['rest']['mime_types']) ) {
 			// Use a short-style ternary (PHP 5.3) to either grab the default or use this hard-coded default
-			$this->response->type = $this->config['rest']['defaults']['data-type'] ?: 'json';
+			$this->response->type = $this->config['rest']['defaults']['data_type'] ?: 'json';
 		}
 
 		// Set our data response header
-		$this->response->header( 'Content-Type', $this->config['rest']['mime-types'][$this->response->type] );
+		$this->response->header( 'Content-Type', $this->config['rest']['mime_types'][$this->response->type] );
 
 		// Set our allowed methods response header
 		if ( !is_null( $this->response->possible_methods ) ) {
@@ -461,9 +446,9 @@ class Paulus {
 		}
 
 		// Send our access control headers
-		$this->response->header( 'Access-Control-Allow-Headers', $this->config['rest']['http-access-control']['allow-headers']);
-		$this->response->header( 'Access-Control-Allow-Methods', $this->config['rest']['http-access-control']['allow-methods']);
-		$this->response->header( 'Access-Control-Allow-Origin', $this->config['rest']['http-access-control']['allow-origin']);
+		$this->response->header( 'Access-Control-Allow-Headers', $this->config['rest']['http_access_control']['allow_headers']);
+		$this->response->header( 'Access-Control-Allow-Methods', $this->config['rest']['http_access_control']['allow_methods']);
+		$this->response->header( 'Access-Control-Allow-Origin', $this->config['rest']['http_access_control']['allow_origin']);
 
 		// Let's build our response data
 		$response_data = new stdClass();
@@ -501,7 +486,7 @@ class Paulus {
 			$this->response->json( $response_data );
 		}
 		elseif ( $this->response->type == 'jsonp' ) {
-			$this->response->json( $response_data, $this->config['rest']['defaults']['jsonp-padding'] ?: 'callback' );
+			$this->response->json( $response_data, $this->config['rest']['defaults']['jsonp_padding'] ?: 'callback' );
 		}
 		// If all else fails, just var_dump
 		else {
@@ -529,7 +514,10 @@ class Paulus {
 		}
 
 		// We need to EXIT here, since we want this to be our last output
-		exit;
+		// ... but be able to turn it off...
+		if ( isset( $this->config['rest']['exit_after_rest_response'] ) && $this->config['rest']['exit_after_rest_response'] ) {
+			exit;
+		}
 	}
 
 	/**
@@ -564,6 +552,31 @@ class Paulus {
 
 			// Respond restfully
 			$this->api_respond();
+		}
+	}
+
+	/**
+	 * generic_exception_handler
+	 *
+	 * Handle any exceptions thrown in our application, so we always respond RESTfully
+	 * 
+	 * @param Exception $exception	The exception object instance
+	 * @access public
+	 * @return void
+	 */
+	public function generic_exception_handler( $exception ) {
+		// Paulus - Handle all of our "ApiException"s
+		if ( $exception instanceOf ApiException ) {
+			// Handle our ApiException interface exceptions from Paulus
+			$this->api_exception_handler( $exception );
+		}
+		// All other exceptions
+		else {
+			// Log the error
+			$this->error_log( $exception->getMessage() );
+
+			// Let's handle the exception gracefully (RESTfully)
+			$this->abort( 500, 'EXCEPTION_THROWN', $exception->getMessage() );
 		}
 	}
 

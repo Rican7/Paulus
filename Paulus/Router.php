@@ -100,17 +100,17 @@ class Router {
 	 * @access private
 	 * @return void
 	 */
-	private static function smart_parameters( &$method, &$route, &$callback ) {
+	private static function smart_parameters( $args ) {
 		// Mirror Klein's native behavior
-		if ( is_callable( $method ) ) {
-			$callback = $method;
-			$method = $route = null;
-		}
-		elseif ( is_callable( $route ) ) {
-			$callback = $route;
-			$route = $method;
-			$method = null;
-		}
+		$callback = array_pop( $args );
+		$route = array_pop( $args );
+		$method = array_pop( $args );
+
+		return array(
+			'callback' => $callback,
+			'route' => $route,
+			'method' => $method,
+		);
 	}
 
 	/**
@@ -126,8 +126,11 @@ class Router {
 	 * @return callable
 	 */
 	public static function route( $method, $route = null, $callback = null ) {
+		// Make sure that our parameters are what they say they are
+		$args = self::smart_parameters( func_get_args() );
+
 		// Pass off to our Klein/Routing library
-		return respond( $method, $route, $callback );
+		return respond( $args[ 'method' ], $args[ 'route' ], $args[ 'callback' ] );
 	}
 
 	/**
@@ -146,7 +149,7 @@ class Router {
 	 */
 	public static function channel( $method, $route = null, $callback = null ) {
 		// Make sure that our parameters are what they say they are
-		self::smart_parameters( $method, $route, $callback );
+		extract( self::smart_parameters( func_get_args() ), EXTR_OVERWRITE );
 
 		// Route our new callback
 		return self::route(
@@ -216,7 +219,10 @@ class Router {
 	 * @return callable
 	 */
 	public static function any( $route = null, $callback = null ) {
-		return self::route( $route, $callback );
+		// Make sure that our parameters are what they say they are
+		$args = self::smart_parameters( func_get_args() );
+
+		return self::route( $args[ 'route' ], $args[ 'callback' ] );
 	}
 
 	/**
@@ -233,7 +239,10 @@ class Router {
 	 * @return callable
 	 */
 	public static function get( $route = null, $callback = null ) {
-		return self::route( 'GET', $route, $callback );
+		// Make sure that our parameters are what they say they are
+		$args = self::smart_parameters( func_get_args() );
+
+		return self::route( 'GET', $args[ 'route' ], $args[ 'callback' ] );
 	}
 
 	/**
@@ -250,7 +259,10 @@ class Router {
 	 * @return callable
 	 */
 	public static function post( $route = null, $callback = null ) {
-		return self::route( 'POST', $route, $callback );
+		// Make sure that our parameters are what they say they are
+		$args = self::smart_parameters( func_get_args() );
+
+		return self::route( 'POST', $args[ 'route' ], $args[ 'callback' ] );
 	}
 
 	/**
@@ -267,7 +279,10 @@ class Router {
 	 * @return callable
 	 */
 	public static function put( $route = null, $callback = null ) {
-		return self::route( 'PUT', $route, $callback );
+		// Make sure that our parameters are what they say they are
+		$args = self::smart_parameters( func_get_args() );
+
+		return self::route( 'PUT', $args[ 'route' ], $args[ 'callback' ] );
 	}
 
 	/**
@@ -284,7 +299,10 @@ class Router {
 	 * @return callable
 	 */
 	public static function delete( $route = null, $callback = null ) {
-		return self::route( 'DELETE', $route, $callback );
+		// Make sure that our parameters are what they say they are
+		$args = self::smart_parameters( func_get_args() );
+
+		return self::route( 'DELETE', $args[ 'route' ], $args[ 'callback' ] );
 	}
 
 	/**
@@ -301,7 +319,10 @@ class Router {
 	 * @return callable
 	 */
 	public static function head( $route = null, $callback = null ) {
-		return self::route( 'HEAD', $route, $callback );
+		// Make sure that our parameters are what they say they are
+		$args = self::smart_parameters( func_get_args() );
+
+		return self::route( 'HEAD', $args[ 'route' ], $args[ 'callback' ] );
 	}
 
 	/**
@@ -318,7 +339,10 @@ class Router {
 	 * @return callable
 	 */
 	public static function options( $route = null, $callback = null ) {
-		return self::route( 'OPTIONS', $route, $callback );
+		// Make sure that our parameters are what they say they are
+		$args = self::smart_parameters( func_get_args() );
+
+		return self::route( 'OPTIONS', $args[ 'route' ], $args[ 'callback' ] );
 	}
 
 } // End class Router
