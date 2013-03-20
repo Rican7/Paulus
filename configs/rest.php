@@ -5,10 +5,10 @@ $load_config = function() {
 	return array(
 		'defaults' => array(
 			'status' => 'NULL',
-			'data-type' => 'json',
-			'jsonp-padding' => 'callback',
+			'data_type' => 'json',
+			'jsonp_padding' => 'callback',
 		),
-		'status-codes' => array(
+		'status_codes' => array(
 			200 => 'OK',
 			400 => 'BAD_REQUEST',
 			401 => 'UNAUTHORIZED',
@@ -22,16 +22,16 @@ $load_config = function() {
 			503 => 'SERVICE_UNAVAILABLE',
 			504 => 'GATEWAY_TIMEOUT',
 		),
-		'mime-types' => array(
+		'mime_types' => array(
 			'json' => 'application/json',
 			'jsonp' => 'application/javascript',
 			//'xml' => 'application/xml',
 			//'csv' => 'application/csv',
 		),
-		'http-access-control' => array(
-			'allow-headers' => 'Origin, X-Requested-With, Content-Type, Accept',
-			'allow-methods' => 'POST, GET',
-			'allow-origin' => '*',
+		'http_access_control' => array(
+			'allow_headers' => 'Origin, X-Requested-With, Content-Type, Accept',
+			'allow_methods' => 'POST, GET',
+			'allow_origin' => '*',
 		),
 	);
 };

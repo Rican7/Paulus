@@ -410,8 +410,8 @@ class Paulus {
 			return $this->response->status;
 		}
 		// If the status code has a corresponding message in our config
-		elseif ( array_key_exists($this->response->code(), $this->config['rest']['status-codes']) ) {
-			return $this->config['rest']['status-codes'][$this->response->code()];
+		elseif ( array_key_exists($this->response->code(), $this->config['rest']['status_codes']) ) {
+			return $this->config['rest']['status_codes'][$this->response->code()];
 		}
 		// If there's a default
 		elseif ( isset($this->config['rest']['defaults']['status']) ) {
@@ -432,13 +432,13 @@ class Paulus {
 	 */
 	public function api_respond() {
 		// Is a data response type not defined or not available?
-		if ( !isset($this->response->type) || !array_key_exists($this->response->type, $this->config['rest']['mime-types']) ) {
+		if ( !isset($this->response->type) || !array_key_exists($this->response->type, $this->config['rest']['mime_types']) ) {
 			// Use a short-style ternary (PHP 5.3) to either grab the default or use this hard-coded default
-			$this->response->type = $this->config['rest']['defaults']['data-type'] ?: 'json';
+			$this->response->type = $this->config['rest']['defaults']['data_type'] ?: 'json';
 		}
 
 		// Set our data response header
-		$this->response->header( 'Content-Type', $this->config['rest']['mime-types'][$this->response->type] );
+		$this->response->header( 'Content-Type', $this->config['rest']['mime_types'][$this->response->type] );
 
 		// Set our allowed methods response header
 		if ( !is_null( $this->response->possible_methods ) ) {
@@ -446,9 +446,9 @@ class Paulus {
 		}
 
 		// Send our access control headers
-		$this->response->header( 'Access-Control-Allow-Headers', $this->config['rest']['http-access-control']['allow-headers']);
-		$this->response->header( 'Access-Control-Allow-Methods', $this->config['rest']['http-access-control']['allow-methods']);
-		$this->response->header( 'Access-Control-Allow-Origin', $this->config['rest']['http-access-control']['allow-origin']);
+		$this->response->header( 'Access-Control-Allow-Headers', $this->config['rest']['http_access_control']['allow_headers']);
+		$this->response->header( 'Access-Control-Allow-Methods', $this->config['rest']['http_access_control']['allow_methods']);
+		$this->response->header( 'Access-Control-Allow-Origin', $this->config['rest']['http_access_control']['allow_origin']);
 
 		// Let's build our response data
 		$response_data = new stdClass();
@@ -486,7 +486,7 @@ class Paulus {
 			$this->response->json( $response_data );
 		}
 		elseif ( $this->response->type == 'jsonp' ) {
-			$this->response->json( $response_data, $this->config['rest']['defaults']['jsonp-padding'] ?: 'callback' );
+			$this->response->json( $response_data, $this->config['rest']['defaults']['jsonp_padding'] ?: 'callback' );
 		}
 		// If all else fails, just var_dump
 		else {
