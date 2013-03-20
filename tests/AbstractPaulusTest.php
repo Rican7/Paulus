@@ -1,6 +1,8 @@
 <?php
-// Require our setup file
-require_once( __DIR__ . '/setup.php' );
+
+namespace Paulus\Tests;
+
+use \PHPUnit_Framework_TestCase;
 
 use \Paulus\Paulus;
 

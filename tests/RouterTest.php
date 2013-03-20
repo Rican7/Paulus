@@ -1,6 +1,6 @@
 <?php
-// Require our base class
-require_once( __DIR__ . '/AbstractPaulusTest.php' );
+
+namespace Paulus\Tests;
 
 use \Paulus\Paulus;
 use \Paulus\Router;

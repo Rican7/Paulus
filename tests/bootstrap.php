@@ -1,5 +1,6 @@
 <?php
-require_once( __DIR__ . '/../vendor/autoload.php' );
+$autoloader = require( __DIR__ . '/../vendor/autoload.php' );
+$autoloader->add( 'Paulus\Tests', __DIR__ );
 
 // Setup my own config
 $paulus_config = array(
