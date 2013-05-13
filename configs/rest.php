@@ -28,6 +28,7 @@ $load_config = function() {
 			//'xml' => 'application/xml',
 			//'csv' => 'application/csv',
 		),
+      'json_request_body_handle' => 'merge', // merge, replace, or off?
 		'http_access_control' => array(
 			'allow_headers' => 'Origin, X-Requested-With, Content-Type, Accept',
 			'allow_methods' => 'POST, GET',
