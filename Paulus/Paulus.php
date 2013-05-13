@@ -18,6 +18,7 @@ use	\Paulus\Config,
 	\Paulus\Exceptions\Interfaces\ApiVerboseException,
 	\Paulus\Exceptions\EndpointNotFound,
 	\Paulus\Exceptions\WrongMethod,
+	\Paulus\Exceptions\InvalidRequestSyntax,
 	\Paulus\Util,
 	\stdClass;
 
@@ -35,6 +36,7 @@ class Paulus {
 	 */
 	public	$config; // Configuration array
 	public	$controller; // Let's keep track of a potential route controller
+	protected   $json_request_body; // JSON request body cache
 
 	// Routing variable references
 	private	$request;
@@ -88,6 +90,9 @@ class Paulus {
 
 			// Setup our exception handler
 			$this->setup_exception_handler();
+
+			// Handle any JSON request bodies
+			$this->handle_json_request();
 
 			// Only pass our "app" to the service register if we've configured it to do so
 			if ( $this->config['routing']['pass_app_to_service'] ) {
@@ -333,6 +338,56 @@ class Paulus {
 		}
 
 		return null;
+	}
+
+	/**
+	 * handle_json_request
+	 *
+	 * Handle a JSON request and automatically decode the request
+	 * into PHP's request data superglobal
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function handle_json_request() {
+		// Did we get a JSON request?
+		if ( isset( $_SERVER['CONTENT_TYPE'] )
+			&& ( strpos( $_SERVER['CONTENT_TYPE'], 'application/json' ) !== false
+			|| strpos( $_SERVER['CONTENT_TYPE'], 'application/x-json' ) !== false ) ) {
+
+				// Grab from our cache and save us some time
+				if ( $this->json_request_body !== null ) {
+					return $this->json_request_body;
+				}
+
+				// Grab the body
+				$body = (string) $this->request->body();
+
+				// Let's do this thing!
+				$this->json_request_body = json_decode($body, true); // Decode into an associative array
+
+				// If there was an error parsing, throw an exception
+				if (JSON_ERROR_NONE !== json_last_error()) {
+					throw new InvalidRequestSyntax();
+				}
+				else {
+					if ( isset( $this->config['rest']['json_request_body_handle'] ) ) {
+						switch ( strtolower( $this->config['rest']['json_request_body_handle'] ) ) {
+						case 'merge':
+							$_REQUEST = array_merge(
+								$_REQUEST,
+								(array) $this->json_request_body
+							);
+							break;
+						case 'replace':
+							$_REQUEST = (array) $this->json_request_body;
+							break;
+						}
+					}
+				}
+			}
+
+		return false;
 	}
 
 	/**
