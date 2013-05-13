@@ -351,8 +351,9 @@ class Paulus {
 	 */
 	public function handle_json_request() {
 		// Did we get a JSON request?
-		if ( strpos( $_SERVER['CONTENT_TYPE'], 'application/json' ) !== false
-			|| strpos( $_SERVER['CONTENT_TYPE'], 'application/x-json' ) !== false ) {
+		if ( isset( $_SERVER['CONTENT_TYPE'] )
+			&& ( strpos( $_SERVER['CONTENT_TYPE'], 'application/json' ) !== false
+			|| strpos( $_SERVER['CONTENT_TYPE'], 'application/x-json' ) !== false ) ) {
 
 				// Grab from our cache and save us some time
 				if ( $this->json_request_body !== null ) {
