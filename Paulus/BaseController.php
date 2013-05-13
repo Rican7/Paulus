@@ -66,6 +66,9 @@ abstract class BaseController {
 
 		// Let's keep a quick reference to our config for accessibility
 		$this->config = &$app->config;
+
+      // Handle any JSON request bodies
+      $this->handle_json_request();
 	}
 
    /**
