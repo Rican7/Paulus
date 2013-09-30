@@ -1,27 +1,26 @@
 {
-	"name": "paulus/paulus",
-	"description": "A PHP micro-framework (well, more like a \"mini\" framework) for creating RESTful API services quickly and efficiently.",
-	"keywords": ["microframework", "rest", "routing", "router", "api", "boilerplate"],
-	"homepage": "https://github.com/Rican7/Paulus",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Trevor N. Suarez",
-			"email": "rican7@gmail.com",
-			"homepage": "http://about.me/tnsuarez"
-		}
-	],
-	"require": {
-		"php": ">=5.4.0",
-		"klein/klein": "1.1.x"
-	},
-	"require-dev": {
-		"phpunit/phpunit": "3.7.x"
-	},
-	"suggest": {
-		"php-activerecord/php-activerecord": "Robust ActiveRecord pattern implemented in PHP. A great ORM that Paulus was designed to be used with"
-	},
+   "name": "paulus/paulus",
+   "description": "A PHP micro-framework for creating RESTful services quickly and efficiently.",
+   "keywords": ["microframework", "rest", "routing", "router", "api", "boilerplate"],
+   "homepage": "https://github.com/Rican7/Paulus",
+   "license": "MIT",
+   "authors": [
+      {
+      "name": "Trevor N. Suarez",
+      "email": "rican7@gmail.com",
+      "homepage": "http://about.me/tnsuarez"
+   }
+   ],
+   "require": {
+      "php": ">=5.4.0",
+      "klein/klein": "dev-master"
+   },
+   "require-dev": {
+      "phpunit/phpunit": "3.7.x",
+      "phpunit/php-code-coverage": "1.2.x",
+      "squizlabs/php_codesniffer": "1.4.6"
+   },
    "autoload": {
-      "psr-0": { "Paulus": "." }
+      "psr-0": { "Paulus": "src/" }
    }
 }
