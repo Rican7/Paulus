@@ -43,6 +43,14 @@ class Paulus
      */
     protected $router;
 
+    /**
+     * The Service Locator used throughout the app
+     *
+     * @var ServiceLocator
+     * @access protected
+     */
+    protected $locator;
+
 
     /**
      * Methods
@@ -55,7 +63,7 @@ class Paulus
      * @param Router $router    The Router instance to use for HTTP routing
      * @access public
      */
-    public function __construct(array $config = null, Router $router = null)
+    public function __construct(array $config = null, Router $router = null, ServiceLocator $locator = null)
     {
         // First things first... get our init time
         $this->start_time = microtime(true);
@@ -64,6 +72,9 @@ class Paulus
 
         // Set our router with a context of this application instance
         $this->router = $router ?: new Router(null, $this);
+
+        // Setup our service locator
+        $this->locator = $locator ?: new ServiceLocator();
     }
 
     /**
@@ -86,6 +97,17 @@ class Paulus
     public function router()
     {
         return $this->router;
+    }
+
+    /**
+     * Get the service locator instance
+     *
+     * @access public
+     * @return ServiceLocator
+     */
+    public function locator()
+    {
+        return $this->locator;
     }
 
     /**

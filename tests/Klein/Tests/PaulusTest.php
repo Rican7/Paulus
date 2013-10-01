@@ -13,6 +13,7 @@ namespace Paulus\Tests;
 
 use Paulus\Paulus;
 use Paulus\Router;
+use Paulus\ServiceLocator;
 
 /**
  * PaulusTest
@@ -43,5 +44,12 @@ class PaulusTest extends AbstractPaulusTest
         $router = $this->paulus_app->router();
 
         $this->assertTrue($router instanceof Router);
+    }
+
+    public function testLocator()
+    {
+        $locator = $this->paulus_app->locator();
+
+        $this->assertTrue($locator instanceof ServiceLocator);
     }
 }
