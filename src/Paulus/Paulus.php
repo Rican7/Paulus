@@ -127,8 +127,6 @@ class Paulus
             );
         }
 
-        call_user_func_array([$this->router(), $method], $arguments);
-
-        return $this;
+        return call_user_func_array([$this->router(), $method], $args);
     }
 }

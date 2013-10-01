@@ -14,6 +14,7 @@ namespace Paulus\Tests;
 use Paulus\Paulus;
 use Paulus\Router;
 use Paulus\ServiceLocator;
+use Klein\DataCollection\RouteCollection;
 
 /**
  * PaulusTest
@@ -51,5 +52,20 @@ class PaulusTest extends AbstractPaulusTest
         $locator = $this->paulus_app->locator();
 
         $this->assertTrue($locator instanceof ServiceLocator);
+    }
+
+    public function testCallUnknownMethodRedirectsToRouter()
+    {
+        $returned = $this->paulus_app->routes();
+
+        $this->assertTrue($returned instanceof RouteCollection);
+    }
+
+    /**
+     * @expectedException BadMethodCallException
+     */
+    public function testCallBadMethodThrowsAnException()
+    {
+        $this->paulus_app->thisMethodShouldNotExistANYWHERE();
     }
 }
