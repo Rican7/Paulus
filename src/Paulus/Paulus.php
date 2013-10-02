@@ -125,19 +125,25 @@ class Paulus
     /**
      * Prepare the application to be run
      *
+     * @param boolean $auto_load_routes Whether or not we should attempt to automatically load the route definitions
      * @param RouteLoader $route_loader The route loader to use when preparing routes
      * @access public
      * @return Paulus
      */
-    public function prepare(RouteLoader $route_loader = null)
+    public function prepare($auto_load_routes = true, RouteLoader $route_loader = null)
     {
         // Don't allow the preparing of an application more than once
         if ($this->prepared) {
             throw new AlreadyPreparedException();
         }
 
-        // Try and build our RouteLoader instance by inferring the route directory
-        $route_loader = $route_loader ?: RouteLoaderFactory::buildByDirectoryInferring($this->router);
+        if ($auto_load_routes) {
+            // Try and build our RouteLoader instance by inferring the route directory
+            $route_loader = $route_loader ?: RouteLoaderFactory::buildByDirectoryInferring($this->router);
+
+            // Actually load our routes
+            $route_loader->load();
+        }
 
         $this->prepared = true;
 
