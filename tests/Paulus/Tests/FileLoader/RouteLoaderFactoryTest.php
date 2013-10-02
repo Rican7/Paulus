@@ -72,7 +72,7 @@ class RouteLoaderFactoryTest extends AbstractPaulusTest
     }
 
     /**
-     * @expectedException UnexpectedValueException
+     * @expectedException Paulus\Exception\UnableToInferRouteDirectoryException
      */
     public function testbuildByDirectoryInferringFails()
     {
@@ -85,7 +85,7 @@ class RouteLoaderFactoryTest extends AbstractPaulusTest
     }
 
     /**
-     * @expectedException UnexpectedValueException
+     * @expectedException Paulus\Exception\UnableToInferRouteDirectoryException
      */
     public function testbuildByDirectoryInferringFindsFile()
     {

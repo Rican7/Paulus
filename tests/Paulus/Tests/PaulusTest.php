@@ -78,6 +78,21 @@ class PaulusTest extends AbstractPaulusTest
         $this->assertTrue($locator instanceof ServiceLocator);
     }
 
+    public function testPrepareWithoutAutoLoading()
+    {
+        $returned = $this->paulus_app->prepare(false);
+
+        $this->assertTrue($returned instanceof Paulus);
+    }
+
+    /**
+     * @expectedException Paulus\Exception\UnableToInferRouteDirectoryException
+     */
+    public function testPrepareWithAutoLoadingFailsToLoad()
+    {
+        $this->paulus_app->prepare(true);
+    }
+
     public function testPrepareWithRouteInfer()
     {
         // Make a directory that it can find
