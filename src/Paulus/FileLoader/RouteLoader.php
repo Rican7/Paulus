@@ -11,6 +11,7 @@
 
 namespace Paulus\FileLoader;
 
+use Paulus\Exception\RouteAutoLoadFailureException;
 use Paulus\Router;
 use SplFileInfo;
 
@@ -241,6 +242,17 @@ class RouteLoader extends AbstractFileLoader
         $this->valid_routes = $routes;
 
         // Call our parent loader
-        return parent::load();
+        try {
+            $returned = parent::load();
+        } catch (UnexpectedValueException $e) {
+            // Rethrow
+            throw new RouteAutoLoadFailureException(
+                $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
+
+        return $returned;
     }
 }

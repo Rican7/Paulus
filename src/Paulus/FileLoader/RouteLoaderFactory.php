@@ -12,9 +12,9 @@
 namespace Paulus\FileLoader;
 
 use FilesystemIterator;
+use Paulus\Exception\UnableToInferRouteDirectoryException;
 use Paulus\Router;
 use SplFileInfo;
-use UnexpectedValueException;
 
 /**
  * RouteLoaderFactory
@@ -163,7 +163,7 @@ class RouteLoaderFactory
      * Build the RouteLoader by inferring the route directory
      *
      * @param string $start_directory
-     * @throws UnexpectedValueException If we failed to infer the directory
+     * @throws UnableToInferRouteDirectoryException If we failed to infer the directory
      * @static
      * @access public
      * @return RouteLoader
@@ -174,11 +174,7 @@ class RouteLoaderFactory
 
         if ($path === false) {
             // Let them know that we couldn't find it
-            throw new UnexpectedValueException(
-                'Unable to infer route directory.'
-                .' Please provide a RouteLoader instance'
-                .' with a valid path to the `prepare()` method.'
-            );
+            throw new UnableToInferRouteDirectoryException();
         }
 
         return new RouteLoader($path, $router);
