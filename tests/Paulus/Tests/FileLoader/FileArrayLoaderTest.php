@@ -9,15 +9,16 @@
  * @version     2.0.0
  */
 
-namespace Paulus\Tests;
+namespace Paulus\Tests\FileLoader;
 
 use Paulus\FileLoader\FileArrayLoader;
+use Paulus\Tests\AbstractPaulusTest;
 
 /**
  * FileArrayLoaderTest
  *
  * @uses    AbstractPaulusTest
- * @package Paulus\Tests;
+ * @package Paulus\Tests
  */
 class FileArrayLoaderTest extends AbstractPaulusTest
 {
@@ -28,7 +29,7 @@ class FileArrayLoaderTest extends AbstractPaulusTest
 
     protected function getTestFilePath()
     {
-        return __DIR__ .'/../../file_array_loader_files/';
+        return __DIR__ .'/../../../file_array_loader_files/';
     }
 
 
