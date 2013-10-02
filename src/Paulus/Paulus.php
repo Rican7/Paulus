@@ -130,7 +130,7 @@ class Paulus
      * @access public
      * @return Paulus
      */
-    public function prepare($auto_load_routes = true, RouteLoader $route_loader = null)
+    public function prepare($auto_load_routes = false, RouteLoader $route_loader = null)
     {
         // Don't allow the preparing of an application more than once
         if ($this->prepared) {

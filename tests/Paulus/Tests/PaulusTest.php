@@ -98,7 +98,7 @@ class PaulusTest extends AbstractPaulusTest
         // Make a directory that it can find
         mkdir($this->getTestRoutesPath(), 0777);
 
-        $returned = $this->paulus_app->prepare();
+        $returned = $this->paulus_app->prepare(true);
 
         $this->assertTrue($returned instanceof Paulus);
 
