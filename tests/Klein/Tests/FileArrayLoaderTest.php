@@ -11,7 +11,7 @@
 
 namespace Paulus\Tests;
 
-use Paulus\FileArrayLoader;
+use Paulus\FileLoader\FileArrayLoader;
 
 /**
  * FileArrayLoaderTest

@@ -9,7 +9,7 @@
  * @version     2.0.0
  */
 
-namespace Paulus;
+namespace Paulus\FileLoader;
 
 use SplFileInfo;
 
@@ -25,7 +25,7 @@ use SplFileInfo;
  * across all matches under the same URL namespace
  *
  * @uses    AbstractFileLoader
- * @package Paulus
+ * @package Paulus\FileLoader
  */
 class RouteLoader extends AbstractFileLoader
 {

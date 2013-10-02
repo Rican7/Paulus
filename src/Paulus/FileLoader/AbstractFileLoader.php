@@ -9,7 +9,7 @@
  * @version     2.0.0
  */
 
-namespace Paulus;
+namespace Paulus\FileLoader;
 
 use FilesystemIterator;
 use IteratorAggregate;
@@ -23,7 +23,7 @@ use SplFileInfo;
  *
  * @uses    IteratorAggregate
  * @abstract
- * @package Paulus
+ * @package Paulus\FileLoader
  */
 abstract class AbstractFileLoader implements IteratorAggregate
 {

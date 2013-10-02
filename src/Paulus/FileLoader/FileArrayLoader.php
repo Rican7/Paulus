@@ -9,7 +9,7 @@
  * @version     2.0.0
  */
 
-namespace Paulus;
+namespace Paulus\FileLoader;
 
 use SplFileInfo;
 use UnexpectedValueException;
@@ -18,7 +18,7 @@ use UnexpectedValueException;
  * FileArrayLoader
  *
  * @uses    AbstractFileLoader
- * @package Paulus
+ * @package Paulus\FileLoader
  */
 class FileArrayLoader extends AbstractFileLoader
 {
