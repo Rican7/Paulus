@@ -15,7 +15,7 @@ use Klein\Route as KleinRoute;
 /**
  * Route
  *
- * @uses	KleinRoute
+ * @uses    KleinRoute
  * @package Paulus
  */
 class Route extends KleinRoute

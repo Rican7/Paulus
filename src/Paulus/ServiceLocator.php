@@ -25,7 +25,7 @@ use Paulus\Exception\DuplicateServiceException;
  * Not to be confused with a true Dependency Injection Container
  * (http://blog.ircmaxell.com/2012/08/object-scoping-triste-against-service.html)
  *
- * @uses	DataCollection
+ * @uses    DataCollection
  * @package Paulus
  */
 class ServiceLocator extends DataCollection
