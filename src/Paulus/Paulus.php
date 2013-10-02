@@ -13,6 +13,7 @@ namespace Paulus;
 
 use BadMethodCallException;
 use Paulus\DataCollection\ImmutableDataCollection;
+use Paulus\Exception\AlreadyPreparedException;
 use Paulus\FileLoader\RouteLoader;
 use Paulus\FileLoader\RouteLoaderFactory;
 
@@ -124,8 +125,9 @@ class Paulus
     /**
      * Prepare the application to be run
      *
+     * @param RouteLoader $route_loader The route loader to use when preparing routes
      * @access public
-     * @return void
+     * @return Paulus
      */
     public function prepare(RouteLoader $route_loader = null)
     {
@@ -138,6 +140,8 @@ class Paulus
         $route_loader = $route_loader ?: RouteLoaderFactory::buildByDirectoryInferring($this->router);
 
         $this->prepared = true;
+
+        return $this;
     }
 
     /**

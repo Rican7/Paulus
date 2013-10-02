@@ -11,10 +11,12 @@
 
 namespace Paulus\Tests;
 
+use Klein\DataCollection\RouteCollection;
+use Paulus\DataCollection\ImmutableDataCollection;
+use Paulus\FileLoader\RouteLoaderFactory;
 use Paulus\Paulus;
 use Paulus\Router;
 use Paulus\ServiceLocator;
-use Klein\DataCollection\RouteCollection;
 
 /**
  * PaulusTest
@@ -24,6 +26,28 @@ use Klein\DataCollection\RouteCollection;
  */
 class PaulusTest extends AbstractPaulusTest
 {
+
+    /**
+     * Helpers
+     */
+
+    protected function getTestRoutesPath()
+    {
+        return $this->getTestsDir() .'/../'. RouteLoaderFactory::ROUTE_DIR_NAME;
+    }
+
+    protected function tearDown()
+    {
+        // Clean up
+        @rmdir($this->getTestRoutesPath());
+
+        parent::tearDown();
+    }
+
+
+    /**
+     * Tests
+     */
 
     public function testGetStartTime()
     {
@@ -52,6 +76,27 @@ class PaulusTest extends AbstractPaulusTest
         $locator = $this->paulus_app->locator();
 
         $this->assertTrue($locator instanceof ServiceLocator);
+    }
+
+    public function testPrepareWithRouteInfer()
+    {
+        // Make a directory that it can find
+        mkdir($this->getTestRoutesPath(), 0777);
+
+        $returned = $this->paulus_app->prepare();
+
+        $this->assertTrue($returned instanceof Paulus);
+
+        return $this->paulus_app;
+    }
+
+    /**
+     * @depends testPrepareWithRouteInfer
+     * @expectedException Paulus\Exception\AlreadyPreparedException
+     */
+    public function testMultiplePrepareThrowsException($app)
+    {
+        $app->prepare();
     }
 
     public function testCallUnknownMethodRedirectsToRouter()
