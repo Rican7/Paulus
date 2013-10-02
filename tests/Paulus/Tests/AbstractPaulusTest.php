@@ -32,6 +32,14 @@ abstract class AbstractPaulusTest extends PHPUnit_Framework_TestCase
      */
 
     /**
+     * The directory containing the test files
+     *
+     * @var string
+     * @access private
+     */
+    private $tests_dir;
+
+    /**
      * The automatically created test Paulus instance
      * (for easy testing and less boilerplate)
      *
@@ -57,5 +65,19 @@ abstract class AbstractPaulusTest extends PHPUnit_Framework_TestCase
 
         // Create a paulus instance, since we're going to need it EVERYWHERE
         $this->paulus_app = new Paulus();
+
+        // Get our tests directory
+        $this->tests_dir = dirname($GLOBALS['__PHPUNIT_BOOTSTRAP']);
+    }
+
+    /**
+     * Get the directory containing our tests
+     *
+     * @access protected
+     * @return string
+     */
+    protected function getTestsDir()
+    {
+        return $this->tests_dir;
     }
 }
