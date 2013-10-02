@@ -200,9 +200,9 @@ class RouteLoader extends AbstractFileLoader
         if ($this->controllers_should_initialize) {
             // Setup our router to instantiate our controller when the namespace is matched
             $this->router->with(
+                $base_url,
                 function () use ($basename) {
                     $this->router->respond(
-                        $base_url,
                         function ($request, $response, $service, $app, $router) use ($basename) {
                             $router->initializeController($basename);
                         }
