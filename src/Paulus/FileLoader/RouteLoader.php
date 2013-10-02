@@ -11,6 +11,7 @@
 
 namespace Paulus\FileLoader;
 
+use Paulus\Router;
 use SplFileInfo;
 
 /**
