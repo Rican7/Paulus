@@ -12,6 +12,9 @@
 namespace Paulus;
 
 use BadMethodCallException;
+use Paulus\DataCollection\ImmutableDataCollection;
+use Paulus\FileLoader\RouteLoader;
+use Paulus\FileLoader\RouteLoaderFactory;
 
 /**
  * Paulus
@@ -50,6 +53,14 @@ class Paulus
      * @access protected
      */
     protected $locator;
+
+    /**
+     * Whether the application been prepared or not
+     *
+     * @var boolean
+     * @access protected
+     */
+    protected $prepared = false;
 
 
     /**
@@ -108,6 +119,25 @@ class Paulus
     public function locator()
     {
         return $this->locator;
+    }
+
+    /**
+     * Prepare the application to be run
+     *
+     * @access public
+     * @return void
+     */
+    public function prepare(RouteLoader $route_loader = null)
+    {
+        // Don't allow the preparing of an application more than once
+        if ($this->prepared) {
+            throw new AlreadyPreparedException();
+        }
+
+        // Try and build our RouteLoader instance by inferring the route directory
+        $route_loader = $route_loader ?: RouteLoaderFactory::buildByDirectoryInferring($this->router);
+
+        $this->prepared = true;
     }
 
     /**
