@@ -246,22 +246,4 @@ class ApiResponse extends JsonResponse
 
         return $this;
     }
-
-    /**
-     * Easy method to determine if the array contains any non-integer keys
-     *
-     * @param array $array
-     * @static
-     * @access public
-     * @return boolean
-     */
-    public static function isHash(array $array)
-    {
-        return (bool) count(
-            array_filter(
-                array_keys($array),
-                'is_string'
-            )
-        );
-    }
 }
