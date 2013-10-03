@@ -13,6 +13,7 @@ namespace Paulus\Exception\Http\Standard;
 
 use InvalidArgumentException;
 use Paulus\Exception\Http\ApiExceptionInterface;
+use Paulus\Exception\Http\ApiExceptionTrait;
 
 /**
  * Unauthorized

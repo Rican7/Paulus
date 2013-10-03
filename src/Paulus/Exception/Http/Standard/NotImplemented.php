@@ -11,8 +11,9 @@
 
 namespace Paulus\Exception\Http\Standard;
 
-use RuntimeException;
 use Paulus\Exception\Http\ApiExceptionInterface;
+use Paulus\Exception\Http\ApiExceptionTrait;
+use RuntimeException;
 
 /**
  * NotImplemented

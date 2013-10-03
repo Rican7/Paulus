@@ -13,6 +13,7 @@ namespace Paulus\Exception\Http\Standard;
 
 use OutOfBoundsException;
 use Paulus\Exception\Http\ApiExceptionInterface;
+use Paulus\Exception\Http\ApiExceptionTrait;
 
 /**
  * Forbidden

@@ -11,6 +11,8 @@
 
 namespace Paulus\Exception\Http;
 
+use Paulus\Exception\PaulusExceptionInterface;
+
 /**
  * ApiExceptionInterface
  *
