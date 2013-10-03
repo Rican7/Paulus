@@ -12,6 +12,7 @@
 namespace Paulus;
 
 use Klein\RouteFactory as KleinRouteFactory;
+use Paulus\Route;
 
 /**
  * RouteFactory
