@@ -19,7 +19,7 @@ use Paulus\Tests\AbstractPaulusTest;
  * RouteLoaderTest
  *
  * @uses    AbstractPaulusTest
- * @package Paulus\Tests
+ * @package Paulus\Tests\FileLoader
  */
 class RouteLoaderTest extends AbstractPaulusTest
 {
