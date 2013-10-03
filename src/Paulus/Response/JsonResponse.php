@@ -63,7 +63,7 @@ class JsonResponse extends AbstractResponse
      * @access public
      * @return JsonResponse
      */
-    public function setData($data = null)
+    public function setData($data)
     {
         // Require that the response be unlocked before changing it
         $this->requireUnlocked();
@@ -128,6 +128,6 @@ class JsonResponse extends AbstractResponse
          */
         $encode_flags = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT;
 
-        return json_encode($data, $options);
+        return json_encode($data, $encode_flags);
     }
 }
