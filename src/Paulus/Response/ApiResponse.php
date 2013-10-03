@@ -219,11 +219,11 @@ class ApiResponse extends JsonResponse
             'status_code' => (int) $this->code(),
             'status' => (string) $this->getStatusSlug(),
             'message' => (string) $this->getMessage(),
-            'more_info' => (object) $this->getMoreInfo(),
+            'more_info' => $this->getMoreInfo() ?: (object) [],
         ];
 
         // Assign our data
-        $formatted->data = $this->getData();
+        $formatted->data = $this->getData() ?: (object) [];
 
         return $formatted;
     }
