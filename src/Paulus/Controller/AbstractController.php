@@ -13,11 +13,13 @@ namespace Paulus\Controller;
 
 use Exception;
 use Klein\AbstractResponse;
+use Klein\Request;
 use Klein\ServiceProvider;
 use Paulus\Exception\Http\InvalidParameters;
 use Paulus\Exception\Http\ObjectNotFound;
 use Paulus\Paulus;
-use Paulus\Request;
+use Paulus\Response\ApiResponse;
+use Paulus\Router;
 
 /**
  * AbstractController
@@ -117,22 +119,25 @@ abstract class AbstractController implements ControllerInterface
         // If the response is null.. we didn't get back a result
         if (null === $result_data) {
             throw new ObjectNotFound();
-        }
 
-        // True response
-        if ($result_data === true) {
+        } elseif (true === $result_data) {
             // True case WITHOUT any returned data
 
-        } elseif ($result_data === false) {
+        } elseif (false === $result_data) {
             // Throw an exception
             throw new InvalidParameters();
 
         } else {
             if ($this->response instanceof ApiResponse) {
-                // Prepare our data for response
-                $this->response->setData($result_data);
+                if (!$this->response->isLocked()) {
+                    // Prepare our data for response
+                    $this->response->setData($result_data);
+                }
             }
         }
+
+        // Handle it with the default behavior
+        return $result_data;
     }
 
     /**
@@ -153,6 +158,9 @@ abstract class AbstractController implements ControllerInterface
                 $e
             );
         }
+
+        // Handle it with our app's default handler
+        $this->app->handleException($e);
     }
 
     /**
