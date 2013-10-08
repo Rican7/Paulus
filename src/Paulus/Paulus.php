@@ -12,10 +12,15 @@
 namespace Paulus;
 
 use BadMethodCallException;
+use Exception;
+use Klein\AbstractResponse;
 use Paulus\DataCollection\ImmutableDataCollection;
 use Paulus\Exception\AlreadyPreparedException;
+use Paulus\Exception\Http\ApiExceptionInterface;
+use Paulus\Exception\Http\ApiVerboseExceptionInterface;
 use Paulus\FileLoader\RouteLoader;
 use Paulus\FileLoader\RouteLoaderFactory;
+use Paulus\Response\ApiResponse;
 
 /**
  * Paulus
@@ -71,22 +76,23 @@ class Paulus
     /**
      * Constructor
      *
-     * @param array $config     A custom application configuration array
-     * @param Router $router    The Router instance to use for HTTP routing
+     * @param Router $router            The Router instance to use for HTTP routing
+     * @param ServiceLocator $locator   The service locator/container for the app
      * @access public
      */
-    public function __construct(array $config = null, Router $router = null, ServiceLocator $locator = null)
+    public function __construct(Router $router = null, ServiceLocator $locator = null)
     {
         // First things first... get our init time
         $this->start_time = microtime(true);
-
-        // TODO: Handle config merging
 
         // Set our router with a context of this application instance
         $this->router = $router ?: new Router(null, $this);
 
         // Setup our service locator
         $this->locator = $locator ?: new ServiceLocator();
+
+        // Setup our exception handler
+        $this->setupExceptionHandler();
     }
 
     /**
@@ -123,6 +129,106 @@ class Paulus
     }
 
     /**
+     * Setup our exception handler
+     *
+     * Setup our global exception handler for Paulus,
+     * try and setup our controller's exception handler,
+     * and fall back to our generic exception handler
+     *
+     * @access protected
+     * @return Paulus
+     */
+    protected function setupExceptionHandler()
+    {
+        // Setup the global exception handler
+        set_exception_handler([$this, 'handleException']);
+
+        // Register an error handler through our router's catcher
+        $this->router->onError(
+            function ($router, $message, $class, Exception $exception) {
+                return $this->handleException($exception);
+            }
+        );
+
+        return $this;
+    }
+
+    /**
+     * Handle an exception
+     *
+     * Handles any exception thrown in the application,
+     * so we always respond RESTfully
+     *
+     * @param Exception $exception
+     * @access public
+     * @return Paulus
+     */
+    public function handleException(Exception $exception)
+    {
+        // Handle our RESTful exceptions
+        if ($exception instanceof ApiExceptionInterface) {
+
+            $this->handleRestfulException($exception);
+        } else {
+
+            // Grab the response
+            $response = $this->router->response();
+
+            // Unlock the response and set its response code
+            $response->unlock()->code(500);
+
+            if ($response instanceof ApiResponse) {
+
+                // Set our slug and message
+                $response
+                    ->setStatusSlug('EXCEPTION_THROWN')
+                    ->setMessage($exception->getMessage());
+            }
+
+            // Send the response
+            $response->send();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Handle exceptions implementing the ApiExceptionInterface
+     *
+     * @param ApiExceptionInterface $exception
+     * @access public
+     * @return Paulus
+     */
+    public function handleRestfulException(ApiExceptionInterface $exception)
+    {
+        // Grab the response
+        $response = $this->router->response();
+
+        // Unlock the response
+        $response->unlock();
+
+        // Set the response code of the response based on the exception's code
+        $response->code($exception->getCode());
+
+        if ($response instanceof ApiResponse) {
+
+            // Set our slug and message
+            $response
+                ->setStatusSlug($exception->getSlug())
+                ->setMessage($exception->getMessage());
+
+            if ($exception instanceof ApiVerboseExceptionInterface) {
+                $response->setMoreInfo($exception->getMoreInfo());
+            }
+        }
+
+        // Send the response
+        $response->send();
+
+        return $this;
+    }
+
+    /**
      * Prepare the application to be run
      *
      * @param boolean $auto_load_routes Whether or not we should attempt to automatically load the route definitions
@@ -148,6 +254,39 @@ class Paulus
         $this->prepared = true;
 
         return $this;
+    }
+
+    /**
+     * Run the application
+     *
+     * Optionally pass in custom Request and Response instances
+     * and define how the application should handle the output
+     *
+     * @param Request $request          The request object to give to each callback
+     * @param Response $response        The response object to give to each callback
+     * @param boolean $send_response    Whether or not to "send" the response after the last route has been matched
+     * @param int $capture              Specify a DISPATCH_* constant to change the output capturing behavior
+     * @access public
+     * @return void|string
+     */
+    public function run(
+        Request $request = null,
+        AbstractResponse $response = null,
+        $send_response = true,
+        $capture = Router::DISPATCH_NO_CAPTURE
+    ) {
+
+        // Prepare the application if we haven't done so yet
+        if (!$this->prepared) {
+            $this->prepare();
+        }
+
+        return $this->router->dispatch(
+            $request,
+            $response,
+            $send_response,
+            $capture
+        );
     }
 
     /**
