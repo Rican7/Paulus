@@ -14,6 +14,7 @@ namespace Paulus;
 use BadMethodCallException;
 use Exception;
 use Klein\AbstractResponse;
+use LogicException;
 use Paulus\DataCollection\ImmutableDataCollection;
 use Paulus\Exception\AlreadyPreparedException;
 use Paulus\Exception\Http\ApiExceptionInterface;
@@ -83,7 +84,7 @@ class Paulus
     public function __construct(Router $router = null, ServiceLocator $locator = null)
     {
         // First things first... get our init time
-        $this->start_time = microtime(true);
+        $this->initStartTime();
 
         // Set our router with a context of this application instance
         $this->router = $router ?: new Router();
@@ -96,6 +97,23 @@ class Paulus
 
         // Setup our exception handler
         $this->setupExceptionHandler();
+    }
+
+    /**
+     * Initialize our start time, only
+     * allowing it to be set once
+     *
+     * @access public
+     * @return Paulus
+     */
+    public function initStartTime()
+    {
+        // Don't allow this to be set more than once
+        if (null === $this->start_time) {
+            $this->start_time = microtime(true);
+        }
+
+        return $this;
     }
 
     /**
