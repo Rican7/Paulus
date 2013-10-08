@@ -239,6 +239,12 @@ class Router extends Klein
     {
         $callback = $route->getCallback();
 
+        // If the callback is a controller auto-route, then redefine its callback
+        if (is_string($callback) && $route->isPrefixedAsAutoRoute($callback)) {
+            $callback = [$this->controller, $route->stripAutoRoutePrefix($callback)];
+        }
+
+        // Wrap the callback in the handler
         $route->setCallback(
             function () use ($handler, $callback) {
                 return $handler(
