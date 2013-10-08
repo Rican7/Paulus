@@ -251,6 +251,9 @@ class Paulus
             $route_loader->load();
         }
 
+        // Setup our routes for handling simple errors
+        $this->router->setupDefaultErrorRoutes();
+
         $this->prepared = true;
 
         return $this;
@@ -262,10 +265,10 @@ class Paulus
      * Optionally pass in custom Request and Response instances
      * and define how the application should handle the output
      *
-     * @param Request $request          The request object to give to each callback
-     * @param Response $response        The response object to give to each callback
-     * @param boolean $send_response    Whether or not to "send" the response after the last route has been matched
-     * @param int $capture              Specify a DISPATCH_* constant to change the output capturing behavior
+     * @param Request $request              The request object to give to each callback
+     * @param AbstractResponse $response    The response object to give to each callback
+     * @param boolean $send_response        Whether or not to "send" the response after the last route has been matched
+     * @param int $capture                  Specify a DISPATCH_* constant to change the output capturing behavior
      * @access public
      * @return void|string
      */
