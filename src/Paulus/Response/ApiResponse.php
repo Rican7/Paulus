@@ -11,6 +11,8 @@
 
 namespace Paulus\Response;
 
+use Paulus\Support\Inflector;
+
 /**
  * ApiResponse
  *
@@ -103,8 +105,10 @@ class ApiResponse extends JsonResponse
      */
     public function getStatusSlug()
     {
-        if (null === $this->status_slug) {
-            return $this->status()->getMessage();
+        if (empty($this->status_slug)) {
+            return Inflector::constantStringify(
+                $this->status()->getMessage()
+            );
         }
 
         return $this->status_slug;
