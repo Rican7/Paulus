@@ -14,9 +14,12 @@ namespace Paulus;
 use Klein\DataCollection\RouteCollection;
 use Klein\Klein;
 use Klein\ServiceProvider;
+use LogicException;
+use Paulus\Controller\AbstractController;
 use Paulus\Exception\Http\EndpointNotFound;
 use Paulus\Exception\Http\WrongMethod;
 use Paulus\RouteFactory;
+use Paulus\Support\Inflector;
 
 /**
  * Router
@@ -28,6 +31,27 @@ use Paulus\RouteFactory;
  */
 class Router extends Klein
 {
+
+    /**
+     * Properties
+     */
+
+    /**
+     * The namespace of the controllers
+     *
+     * @var string
+     * @access protected
+     */
+    protected $controller_namespace;
+
+    /**
+     * The currently loaded controller
+     *
+     * @var Paulus\Controller\ControllerInterface
+     * @access protected
+     */
+    protected $controller;
+
 
     /**
      * Methods
@@ -55,6 +79,58 @@ class Router extends Klein
         $this->app           = $app           ?: new Paulus(); // Replace with current application instance
         $this->routes        = $routes        ?: new RouteCollection();
         $this->route_factory = $route_factory ?: new RouteFactory();
+    }
+
+    /**
+     * Set the controller namespace to be used
+     * when automatically initializing controllers
+     *
+     * @param string $namespace
+     * @access public
+     * @return Router
+     */
+    public function setControllerNamespace($namespace)
+    {
+        // Don't allow this to be set more than once
+        if (null !== $this->controller_namespace) {
+            throw new LogicException('The controller namespace has already been set');
+        }
+
+        $this->controller_namespace = rtrim($namespace, '\\');
+
+        return $this;
+    }
+
+    /**
+     * Initialize and instantiate a new route controller
+     * if a class exists for the given basename
+     *
+     * @param string $class_basename
+     * @access public
+     * @return boolean|Paulus\Controller\AbstractController
+     */
+    public function initializeController($class_basename)
+    {
+        $class_name = Inflector::urlNamespaceToClassNamespace($class_basename);
+
+        $class = $this->controller_namespace . '\\'. $class_name;
+
+        /**
+         * Check if the class exists (Autoload it if its not loaded/included yet)
+         * Find out if its a child of AbstractController, so we know its constructor
+         */
+        if (class_exists($class, true) && AbstractController::isChildClass($class)) {
+            // Create our new controller, set it as such, and return it
+            return $this->controller = new $class(
+                $this->request,
+                $this->response,
+                $this->service,
+                $this->app,
+                $this
+            );
+        }
+
+        return false;
     }
 
     /**
