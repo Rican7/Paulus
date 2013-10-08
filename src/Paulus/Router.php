@@ -11,8 +11,10 @@
 
 namespace Paulus;
 
+use Klein\AbstractResponse;
 use Klein\DataCollection\RouteCollection;
 use Klein\Klein;
+use Klein\Request;
 use Klein\Route;
 use Klein\ServiceProvider;
 use LogicException;
@@ -20,6 +22,7 @@ use Paulus\Controller\AbstractController;
 use Paulus\Controller\ControllerInterface;
 use Paulus\Exception\Http\EndpointNotFound;
 use Paulus\Exception\Http\WrongMethod;
+use Paulus\Request\AutomaticParamsParserRequest;
 use Paulus\RouteFactory;
 use Paulus\Support\Inflector;
 
@@ -271,5 +274,28 @@ class Router extends Klein
         }
 
         parent::handleRouteCallback($route, $matched, $methods_matched);
+    }
+
+    /**
+     * Dispatch the request to the approriate route(s)
+     *
+     * @see Klein\Klein::dispatch()
+     * @param Request $request              The request object to give to each callback
+     * @param AbstractResponse $response    The response object to give to each callback
+     * @param boolean $send_response        Whether or not to "send" the response after the last route has been matched
+     * @param int $capture                  Specify a DISPATCH_* constant to change the output capturing behavior
+     * @access public
+     * @return void|string
+     */
+    public function dispatch(
+        Request $request = null,
+        AbstractResponse $response = null,
+        $send_response = true,
+        $capture = self::DISPATCH_NO_CAPTURE
+    ) {
+        // Change our defaults
+        $request = $request ?: AutomaticParamsParserRequest::createFromGlobals();
+
+        return parent::dispatch($request, $response, $send_response, $capture);
     }
 }
