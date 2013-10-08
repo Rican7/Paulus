@@ -55,6 +55,28 @@ class Route extends KleinRoute
     }
 
     /**
+     * Strip the auto-route prefix from a callback string
+     *
+     * @param string $callback_string
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function stripAutoRoutePrefix($callback_string)
+    {
+        $pos = strpos($callback_string, static::PAULUS_AUTO_ROUTE_PREFIX);
+
+        if (false !== $pos) {
+            $callback_string = substr(
+                $callback_string,
+                ($pos + strlen(static::PAULUS_AUTO_ROUTE_PREFIX))
+            );
+        }
+
+        return $callback_string;
+    }
+
+    /**
      * Set the callback
      *
      * @param callable $callback    The route's callback to execute on matching
