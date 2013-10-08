@@ -14,6 +14,7 @@ namespace Paulus;
 use BadMethodCallException;
 use Exception;
 use Klein\AbstractResponse;
+use Klein\Response;
 use LogicException;
 use Paulus\DataCollection\ImmutableDataCollection;
 use Paulus\Exception\AlreadyPreparedException;
@@ -45,6 +46,15 @@ class Paulus
      * @const string
      */
     const LOGGER_KEY = 'logger';
+
+    /**
+     * The default response class to use for
+     * in case a response hasn't been created
+     * yet and an exception is thrown
+     *
+     * @const string
+     */
+    const FALLBACK_RESPONSE_CLASS = '\Klein\Response';
 
 
     /**
@@ -271,6 +281,12 @@ class Paulus
     {
         // Grab the response
         $response = $this->router->response();
+
+        // If we haven't initialized a response yet...
+        if ($response === null) {
+            $response_class = static::FALLBACK_RESPONSE_CLASS;
+            $response = new $response_class();
+        }
 
         // Unlock the response
         $response->unlock();
