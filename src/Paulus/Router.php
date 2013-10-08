@@ -11,10 +11,12 @@
 
 namespace Paulus;
 
-use Klein\RouteFactory;
-use Klein\Klein;
 use Klein\DataCollection\RouteCollection;
+use Klein\Klein;
 use Klein\ServiceProvider;
+use Paulus\Exception\Http\EndpointNotFound;
+use Paulus\Exception\Http\WrongMethod;
+use Paulus\RouteFactory;
 
 /**
  * Router
@@ -53,5 +55,33 @@ class Router extends Klein
         $this->app           = $app           ?: new Paulus(); // Replace with current application instance
         $this->routes        = $routes        ?: new RouteCollection();
         $this->route_factory = $route_factory ?: new RouteFactory();
+    }
+
+    /**
+     * Setup our default error route responders
+     * by registering them with our router
+     *
+     * @access public
+     * @return Router
+     */
+    public function setupDefaultErrorRoutes()
+    {
+        // "HTTP 404 Not Found" default handler
+        $this->respond(
+            404,
+            function () {
+                throw new EndpointNotFound();
+            }
+        )->setName(404);
+
+        // "HTTP 405 Method Not Allowed" default handler
+        $this->respond(
+            405,
+            function () {
+                throw new WrongMethod();
+            }
+        )->setName(405);
+
+        return $this;
     }
 }
