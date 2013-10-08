@@ -14,6 +14,7 @@ namespace Paulus\FileLoader;
 use FilesystemIterator;
 use Paulus\Exception\UnableToInferRouteDirectoryException;
 use Paulus\Router;
+use Paulus\Support\Inflector;
 use SplFileInfo;
 
 /**
@@ -50,19 +51,6 @@ class RouteLoaderFactory
     /**
      * Methods
      */
-
-    /**
-     * Convert a namespace to a directory path
-     *
-     * @param string $namespace
-     * @static
-     * @access protected
-     * @return string
-     */
-    protected static function namespaceToPath($namespace = __NAMESPACE__)
-    {
-        return str_replace('\\', DIRECTORY_SEPARATOR, $namespace);
-    }
 
     /**
      * Strip a section from the end of a path
@@ -136,7 +124,7 @@ class RouteLoaderFactory
     protected static function inferRouteDirectory($start_directory = __DIR__)
     {
         // First, let's strip our directory namespace
-        $dir = static::stripFromPath($start_directory, static::namespaceToPath());
+        $dir = static::stripFromPath($start_directory, Inflector::namespaceToPath());
 
         // Setup our loop variables
         $found = false; // Have we found it?
