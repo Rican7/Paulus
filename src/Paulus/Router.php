@@ -13,6 +13,7 @@ namespace Paulus;
 
 use Klein\DataCollection\RouteCollection;
 use Klein\Klein;
+use Klein\Route;
 use Klein\ServiceProvider;
 use LogicException;
 use Paulus\Controller\AbstractController;
@@ -201,5 +202,74 @@ class Router extends Klein
         }
 
         return false;
+    }
+
+    /**
+     * Get the current controller's result handler
+     * if there is one defined
+     *
+     * @access public
+     * @return callable
+     */
+    public function getControllerResultHandler()
+    {
+        // If the controller implements our interface
+        if ($this->controller instanceof ControllerInterface) {
+
+            return [$this->controller, 'handleResult'];
+        }
+
+        return false;
+    }
+
+    /**
+     * Wrap's the given route's callback method
+     * in a given callable handler for
+     * post-processing and filtering
+     *
+     * @param Route $route
+     * @param callable $handler
+     * @access protected
+     * @return Route
+     */
+    protected function wrapRouteCallbackInResultHandler(Route $route, callable $handler)
+    {
+        $callback = $route->getCallback();
+
+        $route->setCallback(
+            function () use ($handler, $callback) {
+                return $handler(
+                    call_user_func_array(
+                        $callback,
+                        func_get_args()
+                    )
+                );
+            }
+        );
+
+        return $route;
+    }
+
+    /**
+     * Handle the route's callback
+     *
+     * @see Klein\Klein::handleRouteCallback()
+     * @param Route $route
+     * @param RouteCollection $matched
+     * @param mixed $methods_matched
+     * @access protected
+     * @return void
+     */
+    protected function handleRouteCallback(Route $route, RouteCollection $matched, $methods_matched)
+    {
+        // Get the result handler of the current controller
+        $handler = $this->getControllerResultHandler();
+
+        // Let's wrap our route's current callback in the handler
+        if ($handler !== false) {
+            $this->wrapRouteCallbackInResultHandler($route, $handler);
+        }
+
+        parent::handleRouteCallback($route, $matched, $methods_matched);
     }
 }
