@@ -146,6 +146,15 @@ class Paulus
         // Register an error handler through our router's catcher
         $this->router->onError(
             function ($router, $message, $class, Exception $exception) {
+
+                // Check if we have a callable handler in our controller
+                $callable = $router->getControllerExceptionHandler();
+
+                if ($callable !== false) {
+                    // Call and return our controller's exception handler
+                    return call_user_func($callable, $exception);
+                }
+
                 return $this->handleException($exception);
             }
         );

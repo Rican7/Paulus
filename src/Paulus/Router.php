@@ -16,6 +16,7 @@ use Klein\Klein;
 use Klein\ServiceProvider;
 use LogicException;
 use Paulus\Controller\AbstractController;
+use Paulus\Controller\ControllerInterface;
 use Paulus\Exception\Http\EndpointNotFound;
 use Paulus\Exception\Http\WrongMethod;
 use Paulus\RouteFactory;
@@ -159,5 +160,23 @@ class Router extends Klein
         )->setName(405);
 
         return $this;
+    }
+
+    /**
+     * Get the current controller's exception handler
+     * if there is one defined
+     *
+     * @access public
+     * @return callable
+     */
+    public function getControllerExceptionHandler()
+    {
+        // If the controller implements our interface
+        if ($this->controller instanceof ControllerInterface) {
+
+            return [$this->controller, 'handleException'];
+        }
+
+        return false;
     }
 }
