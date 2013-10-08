@@ -22,6 +22,7 @@ use Paulus\Exception\Http\ApiVerboseExceptionInterface;
 use Paulus\FileLoader\RouteLoader;
 use Paulus\FileLoader\RouteLoaderFactory;
 use Paulus\Response\ApiResponse;
+use Psr\Log\LoggerInterface;
 
 /**
  * Paulus
@@ -32,6 +33,19 @@ use Paulus\Response\ApiResponse;
  */
 class Paulus
 {
+
+    /**
+     * Constants
+     */
+
+    /**
+     * The key used in our service locator
+     * for our logger instance
+     *
+     * @const string
+     */
+    const LOGGER_KEY = 'logger';
+
 
     /**
      * Properties
@@ -81,7 +95,7 @@ class Paulus
      * @param ServiceLocator $locator   The service locator/container for the app
      * @access public
      */
-    public function __construct(Router $router = null, ServiceLocator $locator = null)
+    public function __construct(Router $router = null, ServiceLocator $locator = null, LoggerInterface $logger = null)
     {
         // First things first... get our init time
         $this->initStartTime();
@@ -95,8 +109,14 @@ class Paulus
         // Setup our service locator
         $this->locator = $locator ?: new ServiceLocator();
 
+        // Setup our logger
+        $this->locator[static::LOGGER_KEY] = $logger ?: new BasicLogger();
+
         // Setup our exception handler
         $this->setupExceptionHandler();
+
+        // Write to our log
+        $this->logger()->debug('Paulus application constructed at start time: '. $this->start_time);
     }
 
     /**
@@ -150,6 +170,17 @@ class Paulus
     }
 
     /**
+     * Get the application's logger instance
+     *
+     * @access public
+     * @return LoggerInterface
+     */
+    public function logger()
+    {
+        return $this->locator[static::LOGGER_KEY];
+    }
+
+    /**
      * Setup our exception handler
      *
      * Setup our global exception handler for Paulus,
@@ -195,11 +226,18 @@ class Paulus
      */
     public function handleException(Exception $exception)
     {
+        // Write to our log
+        $this->logger()->info('Exception being handled by the Paulus exception handler');
+
         // Handle our RESTful exceptions
         if ($exception instanceof ApiExceptionInterface) {
+            // Write to our log
+            $this->logger()->error($exception->getMessage(), ['exception' => $exception]);
 
             $this->handleRestfulException($exception);
         } else {
+            // Write to our log
+            $this->logger()->critical($exception->getMessage(), ['exception' => $exception]);
 
             // Grab the response
             $response = $this->router->response();
@@ -286,6 +324,9 @@ class Paulus
 
         $this->prepared = true;
 
+        // Write to our log
+        $this->logger()->debug('Paulus application prepared');
+
         return $this;
     }
 
@@ -313,6 +354,9 @@ class Paulus
         if (!$this->prepared) {
             $this->prepare();
         }
+
+        // Write to our log
+        $this->logger()->debug('Paulus application running!');
 
         return $this->router->dispatch(
             $request,
