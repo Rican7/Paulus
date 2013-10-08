@@ -46,12 +46,4 @@ class MethodNotAllowed extends OutOfBoundsException implements ApiExceptionInter
      * @access protected
      */
     protected $code = 405;
-
-    /**
-     * The exception slug
-     *
-     * @var string
-     * @access protected
-     */
-    protected $slug = null; // Leave null to use standard HTTP status slug
 }

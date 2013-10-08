@@ -46,12 +46,4 @@ class NotFound extends OutOfBoundsException implements ApiExceptionInterface
      * @access protected
      */
     protected $code = 404;
-
-    /**
-     * The exception slug
-     *
-     * @var string
-     * @access protected
-     */
-    protected $slug = null; // Leave null to use standard HTTP status slug
 }

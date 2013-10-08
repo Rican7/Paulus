@@ -46,12 +46,4 @@ class BadRequest extends UnexpectedValueException implements ApiExceptionInterfa
      * @access protected
      */
     protected $code = 400;
-
-    /**
-     * The exception slug
-     *
-     * @var string
-     * @access protected
-     */
-    protected $slug = null; // Leave null to use standard HTTP status slug
 }

@@ -22,13 +22,6 @@ trait ApiVerboseExceptionTrait
 {
 
     /**
-     * Traits
-     */
-
-    // Include our other basic functionality
-    use ApiExceptionTrait;
-
-    /**
      * Properties
      */
 

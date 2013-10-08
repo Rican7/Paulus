@@ -46,12 +46,4 @@ class NotImplemented extends RuntimeException implements ApiExceptionInterface
      * @access protected
      */
     protected $code = 501;
-
-    /**
-     * The exception slug
-     *
-     * @var string
-     * @access protected
-     */
-    protected $slug = null; // Leave null to use standard HTTP status slug
 }

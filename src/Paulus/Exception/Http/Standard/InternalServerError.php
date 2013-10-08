@@ -46,12 +46,4 @@ class InternalServerError extends RuntimeException implements ApiExceptionInterf
      * @access protected
      */
     protected $code = 500;
-
-    /**
-     * The exception slug
-     *
-     * @var string
-     * @access protected
-     */
-    protected $slug = null; // Leave null to use standard HTTP status slug
 }

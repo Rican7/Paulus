@@ -46,12 +46,4 @@ class NotAcceptable extends UnexpectedValueException implements ApiExceptionInte
      * @access protected
      */
     protected $code = 406;
-
-    /**
-     * The exception slug
-     *
-     * @var string
-     * @access protected
-     */
-    protected $slug = null; // Leave null to use standard HTTP status slug
 }

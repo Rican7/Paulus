@@ -46,12 +46,4 @@ class Unauthorized extends InvalidArgumentException implements ApiExceptionInter
      * @access protected
      */
     protected $code = 401;
-
-    /**
-     * The exception slug
-     *
-     * @var string
-     * @access protected
-     */
-    protected $slug = null; // Leave null to use standard HTTP status slug
 }
