@@ -86,7 +86,10 @@ class Paulus
         $this->start_time = microtime(true);
 
         // Set our router with a context of this application instance
-        $this->router = $router ?: new Router(null, $this);
+        $this->router = $router ?: new Router();
+
+        // Bind our Paulus app
+        $this->router->bindPaulusApp($this);
 
         // Setup our service locator
         $this->locator = $locator ?: new ServiceLocator();

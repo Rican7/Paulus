@@ -77,9 +77,32 @@ class Router extends Klein
     ) {
         // Instanciate and fall back to defaults
         $this->service       = $service       ?: new ServiceProvider();
-        $this->app           = $app           ?: new Paulus(); // Replace with current application instance
+
         $this->routes        = $routes        ?: new RouteCollection();
         $this->route_factory = $route_factory ?: new RouteFactory();
+
+        // Ignore their app entry, always keep as null
+        $this->app           = null;
+    }
+
+    /**
+     * Bind a Paulus application instance
+     * to the current router instance
+     *
+     * @param Paulus $app
+     * @access public
+     * @return Router
+     */
+    public function bindPaulusApp(Paulus $app)
+    {
+        // Don't allow this to be set more than once
+        if (null !== $this->app) {
+            throw new LogicException('A Paulus instance has already been set');
+        }
+
+        $this->app = $app;
+
+        return $this;
     }
 
     /**
