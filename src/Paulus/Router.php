@@ -90,6 +90,22 @@ class Router extends Klein
     }
 
     /**
+     * Returns the app object
+     *
+     * @access public
+     * @return Paulus
+     */
+    public function app()
+    {
+        // Alert them of their logical issue
+        if (null === $this->app) {
+            throw new LogicException('A Paulus instance has not yet been bound to the router');
+        }
+
+        return parent::app();
+    }
+
+    /**
      * Bind a Paulus application instance
      * to the current router instance
      *
@@ -153,7 +169,7 @@ class Router extends Klein
                 $this->request,
                 $this->response,
                 $this->service,
-                $this->app,
+                $this->app(),
                 $this
             );
         }
@@ -300,7 +316,8 @@ class Router extends Klein
         $capture = self::DISPATCH_NO_CAPTURE
     ) {
         // Change our defaults
-        $request = $request ?: AutomaticParamsParserRequest::createFromGlobals();
+        $request  = $request  ?: AutomaticParamsParserRequest::createFromGlobals();
+        $response = $response ?: $this->app()->getDefaultResponse();
 
         return parent::dispatch($request, $response, $send_response, $capture);
     }
