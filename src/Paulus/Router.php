@@ -172,6 +172,15 @@ class Router extends Klein
                 $this->app(),
                 $this
             );
+        } else {
+            // Write to our log
+            $this->app()->logger()->debug(
+                sprintf(
+                    'Controller couldn\'t be initialized. Class %s doesn\'t exist or doesn\'t extend %s',
+                    $class,
+                    'Paulus\Controller\AbstractController'
+                )
+            );
         }
 
         return false;
