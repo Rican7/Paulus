@@ -16,7 +16,6 @@ use Exception;
 use Klein\AbstractResponse;
 use Klein\Response;
 use LogicException;
-use Paulus\DataCollection\ImmutableDataCollection;
 use Paulus\Exception\AlreadyPreparedException;
 use Paulus\Exception\Http\ApiExceptionInterface;
 use Paulus\Exception\Http\ApiVerboseExceptionInterface;
@@ -50,7 +49,8 @@ class Paulus
     /**
      * The default response class to use for
      * in case a response hasn't been created
-     * yet and an exception is thrown
+     * or an instance hasn't been set for the
+     * "default_response" property
      *
      * @const string
      */
@@ -84,6 +84,16 @@ class Paulus
      * @access protected
      */
     protected $locator;
+
+    /**
+     * The default response instance to use in
+     * case a response hasn't been created
+     * yet and an exception is thrown
+     *
+     * @var AbstractResponse
+     * @access protected
+     */
+    protected $default_response;
 
     /**
      * Whether the application been prepared or not
@@ -191,6 +201,38 @@ class Paulus
     }
 
     /**
+     * Get the default response object
+     *
+     * @access public
+     * @return AbstractResponse
+     */
+    public function getDefaultResponse()
+    {
+        if (null === $this->default_response) {
+            $response_class = static::FALLBACK_RESPONSE_CLASS;
+            $default_response = new $response_class();
+        } else {
+            $default_response = $this->default_response;
+        }
+
+        return $default_response;
+    }
+
+    /**
+     * Set the default response object
+     *
+     * @param AbstractResponse $default_response description
+     * @access public
+     * @return Paulus
+     */
+    public function setDefaultResponse(AbstractResponse $default_response)
+    {
+        $this->default_response = $default_response;
+
+        return $this;
+    }
+
+    /**
      * Setup our exception handler
      *
      * Setup our global exception handler for Paulus,
@@ -284,8 +326,7 @@ class Paulus
 
         // If we haven't initialized a response yet...
         if ($response === null) {
-            $response_class = static::FALLBACK_RESPONSE_CLASS;
-            $response = new $response_class();
+            $response = $this->getDefaultResponse();
         }
 
         // Unlock the response
