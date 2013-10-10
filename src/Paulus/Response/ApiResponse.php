@@ -211,7 +211,7 @@ class ApiResponse extends JsonResponse
      * Get the response data in a formatted structure
      *
      * @access protected
-     * @return ArrayObject
+     * @return object
      */
     protected function getFormattedResponseData()
     {
