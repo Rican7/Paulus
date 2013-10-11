@@ -107,6 +107,61 @@ abstract class AbstractController implements ControllerInterface
     }
 
     /**
+     * Get the request
+     *
+     * @access public
+     * @return Request
+     */
+    public function request()
+    {
+        return $this->request;
+    }
+
+    /**
+     * Get the response
+     *
+     * @access public
+     * @return Response
+     */
+    public function response()
+    {
+        return $this->response;
+    }
+
+    /**
+     * Get the service
+     *
+     * @access public
+     * @return Service
+     */
+    public function service()
+    {
+        return $this->service;
+    }
+
+    /**
+     * Get the app
+     *
+     * @access public
+     * @return App
+     */
+    public function app()
+    {
+        return $this->app;
+    }
+
+    /**
+     * Get the router
+     *
+     * @access public
+     * @return Router
+     */
+    public function router()
+    {
+        return $this->router;
+    }
+
+    /**
      * Handle the result of the route callback called
      * through the current controller
      *
