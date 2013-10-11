@@ -136,6 +136,9 @@ class Paulus
         // Setup our exception handler
         $this->setupExceptionHandler();
 
+        // Setup our after dispatch handler
+        $this->setupAfterDispatchHandler();
+
         // Write to our log
         $this->logger()->debug('Paulus application constructed at start time: '. $this->start_time);
     }
@@ -355,6 +358,41 @@ class Paulus
 
         // Send the response
         $response->send();
+
+        return $this;
+    }
+
+    /**
+     * Setup our after dispatch handler
+     *
+     * @access protected
+     * @return Paulus
+     */
+    protected function setupAfterDispatchHandler()
+    {
+        // Register an error handler through our router's catcher
+        $this->router->afterDispatch(
+            function ($router) {
+                $request = $router->request();
+                $response = $router->response();
+
+                if ($response instanceof ApiResponse) {
+                    // Request was an OPTIONS request and more info is empty
+                    if ($request->method('OPTIONS') && null === $response->getMoreInfo()) {
+                        // Get our allowed headers
+                        $allowed = $response->headers()->get('Allow');
+
+                        // Tell them of the possible methods
+                        $response->unlock();
+                        $response->setMoreInfo(
+                            [
+                                'possible_methods' => explode(', ', $allowed)
+                            ]
+                        );
+                    }
+                }
+            }
+        );
 
         return $this;
     }
