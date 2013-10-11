@@ -23,6 +23,7 @@ use Paulus\Controller\ControllerInterface;
 use Paulus\Exception\Http\EndpointNotFound;
 use Paulus\Exception\Http\WrongMethod;
 use Paulus\Request\AutomaticParamsParserRequest;
+use Paulus\Response\ApiResponse;
 use Paulus\RouteFactory;
 use Paulus\Support\Inflector;
 
@@ -206,8 +207,18 @@ class Router extends Klein
         // "HTTP 405 Method Not Allowed" default handler
         $this->respond(
             405,
-            function () {
-                throw new WrongMethod();
+            function ($request, $response, $service, $app, $router, $matched, $methods_matched) {
+                // Set the response's headers
+                $response->header('Allow', implode(', ', $methods_matched));
+
+                if ($response instanceof ApiResponse) {
+                    // Tell them of the possible methods
+                    $response->setMoreInfo(
+                        [
+                            'possible_methods' => $methods_matched,
+                        ]
+                    );
+                }
             }
         )->setName(405);
 
