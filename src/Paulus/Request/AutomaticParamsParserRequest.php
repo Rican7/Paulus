@@ -60,7 +60,7 @@ class AutomaticParamsParserRequest extends Request
                 // If there were no decoding errors
                 if (JSON_ERROR_NONE === json_last_error()) {
                     // Replace the post params with the parse params
-                    $request->paramsPost()->replace($params);
+                    $request->paramsPost()->replace((array) $params);
 
                 } else {
                     // Must have been a decoding error
