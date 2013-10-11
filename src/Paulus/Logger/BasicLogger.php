@@ -8,7 +8,7 @@
  * @version     2.0.0
  */
 
-namespace Paulus;
+namespace Paulus\Logger;
 
 use Exception;
 use Psr\Log\AbstractLogger;
@@ -20,7 +20,7 @@ use Psr\Log\LogLevel;
  * BasicLogger
  *
  * @uses LoggerInterface
- * @package Paulus
+ * @package Paulus\Logger
  */
 class BasicLogger extends AbstractLogger implements LoggerInterface
 {
