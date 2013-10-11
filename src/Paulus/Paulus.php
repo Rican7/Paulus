@@ -294,6 +294,11 @@ class Paulus
             // Grab the response
             $response = $this->router->response();
 
+            // If we haven't initialized a response yet...
+            if ($response === null) {
+                $response = $this->getDefaultResponse();
+            }
+
             // Unlock the response and set its response code
             $response->unlock()->code(500);
 
