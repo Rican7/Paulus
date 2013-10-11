@@ -22,6 +22,7 @@ use Paulus\Exception\Http\ApiVerboseExceptionInterface;
 use Paulus\FileLoader\RouteLoader;
 use Paulus\FileLoader\RouteLoaderFactory;
 use Paulus\Logger\BasicLogger;
+use Paulus\Request\Request;
 use Paulus\Response\ApiResponse;
 use Psr\Log\LoggerInterface;
 
