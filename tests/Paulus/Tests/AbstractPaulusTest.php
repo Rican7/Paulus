@@ -12,6 +12,7 @@
 namespace Paulus\Tests;
 
 use PHPUnit_Framework_TestCase;
+use Paulus\Logger\UnitTestLogger;
 use Paulus\Paulus;
 
 /**
@@ -64,10 +65,26 @@ abstract class AbstractPaulusTest extends PHPUnit_Framework_TestCase
         parent::setUp();
 
         // Create a paulus instance, since we're going to need it EVERYWHERE
-        $this->paulus_app = new Paulus();
+        $this->paulus_app = $this->getPaulusWithTestLogger();
 
         // Get our tests directory
         $this->tests_dir = dirname($GLOBALS['__PHPUNIT_BOOTSTRAP']);
+    }
+
+    /**
+     * Get a Paulus instance with a logger
+     * designed for unit testing
+     *
+     * @access protected
+     * @return Paulus
+     */
+    protected function getPaulusWithTestLogger()
+    {
+        return new Paulus(
+            null,
+            null,
+            new UnitTestLogger()
+        );
     }
 
     /**
