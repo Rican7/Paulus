@@ -208,16 +208,19 @@ class Router extends Klein
         $this->respond(
             405,
             function ($request, $response, $service, $app, $router, $matched, $methods_matched) {
-                // Set the response's headers
-                $response->header('Allow', implode(', ', $methods_matched));
+                // Don't error out on an OPTIONS request
+                if (!$request->method('OPTIONS')) {
+                    $exception = new WrongMethod();
 
-                if ($response instanceof ApiResponse) {
                     // Tell them of the possible methods
-                    $response->setMoreInfo(
+                    $exception->setMoreInfo(
                         [
                             'possible_methods' => $methods_matched,
                         ]
                     );
+
+                    throw $exception;
+
                 }
             }
         )->setName(405);
