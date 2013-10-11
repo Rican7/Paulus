@@ -173,7 +173,10 @@ abstract class AbstractController implements ControllerInterface
     {
         // If the response is null.. we didn't get back a result
         if (null === $result_data) {
-            throw new ObjectNotFound();
+            // Make sure not to throw this if its an OPTIONS call...
+            if (!$this->request->method('OPTIONS')) {
+                throw new ObjectNotFound();
+            }
 
         } elseif (true === $result_data) {
             // True case WITHOUT any returned data
