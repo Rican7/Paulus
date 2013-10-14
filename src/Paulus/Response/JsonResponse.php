@@ -53,7 +53,6 @@ class JsonResponse extends AbstractResponse
 
         // Set our data and lock our response
         $this->setData($data);
-        $this->lock();
     }
 
     /**
