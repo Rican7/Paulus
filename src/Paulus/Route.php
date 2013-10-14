@@ -37,6 +37,23 @@ class Route extends KleinRoute
 
 
     /**
+     * Properties
+     */
+
+    /**
+     * A flag to represent whether the route should be
+     * protected from being wrapped in a controller's
+     * result handler. Protected route's should be
+     * called in a more raw fashion, and should have
+     * their callback's wrapped or modified in any way
+     *
+     * @var boolean
+     * @access protected
+     */
+    protected $is_protected = false;
+
+
+    /**
      * Methods
      */
 
@@ -93,6 +110,31 @@ class Route extends KleinRoute
         }
 
         $this->callback = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Get the protected flag
+     *
+     * @access public
+     * @return boolean
+     */
+    public function getIsProtected()
+    {
+        return $this->is_protected;
+    }
+
+    /**
+     * Set the protected flag
+     *
+     * @param boolean $is_protected 
+     * @access public
+     * @return Route
+     */
+    public function setIsProtected($is_protected)
+    {
+        $this->is_protected = (boolean) $is_protected;
 
         return $this;
     }
