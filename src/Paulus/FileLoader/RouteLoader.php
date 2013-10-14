@@ -206,7 +206,7 @@ class RouteLoader extends AbstractFileLoader
                         function ($request, $response, $service, $app, $router) use ($basename) {
                             $router->initializeController($basename);
                         }
-                    );
+                    )->setIsProtected(true); // Let's protect this callback from being wrapped
                 }
             );
         }
