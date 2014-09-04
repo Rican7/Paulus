@@ -17,6 +17,7 @@ use Klein\Request;
 use Klein\ServiceProvider;
 use Paulus\Exception\Http\InvalidParameters;
 use Paulus\Exception\Http\ObjectNotFound;
+use Paulus\Exception\Http\Standard\BadGateway;
 use Paulus\Paulus;
 use Paulus\Response\ApiResponse;
 use Paulus\Router;
@@ -210,11 +211,7 @@ abstract class AbstractController implements ControllerInterface
     {
         // Let's turn PDO database exceptions into 502's
         if ($e instanceof \PDOException) {
-            throw new BadGateway(
-                $e->getMessage(),
-                $e->getCode(),
-                $e
-            );
+            throw BadGateway::create(null, null, $e);
         }
 
         // Handle it with our app's default handler
