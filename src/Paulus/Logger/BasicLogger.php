@@ -40,13 +40,39 @@ class BasicLogger extends AbstractLogger implements LoggerInterface
 
         // If we have an exception...
         if (isset($context['exception']) && $context['exception'] instanceof Exception) {
-            // Add to the formatted string
-            $formatted .= sprintf(
-                PHP_EOL.PHP_EOL. 'Exception "%s" (code %d) thrown with trace:"%s"',
-                get_class($context['exception']),
-                $context['exception']->getCode(),
-                PHP_EOL.PHP_EOL. $context['exception']->getTraceAsString()
-            );
+            $exception = $context['exception'];
+            $first = true;
+
+            // Loop through the previous exceptions
+            while (null !== $exception) {
+                // Line padding
+                $formatted .= PHP_EOL.PHP_EOL;
+
+                if (!$first) {
+                    $formatted .= 'Caused by:' .PHP_EOL;
+                } else {
+                    $first = false;
+                }
+
+                // Format a string of exception origin
+                $origin = sprintf(
+                    'Origin: %s(%d)',
+                    $exception->getFile(),
+                    $exception->getLine()
+                );
+
+                // Add to the formatted string
+                $formatted .= sprintf(
+                    'Exception "%s" (code %d) thrown with trace:"%s%s"',
+                    get_class($exception),
+                    $exception->getCode(),
+                    PHP_EOL.PHP_EOL. $origin,
+                    PHP_EOL. $exception->getTraceAsString()
+                );
+
+                // Grab the previous one
+                $exception = $exception->getPrevious();
+            };
         }
 
         return $formatted;
