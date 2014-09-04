@@ -36,6 +36,25 @@ class MethodNotAllowed extends OutOfBoundsException implements ApiExceptionInter
 
 
     /**
+     * Constants
+     */
+
+    /**
+     * The default exception message
+     *
+     * @const string
+     */
+    const DEFAULT_MESSAGE = '';
+
+    /**
+     * The default exception code
+     *
+     * @const int
+     */
+    const DEFAULT_CODE = 405;
+
+
+    /**
      * Properties
      */
 
@@ -45,5 +64,5 @@ class MethodNotAllowed extends OutOfBoundsException implements ApiExceptionInter
      * @var int
      * @access protected
      */
-    protected $code = 405;
+    protected $code = self::DEFAULT_CODE;
 }

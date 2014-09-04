@@ -36,6 +36,25 @@ class BadRequest extends UnexpectedValueException implements ApiExceptionInterfa
 
 
     /**
+     * Constants
+     */
+
+    /**
+     * The default exception message
+     *
+     * @const string
+     */
+    const DEFAULT_MESSAGE = '';
+
+    /**
+     * The default exception code
+     *
+     * @const int
+     */
+    const DEFAULT_CODE = 400;
+
+
+    /**
      * Properties
      */
 
@@ -45,5 +64,5 @@ class BadRequest extends UnexpectedValueException implements ApiExceptionInterfa
      * @var int
      * @access protected
      */
-    protected $code = 400;
+    protected $code = self::DEFAULT_CODE;
 }

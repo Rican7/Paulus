@@ -36,6 +36,25 @@ class NotImplemented extends RuntimeException implements ApiExceptionInterface
 
 
     /**
+     * Constants
+     */
+
+    /**
+     * The default exception message
+     *
+     * @const string
+     */
+    const DEFAULT_MESSAGE = '';
+
+    /**
+     * The default exception code
+     *
+     * @const int
+     */
+    const DEFAULT_CODE = 501;
+
+
+    /**
      * Properties
      */
 
@@ -45,5 +64,5 @@ class NotImplemented extends RuntimeException implements ApiExceptionInterface
      * @var int
      * @access protected
      */
-    protected $code = 501;
+    protected $code = self::DEFAULT_CODE;
 }
