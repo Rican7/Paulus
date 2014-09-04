@@ -34,6 +34,25 @@ class InvalidParameters extends BadRequest implements ApiVerboseExceptionInterfa
 
 
     /**
+     * Constants
+     */
+
+    /**
+     * The default exception slug
+     *
+     * @const string
+     */
+    const DEFAULT_SLUG = 'INVALID_PARAMETERS';
+
+    /**
+     * The default exception message
+     *
+     * @const string
+     */
+    const DEFAULT_MESSAGE = 'The posted data did not pass validation';
+
+
+    /**
      * Properties
      */
 
@@ -43,7 +62,7 @@ class InvalidParameters extends BadRequest implements ApiVerboseExceptionInterfa
      * @var string
      * @access protected
      */
-    protected $slug = 'INVALID_PARAMETERS';
+    protected $slug = self::DEFAULT_SLUG;
 
     /**
      * The exception message
@@ -51,5 +70,5 @@ class InvalidParameters extends BadRequest implements ApiVerboseExceptionInterfa
      * @var string
      * @access protected
      */
-    protected $message = 'The posted data did not pass validation';
+    protected $message = self::DEFAULT_MESSAGE;
 }

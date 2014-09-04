@@ -26,10 +26,26 @@ class ObjectNotFound extends NotFound
 {
 
     /**
+     * Constants
+     */
+
+    /**
+     * The default exception message
+     *
+     * @const string
+     */
+    const DEFAULT_MESSAGE = 'Object does not exist';
+
+
+    /**
+     * Properties
+     */
+
+    /**
      * The exception message
      *
      * @var string
      * @access protected
      */
-    protected $message = 'Object does not exist';
+    protected $message = self::DEFAULT_MESSAGE;
 }

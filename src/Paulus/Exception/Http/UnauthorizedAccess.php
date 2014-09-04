@@ -26,10 +26,26 @@ class UnauthorizedAccess extends Unauthorized
 {
 
     /**
+     * Constants
+     */
+
+    /**
+     * The default exception message
+     *
+     * @const string
+     */
+    const DEFAULT_MESSAGE = 'You are not authorized to access or modify this';
+
+
+    /**
+     * Properties
+     */
+
+    /**
      * The exception message
      *
      * @var string
      * @access protected
      */
-    protected $message = 'You are not authorized to access or modify this';
+    protected $message = self::DEFAULT_MESSAGE;
 }
