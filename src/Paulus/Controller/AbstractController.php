@@ -211,7 +211,7 @@ abstract class AbstractController implements ControllerInterface
     {
         // Let's turn PDO database exceptions into 502's
         if ($e instanceof \PDOException) {
-            throw BadGateway::create(null, null, $e);
+            $e = BadGateway::create(null, null, $e);
         }
 
         // Handle it with our app's default handler
