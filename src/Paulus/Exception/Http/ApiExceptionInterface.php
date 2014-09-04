@@ -11,6 +11,7 @@
 
 namespace Paulus\Exception\Http;
 
+use Exception;
 use Paulus\Exception\PaulusExceptionInterface;
 
 /**
@@ -24,6 +25,37 @@ use Paulus\Exception\PaulusExceptionInterface;
  */
 interface ApiExceptionInterface extends PaulusExceptionInterface
 {
+
+    /**
+     * Static creation method designed to allow for easier fall-back to default
+     * values than the default exception constructor
+     *
+     * @param string $message
+     * @param int $code
+     * @param Exception $previous
+     * @static
+     * @access public
+     * @return ApiExceptionInterface
+     */
+    public static function create($message = null, $code = null, Exception $previous = null);
+
+    /**
+     * Get the default message for this type of exception
+     *
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function getDefaultMessage();
+
+    /**
+     * Get the default code for this type of exception
+     *
+     * @static
+     * @access public
+     * @return int
+     */
+    public static function getDefaultCode();
 
     /**
      * Get the slug

@@ -40,6 +40,65 @@ trait ApiExceptionTrait
      */
 
     /**
+     * Static creation method designed to allow for easier fall-back to default
+     * values than the default exception constructor
+     *
+     * @param string $message
+     * @param int $code
+     * @param Exception $previous
+     * @static
+     * @access public
+     * @return ApiExceptionInterface
+     */
+    public static function create($message = null, $code = null, Exception $previous = null)
+    {
+        $message = (null !== $message) ? $message : static::getDefaultMessage();
+        $code = (null !== $code) ? $code : static::getDefaultCode();
+
+        return new static($message, $code, $previous);
+    }
+
+    /**
+     * Get the default message for this type of exception
+     *
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function getDefaultMessage()
+    {
+        $default_message_constant = 'static::DEFAULT_MESSAGE';
+
+        if (defined($default_message_constant)) {
+            return (string) constant($default_message_constant);
+        } else {
+            trigger_error('Class constant DEFAULT_MESSAGE not defined', E_USER_NOTICE);
+        }
+
+        return '';
+    }
+
+    /**
+     * Get the default code for this type of exception
+     *
+     * @static
+     * @access public
+     * @return int
+     */
+    public static function getDefaultCode()
+    {
+        $default_code_constant = 'static::DEFAULT_CODE';
+
+        if (defined($default_code_constant)) {
+            return (int) constant($default_code_constant);
+        } else {
+            trigger_error('Class constant DEFAULT_CODE not defined', E_USER_NOTICE);
+        }
+
+        return 0;
+    }
+
+    /**
      * Get the slug
      *
      * @access public
