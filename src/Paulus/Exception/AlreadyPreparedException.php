@@ -27,8 +27,26 @@ class AlreadyPreparedException extends LogicException implements PaulusException
 {
 
     /**
+     * Constants
+     */
+
+    /**
+     * The default exception message
+     *
+     * @const string
+     */
+    const DEFAULT_MESSAGE = 'Paulus has already been prepared';
+
+
+    /**
      * Properties
      */
 
-    protected $message = 'Paulus has already been prepared';
+    /**
+     * The exception message
+     *
+     * @var string
+     * @access protected
+     */
+    protected $message = self::DEFAULT_MESSAGE;
 }
