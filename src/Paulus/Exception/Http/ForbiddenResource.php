@@ -26,10 +26,26 @@ class ForbiddenResource extends Forbidden
 {
 
     /**
+     * Constants
+     */
+
+    /**
+     * The default exception message
+     *
+     * @const string
+     */
+    const DEFAULT_MESSAGE = 'You are forbidden to access or modify this';
+
+
+    /**
+     * Properties
+     */
+
+    /**
      * The exception message
      *
      * @var string
      * @access protected
      */
-    protected $message = 'You are forbidden to access or modify this';
+    protected $message = self::DEFAULT_MESSAGE;
 }

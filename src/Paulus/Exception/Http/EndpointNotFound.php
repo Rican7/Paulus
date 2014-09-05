@@ -26,10 +26,26 @@ class EndpointNotFound extends NotFound
 {
 
     /**
+     * Constants
+     */
+
+    /**
+     * The default exception message
+     *
+     * @const string
+     */
+    const DEFAULT_MESSAGE = 'Unable to find the endpoint you requested';
+
+
+    /**
+     * Properties
+     */
+
+    /**
      * The exception message
      *
      * @var string
      * @access protected
      */
-    protected $message = 'Unable to find the endpoint you requested';
+    protected $message = self::DEFAULT_MESSAGE;
 }

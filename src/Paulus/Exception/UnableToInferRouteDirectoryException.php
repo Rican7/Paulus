@@ -24,10 +24,28 @@ class UnableToInferRouteDirectoryException extends RouteAutoLoadFailureException
 {
 
     /**
+     * Constants
+     */
+
+    /**
+     * The default exception message
+     *
+     * @const string
+     */
+    const DEFAULT_MESSAGE = 'Unable to infer route directory.
+        Please provide a RouteLoader instance
+        with a valid path to the `prepare()` method.';
+
+
+    /**
      * Properties
      */
 
-    protected $message = 'Unable to infer route directory.
-        Please provide a RouteLoader instance
-        with a valid path to the `prepare()` method.';
+    /**
+     * The exception message
+     *
+     * @var string
+     * @access protected
+     */
+    protected $message = self::DEFAULT_MESSAGE;
 }

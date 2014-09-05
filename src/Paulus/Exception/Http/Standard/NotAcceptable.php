@@ -36,6 +36,25 @@ class NotAcceptable extends UnexpectedValueException implements ApiExceptionInte
 
 
     /**
+     * Constants
+     */
+
+    /**
+     * The default exception message
+     *
+     * @const string
+     */
+    const DEFAULT_MESSAGE = '';
+
+    /**
+     * The default exception code
+     *
+     * @const int
+     */
+    const DEFAULT_CODE = 406;
+
+
+    /**
      * Properties
      */
 
@@ -45,5 +64,5 @@ class NotAcceptable extends UnexpectedValueException implements ApiExceptionInte
      * @var int
      * @access protected
      */
-    protected $code = 406;
+    protected $code = self::DEFAULT_CODE;
 }

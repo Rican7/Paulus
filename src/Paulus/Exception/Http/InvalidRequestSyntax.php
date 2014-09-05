@@ -27,12 +27,35 @@ class InvalidRequestSyntax extends BadRequest
 {
 
     /**
+     * Constants
+     */
+
+    /**
+     * The default exception slug
+     *
+     * @const string
+     */
+    const DEFAULT_SLUG = 'INVALID_REQUEST_SYNTAX';
+
+    /**
+     * The default exception message
+     *
+     * @const string
+     */
+    const DEFAULT_MESSAGE = 'The posted request\'s syntax is invalid';
+
+
+    /**
+     * Properties
+     */
+
+    /**
      * The exception slug
      *
      * @var string
      * @access protected
      */
-    protected $slug = 'INVALID_REQUEST_SYNTAX';
+    protected $slug = self::DEFAULT_SLUG;
 
     /**
      * The exception message
@@ -40,5 +63,5 @@ class InvalidRequestSyntax extends BadRequest
      * @var string
      * @access protected
      */
-    protected $message = 'The posted request\'s syntax is invalid';
+    protected $message = self::DEFAULT_MESSAGE;
 }

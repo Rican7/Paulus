@@ -26,8 +26,26 @@ class RouteAutoLoadFailureException extends UnexpectedValueException implements 
 {
 
     /**
+     * Constants
+     */
+
+    /**
+     * The default exception message
+     *
+     * @const string
+     */
+    const DEFAULT_MESSAGE = 'Unable to load routes automatically';
+
+
+    /**
      * Properties
      */
 
-    protected $message = 'Unable to load routes automatically';
+    /**
+     * The exception message
+     *
+     * @var string
+     * @access protected
+     */
+    protected $message = self::DEFAULT_MESSAGE;
 }

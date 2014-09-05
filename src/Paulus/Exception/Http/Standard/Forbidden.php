@@ -36,6 +36,25 @@ class Forbidden extends OutOfBoundsException implements ApiExceptionInterface
 
 
     /**
+     * Constants
+     */
+
+    /**
+     * The default exception message
+     *
+     * @const string
+     */
+    const DEFAULT_MESSAGE = '';
+
+    /**
+     * The default exception code
+     *
+     * @const int
+     */
+    const DEFAULT_CODE = 403;
+
+
+    /**
      * Properties
      */
 
@@ -45,5 +64,5 @@ class Forbidden extends OutOfBoundsException implements ApiExceptionInterface
      * @var int
      * @access protected
      */
-    protected $code = 403;
+    protected $code = self::DEFAULT_CODE;
 }

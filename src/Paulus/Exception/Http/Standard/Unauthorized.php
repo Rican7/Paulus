@@ -36,6 +36,25 @@ class Unauthorized extends InvalidArgumentException implements ApiExceptionInter
 
 
     /**
+     * Constants
+     */
+
+    /**
+     * The default exception message
+     *
+     * @const string
+     */
+    const DEFAULT_MESSAGE = '';
+
+    /**
+     * The default exception code
+     *
+     * @const int
+     */
+    const DEFAULT_CODE = 401;
+
+
+    /**
      * Properties
      */
 
@@ -45,5 +64,5 @@ class Unauthorized extends InvalidArgumentException implements ApiExceptionInter
      * @var int
      * @access protected
      */
-    protected $code = 401;
+    protected $code = self::DEFAULT_CODE;
 }

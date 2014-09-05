@@ -34,6 +34,18 @@ class WrongMethod extends MethodNotAllowed implements ApiVerboseExceptionInterfa
 
 
     /**
+     * Constants
+     */
+
+    /**
+     * The default exception message
+     *
+     * @const string
+     */
+    const DEFAULT_MESSAGE = 'The wrong method was called on this endpoint';
+
+
+    /**
      * Properties
      */
 
@@ -43,5 +55,5 @@ class WrongMethod extends MethodNotAllowed implements ApiVerboseExceptionInterfa
      * @var string
      * @access protected
      */
-    protected $message = 'The wrong method was called on this endpoint';
+    protected $message = self::DEFAULT_MESSAGE;
 }

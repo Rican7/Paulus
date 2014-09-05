@@ -36,6 +36,25 @@ class NotFound extends OutOfBoundsException implements ApiExceptionInterface
 
 
     /**
+     * Constants
+     */
+
+    /**
+     * The default exception message
+     *
+     * @const string
+     */
+    const DEFAULT_MESSAGE = '';
+
+    /**
+     * The default exception code
+     *
+     * @const int
+     */
+    const DEFAULT_CODE = 404;
+
+
+    /**
      * Properties
      */
 
@@ -45,5 +64,5 @@ class NotFound extends OutOfBoundsException implements ApiExceptionInterface
      * @var int
      * @access protected
      */
-    protected $code = 404;
+    protected $code = self::DEFAULT_CODE;
 }
