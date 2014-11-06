@@ -22,7 +22,6 @@ use Paulus\FileLoader\RouteLoaderFactory;
 use Paulus\Handler\Error\BasicErrorHandler;
 use Paulus\Handler\Error\ErrorHandlerInterface;
 use Paulus\Handler\Exception\ExceptionHandlerInterface;
-use Paulus\Handler\Exception\ExceptionResponseHandlerInterface;
 use Paulus\Handler\Exception\RestfulExceptionHandler;
 use Paulus\Logger\BasicLogger;
 use Paulus\Request\Request;
