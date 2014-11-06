@@ -20,6 +20,7 @@ use Paulus\Exception\AlreadyPreparedException;
 use Paulus\FileLoader\RouteLoader;
 use Paulus\FileLoader\RouteLoaderFactory;
 use Paulus\Handler\Exception\ExceptionHandlerInterface;
+use Paulus\Handler\Exception\ExceptionResponseHandlerInterface;
 use Paulus\Handler\Exception\RestfulExceptionHandler;
 use Paulus\Logger\BasicLogger;
 use Paulus\Request\Request;
@@ -56,7 +57,7 @@ class Paulus
      *
      * @const string
      */
-    const FALLBACK_RESPONSE_CLASS = '\Klein\Response';
+    const DEFAULT_RESPONSE_CLASS = '\Klein\Response';
 
 
     /**
@@ -88,14 +89,6 @@ class Paulus
     protected $locator;
 
     /**
-     * The exception handler used to handle any application exceptions
-     *
-     * @var ExceptionHandlerInterface
-     * @access protected
-     */
-    protected $exception_handler;
-
-    /**
      * The default response instance to use in
      * case a response hasn't been created
      * yet and an exception is thrown
@@ -104,6 +97,14 @@ class Paulus
      * @access protected
      */
     protected $default_response;
+
+    /**
+     * The exception handler used to handle any application exceptions
+     *
+     * @var ExceptionHandlerInterface
+     * @access protected
+     */
+    protected $exception_handler;
 
     /**
      * Whether the application been prepared or not
@@ -142,9 +143,14 @@ class Paulus
         // Setup our logger
         $this->locator[static::LOGGER_KEY] = $logger ?: new BasicLogger();
 
+        // Setup our default response
+        $response_class = static::DEFAULT_RESPONSE_CLASS;
+        $default_response = new $response_class();
+        $this->setDefaultResponse($default_response);
+
         // Setup our exception handler
         $this->setExceptionHandler(
-            new RestfulExceptionHandler($this->locator[static::LOGGER_KEY], $this)
+            new RestfulExceptionHandler($this->locator[static::LOGGER_KEY], $default_response)
         );
         $this->setupRouterExceptionHandler();
 
@@ -217,6 +223,31 @@ class Paulus
     }
 
     /**
+     * Get the default response object
+     *
+     * @access public
+     * @return AbstractResponse
+     */
+    public function getDefaultResponse()
+    {
+        return $this->default_response;
+    }
+
+    /**
+     * Set the default response object
+     *
+     * @param AbstractResponse $default_response description
+     * @access public
+     * @return Paulus
+     */
+    public function setDefaultResponse(AbstractResponse $default_response)
+    {
+        $this->default_response = $default_response;
+
+        return $this;
+    }
+
+    /**
      * Get the exception_handler
      *
      * @access public
@@ -240,38 +271,6 @@ class Paulus
 
         // Setup the global exception handler
         set_exception_handler([$this->exception_handler, 'handleException']);
-
-        return $this;
-    }
-
-    /**
-     * Get the default response object
-     *
-     * @access public
-     * @return AbstractResponse
-     */
-    public function getDefaultResponse()
-    {
-        if (null === $this->default_response) {
-            $response_class = static::FALLBACK_RESPONSE_CLASS;
-            $default_response = new $response_class();
-        } else {
-            $default_response = $this->default_response;
-        }
-
-        return $default_response;
-    }
-
-    /**
-     * Set the default response object
-     *
-     * @param AbstractResponse $default_response description
-     * @access public
-     * @return Paulus
-     */
-    public function setDefaultResponse(AbstractResponse $default_response)
-    {
-        $this->default_response = $default_response;
 
         return $this;
     }
