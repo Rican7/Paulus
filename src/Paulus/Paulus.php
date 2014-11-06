@@ -21,6 +21,7 @@ use Paulus\Exception\Http\ApiExceptionInterface;
 use Paulus\Exception\Http\ApiVerboseExceptionInterface;
 use Paulus\FileLoader\RouteLoader;
 use Paulus\FileLoader\RouteLoaderFactory;
+use Paulus\Handler\Exception\ExceptionHandlerInterface;
 use Paulus\Logger\BasicLogger;
 use Paulus\Request\Request;
 use Paulus\Response\ApiResponse;
@@ -86,6 +87,14 @@ class Paulus
      * @access protected
      */
     protected $locator;
+
+    /**
+     * The exception handler used to handle any application exceptions
+     *
+     * @var ExceptionHandlerInterface
+     * @access protected
+     */
+    protected $exception_handler;
 
     /**
      * The default response instance to use in
@@ -203,6 +212,34 @@ class Paulus
     public function logger()
     {
         return $this->locator[static::LOGGER_KEY];
+    }
+
+    /**
+     * Get the exception_handler
+     *
+     * @access public
+     * @return ExceptionHandlerInterface
+     */
+    public function getExceptionHandler()
+    {
+        return $this->exception_handler;
+    }
+
+    /**
+     * Set the exception_handler
+     *
+     * @param ExceptionHandlerInterface $exception_handler
+     * @access public
+     * @return Paulus
+     */
+    public function setExceptionHandler(ExceptionHandlerInterface $exception_handler)
+    {
+        $this->exception_handler = $exception_handler;
+
+        // Setup the global exception handler
+        set_exception_handler([$this->exception_handler, 'handleException']);
+
+        return $this;
     }
 
     /**
