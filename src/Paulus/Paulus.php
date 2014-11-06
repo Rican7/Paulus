@@ -17,8 +17,6 @@ use Klein\AbstractResponse;
 use Klein\Response;
 use LogicException;
 use Paulus\Exception\AlreadyPreparedException;
-use Paulus\Exception\Http\ApiExceptionInterface;
-use Paulus\Exception\Http\ApiVerboseExceptionInterface;
 use Paulus\FileLoader\RouteLoader;
 use Paulus\FileLoader\RouteLoaderFactory;
 use Paulus\Handler\Exception\ExceptionHandlerInterface;
