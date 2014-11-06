@@ -19,6 +19,7 @@ use LogicException;
 use Paulus\Exception\AlreadyPreparedException;
 use Paulus\FileLoader\RouteLoader;
 use Paulus\FileLoader\RouteLoaderFactory;
+use Paulus\Handler\Error\ErrorHandlerInterface;
 use Paulus\Handler\Exception\ExceptionHandlerInterface;
 use Paulus\Handler\Exception\ExceptionResponseHandlerInterface;
 use Paulus\Handler\Exception\RestfulExceptionHandler;
@@ -105,6 +106,14 @@ class Paulus
      * @access protected
      */
     protected $exception_handler;
+
+    /**
+     * The error handler used to handle any low-level application errors
+     *
+     * @var ErrorHandlerInterface
+     * @access protected
+     */
+    protected $error_handler;
 
     /**
      * Whether the application been prepared or not
@@ -271,6 +280,41 @@ class Paulus
 
         // Setup the global exception handler
         set_exception_handler([$this->exception_handler, 'handleException']);
+
+        return $this;
+    }
+
+    /**
+     * Get the error_handler
+     *
+     * @access public
+     * @return ErrorHandlerInterface
+     */
+    public function getErrorHandler()
+    {
+        return $this->error_handler;
+    }
+
+    /**
+     * Set the error_handler
+     *
+     * @param ErrorHandlerInterface $error_handler
+     * @param int $error_types
+     * @access public
+     * @return Paulus
+     */
+    public function setErrorHandler(ErrorHandlerInterface $error_handler, $error_types = null)
+    {
+        $this->error_handler = $error_handler;
+
+        // Setup the global error handler
+        $callable = [$this->error_handler, 'handleError'];
+
+        if (null !== $error_types) {
+            set_error_handler($callable, $error_types);
+        } else {
+            set_error_handler($callable);
+        }
 
         return $this;
     }
