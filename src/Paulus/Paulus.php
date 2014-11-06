@@ -19,6 +19,7 @@ use LogicException;
 use Paulus\Exception\AlreadyPreparedException;
 use Paulus\FileLoader\RouteLoader;
 use Paulus\FileLoader\RouteLoaderFactory;
+use Paulus\Handler\Error\BasicErrorHandler;
 use Paulus\Handler\Error\ErrorHandlerInterface;
 use Paulus\Handler\Exception\ExceptionHandlerInterface;
 use Paulus\Handler\Exception\ExceptionResponseHandlerInterface;
@@ -162,6 +163,9 @@ class Paulus
             new RestfulExceptionHandler($this->locator[static::LOGGER_KEY], $default_response)
         );
         $this->setupRouterExceptionHandler();
+
+        // Setup our error handler
+        $this->setErrorHandler(new BasicErrorHandler());
 
         // Setup our after dispatch handler
         $this->setupAfterDispatchHandler();
