@@ -22,6 +22,7 @@ use Paulus\Exception\Http\ApiVerboseExceptionInterface;
 use Paulus\FileLoader\RouteLoader;
 use Paulus\FileLoader\RouteLoaderFactory;
 use Paulus\Handler\Exception\ExceptionHandlerInterface;
+use Paulus\Handler\Exception\RestfulExceptionHandler;
 use Paulus\Logger\BasicLogger;
 use Paulus\Request\Request;
 use Paulus\Response\ApiResponse;
@@ -144,7 +145,10 @@ class Paulus
         $this->locator[static::LOGGER_KEY] = $logger ?: new BasicLogger();
 
         // Setup our exception handler
-        $this->setupExceptionHandler();
+        $this->setExceptionHandler(
+            new RestfulExceptionHandler($this->locator[static::LOGGER_KEY], $this)
+        );
+        $this->setupRouterExceptionHandler();
 
         // Setup our after dispatch handler
         $this->setupAfterDispatchHandler();
@@ -275,20 +279,17 @@ class Paulus
     }
 
     /**
-     * Setup our exception handler
+     * Setup our router's exception handler
      *
-     * Setup our global exception handler for Paulus,
-     * try and setup our controller's exception handler,
-     * and fall back to our generic exception handler
+     * Setup our router's exception handler by first trying
+     * to setup our controller's exception handler, and
+     * falling back to our generic exception handler
      *
      * @access protected
      * @return Paulus
      */
-    protected function setupExceptionHandler()
+    protected function setupRouterExceptionHandler()
     {
-        // Setup the global exception handler
-        set_exception_handler([$this, 'handleException']);
-
         // Register an error handler through our router's catcher
         $this->router->onError(
             function ($router, $message, $class, Exception $exception) {
@@ -301,7 +302,7 @@ class Paulus
                     return call_user_func($callable, $exception);
                 }
 
-                return $this->handleException($exception);
+                return $this->exception_handler->handleException($exception);
             }
         );
 
