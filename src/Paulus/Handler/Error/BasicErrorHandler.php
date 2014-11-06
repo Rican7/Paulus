@@ -38,6 +38,12 @@ class BasicErrorHandler implements ErrorHandlerInterface
      */
     public function handleError($level, $message, $file = null, $line = null, array $context = null)
     {
+        // If the error level has been disabled in our error reporting configuration
+        if (!($level & error_reporting())) {
+            // Don't handle it
+            return false;
+        }
+
         throw new ErrorException($message, 0, $level, $file, $line);
     }
 }
