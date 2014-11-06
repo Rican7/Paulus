@@ -29,8 +29,66 @@ class RestfulExceptionHandler extends BasicExceptionHandler
 {
 
     /**
+     * Properties
+     */
+
+    /**
+     * The delegate exception handler
+     *
+     * This delegate handler will be used to handle the
+     * exceptions that this handler doesn't want to
+     *
+     * @type ExceptionHandlerInterface
+     */
+    private $delegate;
+
+
+    /**
      * Methods
      */
+
+    /**
+     * Constructor
+     *
+     * @param LoggerInterface $logger
+     * @param Paulus $application
+     * @param ExceptionHandlerInterface $delegate
+     * @access public
+     */
+    public function __construct(
+        LoggerInterface $logger,
+        Paulus $application,
+        ExceptionHandlerInterface $delegate = null
+    ) {
+        parent::__construct($logger, $application);
+
+        $this->delegate = $delegate;
+    }
+
+    /**
+     * Gets the value of delegate
+     *
+     * @access public
+     * @return ExceptionHandlerInterface
+     */
+    public function getDelegate()
+    {
+        return $this->delegate;
+    }
+
+    /**
+     * Sets the value of delegate
+     *
+     * @param ExceptionHandlerInterface $delegate
+     * @access public
+     * @return RestfulExceptionHandler
+     */
+    public function setDelegate(ExceptionHandlerInterface $delegate)
+    {
+        $this->delegate = $delegate;
+
+        return $this;
+    }
 
     /**
      * Handle an exception
@@ -46,6 +104,10 @@ class RestfulExceptionHandler extends BasicExceptionHandler
         // Handle our RESTful exceptions
         if ($exception instanceof ApiExceptionInterface) {
             return $this->handleRestfulException($exception);
+
+        } elseif (null !== $this->delegate) {
+            return $this->delegate->handleException($exception);
+
         } else {
             return parent::handleException($exception);
         }
@@ -67,34 +129,19 @@ class RestfulExceptionHandler extends BasicExceptionHandler
         // Write to our log
         $this->logger->error($exception->getMessage(), ['exception' => $exception]);
 
-        // Grab the response
-        $response = $this->application->router()->response();
+        $more_info = null;
 
-        // If we haven't initialized a response yet...
-        if ($response === null) {
-            $response = $this->application->getDefaultResponse();
+        if ($exception instanceof ApiVerboseExceptionInterface) {
+            $more_info = $exception->getMoreInfo();
         }
 
-        // Unlock the response
-        $response->unlock();
-
-        // Set the response code of the response based on the exception's code
-        $response->code($exception->getCode());
-
-        if ($response instanceof ApiResponse) {
-
-            // Set our slug and message
-            $response
-                ->setStatusSlug($exception->getSlug())
-                ->setMessage($exception->getMessage());
-
-            if ($exception instanceof ApiVerboseExceptionInterface) {
-                $response->setMoreInfo($exception->getMoreInfo());
-            }
-        }
-
-        // Send the response
-        $response->send();
+        // Send an error response
+        $this->sendErrorResponse(
+            $exception->getCode(),
+            $exception->getSlug(),
+            $exception->getMessage(),
+            $more_info
+        );
 
         return true;
     }

@@ -37,6 +37,20 @@ class BasicExceptionHandler implements ExceptionHandlerInterface
      */
     const INFO_MESSAGE_FORMAT = 'Exception being handled by the Paulus %s exception handler';
 
+    /**
+     * The default response code to send
+     *
+     * @const int
+     */
+    const DEFAULT_RESPONSE_CODE = 500;
+
+    /**
+     * The default slug to include in the response
+     *
+     * @const string
+     */
+    const DEFAULT_SLUG = 'EXCEPTION_THROWN';
+
 
     /**
      * Properties
@@ -92,27 +106,8 @@ class BasicExceptionHandler implements ExceptionHandlerInterface
         // Write to our log
         $this->logger->critical($exception->getMessage(), ['exception' => $exception]);
 
-        // Grab the response
-        $response = $this->application->router()->response();
-
-        // If we haven't initialized a response yet...
-        if ($response === null) {
-            $response = $this->application->getDefaultResponse();
-        }
-
-        // Unlock the response and set its response code
-        $response->unlock()->code(500);
-
-        if ($response instanceof ApiResponse) {
-
-            // Set our slug and message
-            $response
-                ->setStatusSlug('EXCEPTION_THROWN')
-                ->setMessage($exception->getMessage());
-        }
-
-        // Send the response
-        $response->send();
+        // Send an error response
+        $this->sendErrorResponse(null, null, $exception->getMessage(), null);
 
         return true;
     }
@@ -129,5 +124,51 @@ class BasicExceptionHandler implements ExceptionHandlerInterface
         $this->logger->info(
             sprintf(static::INFO_MESSAGE_FORMAT, get_called_class())
         );
+    }
+
+    /**
+     * Send an error response
+     *
+     * @param int $code
+     * @param string $slug
+     * @param string $message
+     * @param array|object $more_info
+     * @return void
+     */
+    protected function sendErrorResponse(
+        $code = self::DEFAULT_RESPONSE_CODE,
+        $slug = self::DEFAULT_SLUG,
+        $message = null,
+        $more_info = null
+    ) {
+        // Ensure our defaults are set
+        $code = $code ?: static::DEFAULT_RESPONSE_CODE;
+        $slug = $slug ?: static::DEFAULT_SLUG;
+
+        // Grab the response
+        $response = $this->application->router()->response();
+
+        // If we haven't initialized a response yet...
+        if ($response === null) {
+            $response = $this->application->getDefaultResponse();
+        }
+
+        // Unlock the response and set its response code
+        $response->unlock()->code($code);
+
+        if ($response instanceof ApiResponse) {
+
+            // Set our slug and message
+            $response
+                ->setStatusSlug($slug)
+                ->setMessage($message);
+
+            if (null !== $more_info) {
+                $response->setMoreInfo($more_info);
+            }
+        }
+
+        // Send the response
+        $response->send();
     }
 }
