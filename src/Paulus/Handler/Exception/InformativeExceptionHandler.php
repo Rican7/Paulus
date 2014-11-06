@@ -43,11 +43,18 @@ class InformativeExceptionHandler extends BasicExceptionHandler
     const DEFAULT_SLUG = 'EXCEPTION_THROWN';
 
     /**
+     * The exception class name key to use in the more info array
+     *
+     * @const string
+     */
+    const KEY_EXCEPTION_CLASS = 'exception_class';
+
+    /**
      * The exception stack trace key to use in the more info array
      *
      * @const string
      */
-    const STACK_TRACE_KEY = 'stack_trace';
+    const KEY_STACK_TRACE = 'stack_trace';
 
 
     /**
@@ -70,7 +77,10 @@ class InformativeExceptionHandler extends BasicExceptionHandler
             null,
             null,
             $exception->getMessage(),
-            [static::STACK_TRACE_KEY => $exception->getTrace()]
+            [
+                static::KEY_EXCEPTION_CLASS => get_class($exception),
+                static::KEY_STACK_TRACE => $exception->getTrace(),
+            ]
         );
 
         return parent::handleException($exception);
