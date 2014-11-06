@@ -12,7 +12,7 @@
 namespace Paulus\Handler\Exception;
 
 use Exception;
-use Paulus\Paulus;
+use Klein\AbstractResponse;
 use Paulus\Response\ApiResponse;
 use Psr\Log\LoggerInterface;
 
@@ -23,7 +23,7 @@ use Psr\Log\LoggerInterface;
  *
  * @package Paulus\Handler\Exception
  */
-class BasicExceptionHandler implements ExceptionHandlerInterface
+class BasicExceptionHandler implements ExceptionResponseHandlerInterface
 {
 
     /**
@@ -36,20 +36,6 @@ class BasicExceptionHandler implements ExceptionHandlerInterface
      * @const string
      */
     const INFO_MESSAGE_FORMAT = 'Exception being handled by the Paulus %s exception handler';
-
-    /**
-     * The default response code to send
-     *
-     * @const int
-     */
-    const DEFAULT_RESPONSE_CODE = 500;
-
-    /**
-     * The default slug to include in the response
-     *
-     * @const string
-     */
-    const DEFAULT_SLUG = 'EXCEPTION_THROWN';
 
 
     /**
@@ -65,12 +51,12 @@ class BasicExceptionHandler implements ExceptionHandlerInterface
     protected $logger;
 
     /**
-     * The Paulus application
+     * The response to send
      *
-     * @var Paulus
+     * @var AbstractResponse
      * @access protected
      */
-    protected $application;
+    protected $response;
 
 
     /**
@@ -81,13 +67,36 @@ class BasicExceptionHandler implements ExceptionHandlerInterface
      * Constructor
      *
      * @param LoggerInterface $logger
-     * @param Paulus $application
+     * @param AbstractResponse $response
      * @access public
      */
-    public function __construct(LoggerInterface $logger, Paulus $application)
+    public function __construct(LoggerInterface $logger, AbstractResponse $response)
     {
         $this->logger = $logger;
-        $this->application = $application;
+        $this->response = $response;
+    }
+
+    /**
+     * Get the response
+     *
+     * @access public
+     * @return AbstractResponse
+     */
+    public function getResponse()
+    {
+        return $this->response;
+    }
+
+    /**
+     * Set the response
+     *
+     * @param AbstractResponse $response
+     * @access public
+     * @return BasicExceptionHandler
+     */
+    public function setResponse(AbstractResponse $response)
+    {
+        $this->response = $response;
     }
 
     /**
@@ -106,8 +115,8 @@ class BasicExceptionHandler implements ExceptionHandlerInterface
         // Write to our log
         $this->logger->critical($exception->getMessage(), ['exception' => $exception]);
 
-        // Send an error response
-        $this->sendErrorResponse(null, null, $exception->getMessage(), null);
+        // Send our response
+        $this->response->send();
 
         return true;
     }
@@ -124,51 +133,5 @@ class BasicExceptionHandler implements ExceptionHandlerInterface
         $this->logger->info(
             sprintf(static::INFO_MESSAGE_FORMAT, get_called_class())
         );
-    }
-
-    /**
-     * Send an error response
-     *
-     * @param int $code
-     * @param string $slug
-     * @param string $message
-     * @param array|object $more_info
-     * @return void
-     */
-    protected function sendErrorResponse(
-        $code = self::DEFAULT_RESPONSE_CODE,
-        $slug = self::DEFAULT_SLUG,
-        $message = null,
-        $more_info = null
-    ) {
-        // Ensure our defaults are set
-        $code = $code ?: static::DEFAULT_RESPONSE_CODE;
-        $slug = $slug ?: static::DEFAULT_SLUG;
-
-        // Grab the response
-        $response = $this->application->router()->response();
-
-        // If we haven't initialized a response yet...
-        if ($response === null) {
-            $response = $this->application->getDefaultResponse();
-        }
-
-        // Unlock the response and set its response code
-        $response->unlock()->code($code);
-
-        if ($response instanceof ApiResponse) {
-
-            // Set our slug and message
-            $response
-                ->setStatusSlug($slug)
-                ->setMessage($message);
-
-            if (null !== $more_info) {
-                $response->setMoreInfo($more_info);
-            }
-        }
-
-        // Send the response
-        $response->send();
     }
 }

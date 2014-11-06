@@ -12,10 +12,9 @@
 namespace Paulus\Handler\Exception;
 
 use Exception;
+use Klein\AbstractResponse;
 use Paulus\Exception\Http\ApiExceptionInterface;
 use Paulus\Exception\Http\ApiVerboseExceptionInterface;
-use Paulus\Paulus;
-use Paulus\Response\ApiResponse;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -25,7 +24,7 @@ use Psr\Log\LoggerInterface;
  *
  * @package Paulus\Handler\Exception
  */
-class RestfulExceptionHandler extends BasicExceptionHandler
+class RestfulExceptionHandler extends InformativeExceptionHandler
 {
 
     /**
@@ -51,16 +50,16 @@ class RestfulExceptionHandler extends BasicExceptionHandler
      * Constructor
      *
      * @param LoggerInterface $logger
-     * @param Paulus $application
+     * @param AbstractResponse $response
      * @param ExceptionHandlerInterface $delegate
      * @access public
      */
     public function __construct(
         LoggerInterface $logger,
-        Paulus $application,
+        AbstractResponse $response,
         ExceptionHandlerInterface $delegate = null
     ) {
-        parent::__construct($logger, $application);
+        parent::__construct($logger, $response);
 
         $this->delegate = $delegate;
     }
@@ -135,13 +134,16 @@ class RestfulExceptionHandler extends BasicExceptionHandler
             $more_info = $exception->getMoreInfo();
         }
 
-        // Send an error response
-        $this->sendErrorResponse(
+        // Prepare our error response
+        $this->prepareErrorResponse(
             $exception->getCode(),
             $exception->getSlug(),
             $exception->getMessage(),
             $more_info
         );
+
+        // Send our response
+        $this->response->send();
 
         return true;
     }
