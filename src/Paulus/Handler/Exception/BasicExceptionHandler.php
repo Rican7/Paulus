@@ -100,8 +100,6 @@ class BasicExceptionHandler implements ExceptionResponseHandlerInterface
     }
 
     /**
-     * Handle an exception
-     *
      * Handle an exception thrown in the application
      *
      * @param Exception $exception

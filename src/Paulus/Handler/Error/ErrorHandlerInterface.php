@@ -22,15 +22,14 @@ interface ErrorHandlerInterface
 {
 
     /**
-     * Handle an error
-     *
      * Handle an error raised in the application
      *
-     * @param int $level
-     * @param string $message
-     * @param string $file
-     * @param int $line
-     * @param array $context
+     * @link http://php.net/manual/en/function.set-error-handler.php#refsect1-function.set-error-handler-parameters
+     * @param int $level        The level of the error raised
+     * @param string $message   The error message
+     * @param string $file      The filename that the error was raised in
+     * @param int $line         The line number of the error's origin
+     * @param array $context    An array containing all of the variables in scope present at error time
      * @access public
      * @return boolean
      */

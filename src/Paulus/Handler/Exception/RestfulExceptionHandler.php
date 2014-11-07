@@ -90,8 +90,6 @@ class RestfulExceptionHandler extends InformativeExceptionHandler
     }
 
     /**
-     * Handle an exception
-     *
      * Handle an exception thrown in the application
      *
      * @param Exception $exception
