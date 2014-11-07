@@ -214,8 +214,8 @@ abstract class AbstractController implements ControllerInterface
             $e = BadGateway::create(null, null, $e);
         }
 
-        // Handle it with our app's default handler
-        $this->app->handleException($e);
+        // Throw it up the stack. Let someone else handle it
+        throw $e;
     }
 
     /**

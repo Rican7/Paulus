@@ -17,10 +17,12 @@ use Klein\AbstractResponse;
 use Klein\Response;
 use LogicException;
 use Paulus\Exception\AlreadyPreparedException;
-use Paulus\Exception\Http\ApiExceptionInterface;
-use Paulus\Exception\Http\ApiVerboseExceptionInterface;
 use Paulus\FileLoader\RouteLoader;
 use Paulus\FileLoader\RouteLoaderFactory;
+use Paulus\Handler\Error\ErrorHandlerInterface;
+use Paulus\Handler\Error\LevelBasedErrorHandler;
+use Paulus\Handler\Exception\ExceptionHandlerInterface;
+use Paulus\Handler\Exception\RestfulExceptionHandler;
 use Paulus\Logger\BasicLogger;
 use Paulus\Request\Request;
 use Paulus\Response\ApiResponse;
@@ -56,7 +58,7 @@ class Paulus
      *
      * @const string
      */
-    const FALLBACK_RESPONSE_CLASS = '\Klein\Response';
+    const DEFAULT_RESPONSE_CLASS = '\Klein\Response';
 
 
     /**
@@ -98,6 +100,22 @@ class Paulus
     protected $default_response;
 
     /**
+     * The exception handler used to handle any application exceptions
+     *
+     * @var ExceptionHandlerInterface
+     * @access protected
+     */
+    protected $exception_handler;
+
+    /**
+     * The error handler used to handle any low-level application errors
+     *
+     * @var ErrorHandlerInterface
+     * @access protected
+     */
+    protected $error_handler;
+
+    /**
      * Whether the application been prepared or not
      *
      * @var boolean
@@ -134,8 +152,19 @@ class Paulus
         // Setup our logger
         $this->locator[static::LOGGER_KEY] = $logger ?: new BasicLogger();
 
+        // Setup our default response
+        $response_class = static::DEFAULT_RESPONSE_CLASS;
+        $default_response = new $response_class();
+        $this->setDefaultResponse($default_response);
+
         // Setup our exception handler
-        $this->setupExceptionHandler();
+        $this->setExceptionHandler(
+            new RestfulExceptionHandler($this->locator[static::LOGGER_KEY], $default_response)
+        );
+        $this->setupRouterExceptionHandler();
+
+        // Setup our error handler
+        $this->setErrorHandler(new LevelBasedErrorHandler());
 
         // Setup our after dispatch handler
         $this->setupAfterDispatchHandler();
@@ -213,14 +242,7 @@ class Paulus
      */
     public function getDefaultResponse()
     {
-        if (null === $this->default_response) {
-            $response_class = static::FALLBACK_RESPONSE_CLASS;
-            $default_response = new $response_class();
-        } else {
-            $default_response = $this->default_response;
-        }
-
-        return $default_response;
+        return $this->default_response;
     }
 
     /**
@@ -238,20 +260,80 @@ class Paulus
     }
 
     /**
-     * Setup our exception handler
+     * Get the exception_handler
      *
-     * Setup our global exception handler for Paulus,
-     * try and setup our controller's exception handler,
-     * and fall back to our generic exception handler
+     * @access public
+     * @return ExceptionHandlerInterface
+     */
+    public function getExceptionHandler()
+    {
+        return $this->exception_handler;
+    }
+
+    /**
+     * Set the exception_handler
+     *
+     * @param ExceptionHandlerInterface $exception_handler
+     * @access public
+     * @return Paulus
+     */
+    public function setExceptionHandler(ExceptionHandlerInterface $exception_handler)
+    {
+        $this->exception_handler = $exception_handler;
+
+        // Setup the global exception handler
+        set_exception_handler([$this->exception_handler, 'handleException']);
+
+        return $this;
+    }
+
+    /**
+     * Get the error_handler
+     *
+     * @access public
+     * @return ErrorHandlerInterface
+     */
+    public function getErrorHandler()
+    {
+        return $this->error_handler;
+    }
+
+    /**
+     * Set the error_handler
+     *
+     * @param ErrorHandlerInterface $error_handler
+     * @param int $error_types
+     * @access public
+     * @return Paulus
+     */
+    public function setErrorHandler(ErrorHandlerInterface $error_handler, $error_types = null)
+    {
+        $this->error_handler = $error_handler;
+
+        // Setup the global error handler
+        $callable = [$this->error_handler, 'handleError'];
+
+        if (null !== $error_types) {
+            set_error_handler($callable, $error_types);
+        } else {
+            set_error_handler($callable);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Setup our router's exception handler
+     *
+     * Setup our router's exception handler by first trying
+     * to setup our controller's exception handler, and
+     * falling back to our generic exception handler
      *
      * @access protected
      * @return Paulus
      */
-    protected function setupExceptionHandler()
+    protected function setupRouterExceptionHandler()
     {
-        // Setup the global exception handler
-        set_exception_handler([$this, 'handleException']);
-
         // Register an error handler through our router's catcher
         $this->router->onError(
             function ($router, $message, $class, Exception $exception) {
@@ -264,101 +346,9 @@ class Paulus
                     return call_user_func($callable, $exception);
                 }
 
-                return $this->handleException($exception);
+                return $this->exception_handler->handleException($exception);
             }
         );
-
-        return $this;
-    }
-
-    /**
-     * Handle an exception
-     *
-     * Handles any exception thrown in the application,
-     * so we always respond RESTfully
-     *
-     * @param Exception $exception
-     * @access public
-     * @return Paulus
-     */
-    public function handleException(Exception $exception)
-    {
-        // Write to our log
-        $this->logger()->info('Exception being handled by the Paulus exception handler');
-
-        // Handle our RESTful exceptions
-        if ($exception instanceof ApiExceptionInterface) {
-            // Write to our log
-            $this->logger()->error($exception->getMessage(), ['exception' => $exception]);
-
-            $this->handleRestfulException($exception);
-        } else {
-            // Write to our log
-            $this->logger()->critical($exception->getMessage(), ['exception' => $exception]);
-
-            // Grab the response
-            $response = $this->router->response();
-
-            // If we haven't initialized a response yet...
-            if ($response === null) {
-                $response = $this->getDefaultResponse();
-            }
-
-            // Unlock the response and set its response code
-            $response->unlock()->code(500);
-
-            if ($response instanceof ApiResponse) {
-
-                // Set our slug and message
-                $response
-                    ->setStatusSlug('EXCEPTION_THROWN')
-                    ->setMessage($exception->getMessage());
-            }
-
-            // Send the response
-            $response->send();
-        }
-
-        return $this;
-    }
-
-    /**
-     * Handle exceptions implementing the ApiExceptionInterface
-     *
-     * @param ApiExceptionInterface $exception
-     * @access public
-     * @return Paulus
-     */
-    public function handleRestfulException(ApiExceptionInterface $exception)
-    {
-        // Grab the response
-        $response = $this->router->response();
-
-        // If we haven't initialized a response yet...
-        if ($response === null) {
-            $response = $this->getDefaultResponse();
-        }
-
-        // Unlock the response
-        $response->unlock();
-
-        // Set the response code of the response based on the exception's code
-        $response->code($exception->getCode());
-
-        if ($response instanceof ApiResponse) {
-
-            // Set our slug and message
-            $response
-                ->setStatusSlug($exception->getSlug())
-                ->setMessage($exception->getMessage());
-
-            if ($exception instanceof ApiVerboseExceptionInterface) {
-                $response->setMoreInfo($exception->getMoreInfo());
-            }
-        }
-
-        // Send the response
-        $response->send();
 
         return $this;
     }
