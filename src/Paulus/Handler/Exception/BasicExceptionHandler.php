@@ -97,6 +97,8 @@ class BasicExceptionHandler implements ExceptionResponseHandlerInterface
     public function setResponse(AbstractResponse $response)
     {
         $this->response = $response;
+
+        return $this;
     }
 
     /**
