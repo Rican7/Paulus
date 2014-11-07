@@ -11,16 +11,14 @@
 
 namespace Paulus\Handler\Error;
 
-use ErrorException;
-
 /**
- * BasicErrorHandler
+ * LevelBasedErrorHandler
  *
- * A basic error handler that turns errors to thrown ErrorException's
+ * An error handler that only reports errors that we've configured to report
  *
  * @package Paulus\Handler\Error
  */
-class BasicErrorHandler implements ErrorHandlerInterface
+class LevelBasedErrorHandler extends BasicErrorHandler
 {
 
     /**
@@ -33,11 +31,16 @@ class BasicErrorHandler implements ErrorHandlerInterface
      * @param int $line         The line number of the error's origin
      * @param array $context    An array containing all of the variables in scope present at error time
      * @access public
-     * @throws ErrorException   Converts any passed error into an approriately configured ErrorException
      * @return boolean
      */
     public function handleError($level, $message, $file = null, $line = null, array $context = null)
     {
-        throw new ErrorException($message, 0, $level, $file, $line);
+        // If the error level has been disabled in our error reporting configuration
+        if (!($level & error_reporting())) {
+            // Don't handle it
+            return false;
+        }
+
+        return parent::handleError($level, $message, $file, $line, $context);
     }
 }
