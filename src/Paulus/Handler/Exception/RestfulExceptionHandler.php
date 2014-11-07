@@ -13,8 +13,10 @@ namespace Paulus\Handler\Exception;
 
 use Exception;
 use Klein\AbstractResponse;
+use Klein\HttpStatus;
 use Paulus\Exception\Http\ApiExceptionInterface;
 use Paulus\Exception\Http\ApiVerboseExceptionInterface;
+use Paulus\Support\Inflector;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -135,7 +137,7 @@ class RestfulExceptionHandler extends InformativeExceptionHandler
         // Prepare our error response
         $this->prepareErrorResponse(
             $exception->getCode(),
-            $exception->getSlug(),
+            $this->getSlugFromException($exception),
             $exception->getMessage(),
             $more_info
         );
@@ -144,5 +146,32 @@ class RestfulExceptionHandler extends InformativeExceptionHandler
         $this->response->send();
 
         return true;
+    }
+
+    /**
+     * Get a slug from an API exception
+     *
+     * This will get a slug from an ApiExceptionInterface by attempting to first
+     * grab the defined slug and then falling back to using the standard HTTP
+     * status code's message
+     *
+     * @param ApiExceptionInterface $exception
+     * @access protected
+     * @return string
+     */
+    protected function getSlugFromException(ApiExceptionInterface $exception)
+    {
+        $slug = $exception->getSlug();
+
+        if (empty($slug)) {
+            $http_status = new HttpStatus($exception->getCode());
+            $http_status_message = $http_status->getMessage();
+
+            if (!empty($http_status_message)) {
+                $slug = Inflector::constantStringify($http_status_message);
+            }
+        }
+
+        return $slug;
     }
 }
