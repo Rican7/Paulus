@@ -164,7 +164,8 @@ class RestfulExceptionHandler extends InformativeExceptionHandler
         $slug = $exception->getSlug();
 
         if (empty($slug)) {
-            $http_status_message = (new HttpStatus($exception->getCode()))->getMessage();
+            $http_status = new HttpStatus($exception->getCode());
+            $http_status_message = $http_status->getMessage();
 
             if (!empty($http_status_message)) {
                 $slug = Inflector::constantStringify($http_status_message);
