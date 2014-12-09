@@ -91,7 +91,7 @@ class PaulusTest extends AbstractPaulusTest
     {
         $default = $this->paulus_app->getDefaultResponse();
 
-        $this->assertSame(ltrim(Paulus::FALLBACK_RESPONSE_CLASS, '\\'), get_class($default));
+        $this->assertSame(ltrim(Paulus::DEFAULT_RESPONSE_CLASS, '\\'), get_class($default));
 
         $json_response = new JsonResponse();
 

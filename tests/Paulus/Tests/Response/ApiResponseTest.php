@@ -51,7 +51,7 @@ class ApiResponseTest extends AbstractPaulusTest
         $test_data = $this->getTestData();
         $test_status_code = 304;
         $test_headers = [
-            'x-whatever' => 'yup',
+            'X-Whatever' => 'yup',
         ];
 
         $response = new ApiResponse($test_data, $test_status_code, $test_headers);
