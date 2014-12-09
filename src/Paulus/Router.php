@@ -310,11 +310,11 @@ class Router extends Klein
      * @see Klein\Klein::handleRouteCallback()
      * @param Route $route
      * @param RouteCollection $matched
-     * @param mixed $methods_matched
+     * @param array $methods_matched
      * @access protected
      * @return void
      */
-    protected function handleRouteCallback(Route $route, RouteCollection $matched, $methods_matched)
+    protected function handleRouteCallback(Route $route, RouteCollection $matched, array $methods_matched)
     {
         // Get the result handler of the current controller
         $handler = $this->getControllerResultHandler();
