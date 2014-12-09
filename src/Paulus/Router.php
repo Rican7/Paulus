@@ -12,6 +12,7 @@
 namespace Paulus;
 
 use Klein\AbstractResponse;
+use Klein\AbstractRouteFactory;
 use Klein\DataCollection\RouteCollection;
 use Klein\Klein;
 use Klein\Request;
@@ -80,14 +81,16 @@ class Router extends Klein
         RouteCollection $routes = null,
         AbstractRouteFactory $route_factory = null
     ) {
-        // Instanciate and fall back to defaults
-        $this->service       = $service       ?: new ServiceProvider();
+        // Build with our parent, overriding certain injectables
+        parent::__construct(
+            null,
+            null,
+            null,
+            $route_factory ?: new RouteFactory()
+        );
 
-        $this->routes        = $routes        ?: new RouteCollection();
-        $this->route_factory = $route_factory ?: new RouteFactory();
-
-        // Ignore their app entry, always keep as null
-        $this->app           = null;
+        // Don't fallback to a default `app` instance. Keep as null if none provided
+        $this->app = $app ?: null;
     }
 
     /**
