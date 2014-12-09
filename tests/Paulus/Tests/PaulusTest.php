@@ -14,7 +14,9 @@ namespace Paulus\Tests;
 use Klein\DataCollection\RouteCollection;
 use Paulus\DataCollection\ImmutableDataCollection;
 use Paulus\FileLoader\RouteLoaderFactory;
+use Paulus\Logger\BasicLogger;
 use Paulus\Paulus;
+use Paulus\Response\JsonResponse;
 use Paulus\Router;
 use Paulus\ServiceLocator;
 
@@ -76,6 +78,26 @@ class PaulusTest extends AbstractPaulusTest
         $locator = $this->paulus_app->locator();
 
         $this->assertTrue($locator instanceof ServiceLocator);
+    }
+
+    public function testLogger()
+    {
+        $logger = $this->paulus_app->logger();
+
+        $this->assertTrue($logger instanceof BasicLogger);
+    }
+
+    public function testGetSetDefaultResponse()
+    {
+        $default = $this->paulus_app->getDefaultResponse();
+
+        $this->assertSame(ltrim(Paulus::DEFAULT_RESPONSE_CLASS, '\\'), get_class($default));
+
+        $json_response = new JsonResponse();
+
+        $this->paulus_app->setDefaultResponse($json_response);
+
+        $this->assertSame($json_response, $this->paulus_app->getDefaultResponse());
     }
 
     public function testPrepareWithoutAutoLoading()

@@ -12,6 +12,7 @@
 namespace Paulus;
 
 use Klein\AbstractResponse;
+use Klein\AbstractRouteFactory;
 use Klein\DataCollection\RouteCollection;
 use Klein\Klein;
 use Klein\Request;
@@ -80,14 +81,16 @@ class Router extends Klein
         RouteCollection $routes = null,
         AbstractRouteFactory $route_factory = null
     ) {
-        // Instanciate and fall back to defaults
-        $this->service       = $service       ?: new ServiceProvider();
+        // Build with our parent, overriding certain injectables
+        parent::__construct(
+            null,
+            null,
+            null,
+            $route_factory ?: new RouteFactory()
+        );
 
-        $this->routes        = $routes        ?: new RouteCollection();
-        $this->route_factory = $route_factory ?: new RouteFactory();
-
-        // Ignore their app entry, always keep as null
-        $this->app           = null;
+        // Don't fallback to a default `app` instance. Keep as null if none provided
+        $this->app = $app ?: null;
     }
 
     /**
@@ -307,11 +310,11 @@ class Router extends Klein
      * @see Klein\Klein::handleRouteCallback()
      * @param Route $route
      * @param RouteCollection $matched
-     * @param mixed $methods_matched
+     * @param array $methods_matched
      * @access protected
      * @return void
      */
-    protected function handleRouteCallback(Route $route, RouteCollection $matched, $methods_matched)
+    protected function handleRouteCallback(Route $route, RouteCollection $matched, array $methods_matched)
     {
         // Get the result handler of the current controller
         $handler = $this->getControllerResultHandler();

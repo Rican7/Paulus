@@ -51,7 +51,7 @@ class JsonResponseTest extends AbstractPaulusTest
         $test_data = $this->getTestData();
         $test_status_code = 304;
         $test_headers = [
-            'x-whatever' => 'yup',
+            'X-Whatever' => 'yup',
         ];
 
         $response = new JsonResponse($test_data, $test_status_code, $test_headers);
@@ -90,13 +90,13 @@ class JsonResponseTest extends AbstractPaulusTest
         $test_data = $this->getTestData();
         $test_status_code = 304;
         $test_headers = [
-            'content-type' => 'image/png',
+            'Content-Type' => 'image/png',
         ];
 
         $response = new JsonResponse($test_data, $test_status_code, $test_headers);
 
         $this->assertSame(
-            $test_headers['content-type'],
+            $test_headers['Content-Type'],
             $response->headers()->get('content-type')
         );
         $this->assertSame(
