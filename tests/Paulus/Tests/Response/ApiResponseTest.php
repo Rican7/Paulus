@@ -62,10 +62,10 @@ class ApiResponseTest extends AbstractPaulusTest
         $this->assertFalse($response->isLocked());
     }
 
-    public function testGetSetData()
+    public function testGetSetData($test_data = null)
     {
         // Test data
-        $test_data = $this->getTestData();
+        $test_data = (null === $test_data) ? $this->getTestData() : $test_data;
 
         $response = new ApiResponse();
 
@@ -77,6 +77,14 @@ class ApiResponseTest extends AbstractPaulusTest
 
         $this->assertSame($test_data, $response->getData());
         $this->assertNotSame($old_body, $new_body);
+    }
+
+    public function testGetSetEmptyDataSet()
+    {
+        // Set the test data to be an empty array
+        $test_data = [];
+
+        $this->testGetSetData($test_data);
     }
 
     public function testGetSetStatusSlug()
