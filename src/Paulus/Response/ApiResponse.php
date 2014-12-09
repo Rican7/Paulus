@@ -227,7 +227,7 @@ class ApiResponse extends JsonResponse
         ];
 
         // Assign our data
-        $formatted->data = $this->getData() ?: (object) [];
+        $formatted->data = (null === $this->getData()) ? (object) [] : $this->getData();
 
         return $formatted;
     }
