@@ -380,11 +380,7 @@ class Paulus
                             $exception = WrongMethod::create(null, null, $http_exception);
 
                             // Tell them of the possible methods
-                            $exception->setMoreInfo(
-                                [
-                                    'possible_methods' => $methods_matched,
-                                ]
-                            );
+                            $exception->setAllowedMethods($methods_matched);
 
                             throw $exception;
                         }
