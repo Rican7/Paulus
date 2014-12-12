@@ -82,7 +82,7 @@ class WrongMethod extends MethodNotAllowed implements ApiVerboseExceptionInterfa
     {
         // Tell them of the possible methods
         $this->setMoreInfo([
-            static::MORE_INFO_ALLOWED_METHODS_KEY => $methods_matched,
+            static::MORE_INFO_ALLOWED_METHODS_KEY => $allowed_methods,
         ]);
 
         return $this;
