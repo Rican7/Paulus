@@ -17,6 +17,8 @@ use Klein\AbstractResponse;
 use Klein\Response;
 use LogicException;
 use Paulus\Exception\AlreadyPreparedException;
+use Paulus\Exception\Http\EndpointNotFound;
+use Paulus\Exception\Http\WrongMethod;
 use Paulus\FileLoader\RouteLoader;
 use Paulus\FileLoader\RouteLoaderFactory;
 use Paulus\Handler\Error\ErrorHandlerInterface;
@@ -165,6 +167,9 @@ class Paulus
 
         // Setup our error handler
         $this->setErrorHandler(new LevelBasedErrorHandler());
+
+        // Setup our HTTP error handler
+        $this->setupRouterHttpErrorHandler();
 
         // Setup our after dispatch handler
         $this->setupAfterDispatchHandler();
@@ -354,6 +359,46 @@ class Paulus
     }
 
     /**
+     * Setup our router's HTTP error handler
+     *
+     * This uses our router's http error callback registration method to assign
+     * a basic, default handler to execute when an HTTP error occurs
+     *
+     * @return Paulus
+     */
+    protected function setupRouterHttpErrorHandler()
+    {
+        $this->router->onHttpError(
+            function ($code, $router, $matched, $methods_matched, $http_exception) {
+                switch ($code) {
+                    case 404:
+                        throw EndpointNotFound::create(null, null, $http_exception);
+                        break;
+                    case 405:
+                        // Don't error out on an OPTIONS request
+                        if (!$router->request()->method('OPTIONS')) {
+                            $exception = WrongMethod::create(null, null, $http_exception);
+
+                            // Tell them of the possible methods
+                            $exception->setMoreInfo(
+                                [
+                                    'possible_methods' => $methods_matched,
+                                ]
+                            );
+
+                            throw $exception;
+                        }
+                        break;
+                    default:
+                        throw $http_exception;
+                }
+            }
+        );
+
+        return $this;
+    }
+
+    /**
      * Setup our after dispatch handler
      *
      * @access protected
@@ -410,9 +455,6 @@ class Paulus
             // Actually load our routes
             $route_loader->load();
         }
-
-        // Setup our routes for handling simple errors
-        $this->router->setupDefaultErrorRoutes();
 
         $this->prepared = true;
 
