@@ -44,6 +44,13 @@ class WrongMethod extends MethodNotAllowed implements ApiVerboseExceptionInterfa
      */
     const DEFAULT_MESSAGE = 'The wrong method was called on this endpoint';
 
+    /**
+     * The "more_info" map key to use for notifying of the allowed methods
+     *
+     * @type string
+     */
+    const MORE_INFO_ALLOWED_METHODS_KEY = 'possible_methods';
+
 
     /**
      * Properties
@@ -56,4 +63,28 @@ class WrongMethod extends MethodNotAllowed implements ApiVerboseExceptionInterfa
      * @access protected
      */
     protected $message = self::DEFAULT_MESSAGE;
+
+
+    /**
+     * Methods
+     */
+
+    /**
+     * Set the HTTP methods that are "allowed" or possible
+     *
+     * This helps communicate to the client what methods would be correct to use
+     * when they receive this exception as an HTTP response
+     *
+     * @param array $allowed_methods
+     * @return WrongMethod
+     */
+    public function setAllowedMethods(array $allowed_methods)
+    {
+        // Tell them of the possible methods
+        $this->setMoreInfo([
+            static::MORE_INFO_ALLOWED_METHODS_KEY => $methods_matched,
+        ]);
+
+        return $this;
+    }
 }
