@@ -1,27 +1,27 @@
 {
-   "name": "paulus/paulus",
-   "description": "A PHP micro-framework for creating RESTful services quickly and efficiently.",
-   "keywords": ["microframework", "rest", "routing", "router", "api", "boilerplate"],
-   "homepage": "https://github.com/Rican7/Paulus",
-   "license": "MIT",
-   "authors": [
-      {
-      "name": "Trevor N. Suarez",
-      "email": "rican7@gmail.com",
-      "homepage": "http://about.me/tnsuarez"
-   }
-   ],
-   "require": {
-      "php": ">=5.4.0",
-      "klein/klein": "dev-master",
-      "psr/log": "~1.0"
-   },
-   "require-dev": {
-      "phpunit/phpunit": "~3.7",
-      "phpunit/php-code-coverage": "~1.2",
-      "squizlabs/php_codesniffer": "~1.5"
-   },
-   "autoload": {
-      "psr-0": { "Paulus": "src/" }
-   }
+  "name": "paulus/paulus",
+  "description": "A PHP micro-framework for creating RESTful services quickly and efficiently.",
+  "keywords": ["microframework", "rest", "routing", "router", "api", "boilerplate"],
+  "homepage": "https://github.com/Rican7/Paulus",
+  "license": "MIT",
+  "authors": [
+    {
+    "name": "Trevor N. Suarez",
+    "email": "rican7@gmail.com",
+    "homepage": "http://about.me/tnsuarez"
+  }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "klein/klein": "dev-master",
+    "psr/log": "~1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~3.7",
+    "phpunit/php-code-coverage": "~1.2",
+    "squizlabs/php_codesniffer": "~1.5"
+  },
+  "autoload": {
+    "psr-0": { "Paulus": "src/" }
+  }
 }
