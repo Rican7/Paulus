@@ -22,6 +22,9 @@
     "squizlabs/php_codesniffer": "~1.5"
   },
   "autoload": {
-    "psr-0": { "Paulus": "src/" }
+    "psr-4": { "Paulus\\": "src/Paulus/" }
+  },
+  "autoload-dev": {
+    "psr-4": { "Paulus\\Tests\\": "tests/Paulus/Tests" }
   }
 }
