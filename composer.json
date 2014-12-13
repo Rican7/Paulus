@@ -6,10 +6,10 @@
   "license": "MIT",
   "authors": [
     {
-    "name": "Trevor N. Suarez",
-    "email": "rican7@gmail.com",
-    "homepage": "http://about.me/tnsuarez"
-  }
+      "name": "Trevor N. Suarez",
+      "email": "rican7@gmail.com",
+      "homepage": "http://about.me/tnsuarez"
+    }
   ],
   "require": {
     "php": ">=5.4.0",
