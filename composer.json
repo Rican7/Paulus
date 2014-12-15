@@ -14,12 +14,12 @@
    "require": {
       "php": ">=5.4.0",
       "klein/klein": "dev-master",
-      "psr/log": "1.0.0"
+      "psr/log": "~1.0"
    },
    "require-dev": {
-      "phpunit/phpunit": "3.7.x",
-      "phpunit/php-code-coverage": "1.2.x",
-      "squizlabs/php_codesniffer": "1.4.6"
+      "phpunit/phpunit": "~3.7",
+      "phpunit/php-code-coverage": "~1.2",
+      "squizlabs/php_codesniffer": "~1.5"
    },
    "autoload": {
       "psr-0": { "Paulus": "src/" }

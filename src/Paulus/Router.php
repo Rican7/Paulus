@@ -191,47 +191,6 @@ class Router extends Klein
     }
 
     /**
-     * Setup our default error route responders
-     * by registering them with our router
-     *
-     * @access public
-     * @return Router
-     */
-    public function setupDefaultErrorRoutes()
-    {
-        // "HTTP 404 Not Found" default handler
-        $this->respond(
-            404,
-            function () {
-                throw new EndpointNotFound();
-            }
-        )->setName(404);
-
-        // "HTTP 405 Method Not Allowed" default handler
-        $this->respond(
-            405,
-            function ($request, $response, $service, $app, $router, $matched, $methods_matched) {
-                // Don't error out on an OPTIONS request
-                if (!$request->method('OPTIONS')) {
-                    $exception = new WrongMethod();
-
-                    // Tell them of the possible methods
-                    $exception->setMoreInfo(
-                        [
-                            'possible_methods' => $methods_matched,
-                        ]
-                    );
-
-                    throw $exception;
-
-                }
-            }
-        )->setName(405);
-
-        return $this;
-    }
-
-    /**
      * Get the current controller's exception handler
      * if there is one defined
      *
