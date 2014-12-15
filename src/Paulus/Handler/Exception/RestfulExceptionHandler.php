@@ -127,9 +127,10 @@ class RestfulExceptionHandler extends InformativeExceptionHandler
         $this->logInfoMessage();
 
         $log_level = LogLevel::ERROR;
+        $exception_code = (int) $exception->getCode();
 
         // If the API exception is representing a server error
-        if (500 <= $exception->getCode() && $exception->getCode() <= 599) {
+        if (500 <= $exception_code && $exception_code <= 599) {
             $log_level = LogLevel::CRITICAL;
         }
 
