@@ -12,6 +12,5 @@
 // Turn on all errors for our unit testing
 error_reporting(-1);
 
-// Load our autoloader, and add our Test class namespace
-$autoloader = require(__DIR__ . '/../vendor/autoload.php');
-$autoloader->add('Paulus\Tests', __DIR__);
+// Load our autoloader
+require(__DIR__ . '/../vendor/autoload.php');

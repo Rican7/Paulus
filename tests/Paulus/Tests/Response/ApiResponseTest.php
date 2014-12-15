@@ -58,8 +58,14 @@ class ApiResponseTest extends AbstractPaulusTest
 
         $this->assertSame($test_data, $response->getData());
         $this->assertSame($test_status_code, $response->code());
-        $this->assertEquals($test_headers, $response->headers()->all(array_keys($test_headers)));
         $this->assertFalse($response->isLocked());
+
+        $this->assertEquals(
+            array_change_key_case($test_headers, CASE_LOWER),
+            $response->headers()->all(
+                array_keys(array_change_key_case($test_headers, CASE_LOWER))
+            )
+        );
     }
 
     public function testGetSetData($test_data = null)
