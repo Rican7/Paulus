@@ -17,6 +17,7 @@ use Klein\HttpStatus;
 use Paulus\Exception\Http\ApiExceptionInterface;
 use Paulus\Exception\Http\ApiVerboseExceptionInterface;
 use Paulus\Support\Inflector;
+use Psr\Log\LogLevel;
 use Psr\Log\LoggerInterface;
 
 /**
