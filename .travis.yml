@@ -15,5 +15,6 @@ script:
 
 matrix:
     allow_failures:
+        # Remove once more tests are in and we're confident with HHVM compatibility
         - php: hhvm
     fast_finish: true
