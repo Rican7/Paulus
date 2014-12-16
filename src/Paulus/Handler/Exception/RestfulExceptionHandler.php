@@ -17,6 +17,7 @@ use Klein\HttpStatus;
 use Paulus\Exception\Http\ApiExceptionInterface;
 use Paulus\Exception\Http\ApiVerboseExceptionInterface;
 use Paulus\Support\Inflector;
+use Psr\Log\LogLevel;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -125,8 +126,16 @@ class RestfulExceptionHandler extends InformativeExceptionHandler
     {
         $this->logInfoMessage();
 
+        $log_level = LogLevel::ERROR;
+        $exception_code = (int) $exception->getCode();
+
+        // If the API exception is representing a server error
+        if (500 <= $exception_code && $exception_code <= 599) {
+            $log_level = LogLevel::CRITICAL;
+        }
+
         // Write to our log
-        $this->logger->error($exception->getMessage(), ['exception' => $exception]);
+        $this->logger->log($log_level, $exception->getMessage(), ['exception' => $exception]);
 
         $more_info = null;
 
