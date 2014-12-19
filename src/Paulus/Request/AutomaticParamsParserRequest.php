@@ -42,7 +42,7 @@ class AutomaticParamsParserRequest extends Request
             || $request->method('DELETE')) {
 
             // Parse Form URL Encoded attributes
-            if (strpos($request->headers()->get('content-type'), 'application/x-www-form-urlencoded') !== false
+            if (stripos($request->headers()->get('content-type'), 'application/x-www-form-urlencoded') !== false
                 && !$request->method('POST')) {
 
                 // Parse the body into a params array
@@ -51,8 +51,8 @@ class AutomaticParamsParserRequest extends Request
                 // Replace the post params with the parse params
                 $request->paramsPost()->replace($params);
 
-            } elseif (strpos($request->headers()->get('content-type'), 'application/json') !== false
-                || strpos($request->headers()->get('content-type'), 'application/x-json') !== false) {
+            } elseif (stripos($request->headers()->get('content-type'), 'application/json') !== false
+                || stripos($request->headers()->get('content-type'), 'application/x-json') !== false) {
 
                 // Decode the JSON body
                 $params = json_decode($request->body(), true);
