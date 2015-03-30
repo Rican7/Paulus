@@ -9,7 +9,7 @@
  * @version     2.0.0
  */
 
-namespace Paulus\Tests\Exception;
+namespace Paulus\Tests\Exception\Standard;
 
 use Exception;
 use Paulus\Exception\Http\Standard\BadGateway;
@@ -32,6 +32,7 @@ use Paulus\Tests\AbstractPaulusTest;
  */
 class HttpExceptionFactoryTest extends AbstractPaulusTest
 {
+
     /**
      * Helpers
      */
@@ -74,7 +75,7 @@ class HttpExceptionFactoryTest extends AbstractPaulusTest
     public function testCreateFromCodeWithMessage()
     {
         foreach ($this->getTestData() as $code => $exception) {
-            $message = "Throwing Message with Code: " . $code;
+            $message = 'Throwing Message with Code: ' . $code;
 
             $created_exception = HttpExceptionFactory::createFromCode($code, $message);
 
@@ -92,7 +93,7 @@ class HttpExceptionFactoryTest extends AbstractPaulusTest
         $thrown_exception = new Exception("An error occurred!");
 
         foreach ($this->getTestData() as $code => $exception) {
-            $message = "Throwing Message with Code: " . $code;
+            $message = 'Throwing Message with Code: ' . $code;
 
             $created_exception = HttpExceptionFactory::createFromCode($code, $message, $thrown_exception);
 
