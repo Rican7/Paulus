@@ -17,19 +17,19 @@ use Exception;
 /**
  * HttpExceptionFactory
  *
- * Provides the means to create Api Exceptions using minimal other information.
+ * Provides the means to create Api Exceptions using minimal other information
  *
- * @uses Exception
  * @package Paulus\Exception\Http\Standard
  */
 class HttpExceptionFactory
 {
+
     /**
-     * Create an HTTP exception from nothing but an HTTP code
+     * Create an HTTP exception using a HTTP status code.
      *
-     * @param int $code The HTTP status code
-     * @param string $message
-     * @param Exception $previous
+     * @param int $code	 The HTTP status code
+     * @param string	 $message
+     * @param Exception  $previous
      * @static
      * @access public
      * @return ApiExceptionInterface
