@@ -9,13 +9,13 @@
  * @version     2.0.0
  */
 
-namespace Paulus\Tests\Exception\Standard;
+namespace Paulus\Tests\Exception;
 
 use Exception;
 use Paulus\Exception\Http\Standard\BadGateway;
 use Paulus\Exception\Http\Standard\BadRequest;
 use Paulus\Exception\Http\Standard\Forbidden;
-use Paulus\Exception\Http\Standard\HttpExceptionFactory;
+use Paulus\Exception\Http\ApiExceptionFactory;
 use Paulus\Exception\Http\Standard\InternalServerError;
 use Paulus\Exception\Http\Standard\MethodNotAllowed;
 use Paulus\Exception\Http\Standard\NotAcceptable;
@@ -25,12 +25,12 @@ use Paulus\Exception\Http\Standard\Unauthorized;
 use Paulus\Tests\AbstractPaulusTest;
 
 /**
- * HttpExceptionFactoryTest
+ * ApiExceptionFactoryTest
  *
  * @uses    AbstractPaulusTest
  * @package Paulus\Tests\Exception
  */
-class HttpExceptionFactoryTest extends AbstractPaulusTest
+class ApiExceptionFactoryTest extends AbstractPaulusTest
 {
 
     /**
@@ -61,7 +61,7 @@ class HttpExceptionFactoryTest extends AbstractPaulusTest
         $message = '';
 
         foreach ($this->getTestData() as $code => $exception) {
-            $created_exception = HttpExceptionFactory::createFromCode($code);
+            $created_exception = ApiExceptionFactory::createFromCode($code);
 
             $this->assertEquals($code, $created_exception->getCode());
             $this->assertEquals($code, $created_exception->getDefaultCode());
@@ -77,7 +77,7 @@ class HttpExceptionFactoryTest extends AbstractPaulusTest
         foreach ($this->getTestData() as $code => $exception) {
             $message = 'Throwing Message with Code: ' . $code;
 
-            $created_exception = HttpExceptionFactory::createFromCode($code, $message);
+            $created_exception = ApiExceptionFactory::createFromCode($code, $message);
 
             $this->assertEquals($code, $created_exception->getCode());
             $this->assertEquals($code, $created_exception->getDefaultCode());
@@ -95,7 +95,7 @@ class HttpExceptionFactoryTest extends AbstractPaulusTest
         foreach ($this->getTestData() as $code => $exception) {
             $message = 'Throwing Message with Code: ' . $code;
 
-            $created_exception = HttpExceptionFactory::createFromCode($code, $message, $thrown_exception);
+            $created_exception = ApiExceptionFactory::createFromCode($code, $message, $thrown_exception);
 
             $this->assertEquals($code, $created_exception->getCode());
             $this->assertEquals($code, $created_exception->getDefaultCode());

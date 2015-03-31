@@ -10,18 +10,27 @@
  * @version     2.0.0
  */
 
-namespace Paulus\Exception\Http\Standard;
+namespace Paulus\Exception\Http;
 
 use Exception;
+use Paulus\Exception\Http\Standard\BadGateway;
+use Paulus\Exception\Http\Standard\BadRequest;
+use Paulus\Exception\Http\Standard\Forbidden;
+use Paulus\Exception\Http\Standard\InternalServerError;
+use Paulus\Exception\Http\Standard\MethodNotAllowed;
+use Paulus\Exception\Http\Standard\NotAcceptable;
+use Paulus\Exception\Http\Standard\NotFound;
+use Paulus\Exception\Http\Standard\NotImplemented;
+use Paulus\Exception\Http\Standard\Unauthorized;
 
 /**
- * HttpExceptionFactory
+ * ApiExceptionFactory
  *
  * Provides the means to create Api Exceptions using minimal other information
  *
- * @package Paulus\Exception\Http\Standard
+ * @package Paulus\Exception\Http
  */
-class HttpExceptionFactory
+class ApiExceptionFactory
 {
 
     /**
