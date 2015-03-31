@@ -36,9 +36,9 @@ class ApiExceptionFactory
     /**
      * Create an HTTP exception using a HTTP status code.
      *
-     * @param int $code	 The HTTP status code
-     * @param string	 $message
-     * @param Exception  $previous
+     * @param int $code              The HTTP status code
+     * @param string $message        The optional message to include with the exception
+     * @param Exception $previous    The previous exception thrown, if any
      * @static
      * @access public
      * @return ApiExceptionInterface
