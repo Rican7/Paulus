@@ -9,7 +9,7 @@
  * @version     2.0.0
  */
 
-namespace Paulus\Tests\Exception;
+namespace Paulus\Tests\Exception\Http;
 
 use Exception;
 use Paulus\Exception\Http\Standard\BadGateway;
@@ -28,7 +28,7 @@ use Paulus\Tests\AbstractPaulusTest;
  * ApiExceptionFactoryTest
  *
  * @uses    AbstractPaulusTest
- * @package Paulus\Tests\Exception
+ * @package Paulus\Tests\Exception\Http
  */
 class ApiExceptionFactoryTest extends AbstractPaulusTest
 {
