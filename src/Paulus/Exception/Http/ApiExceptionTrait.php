@@ -50,7 +50,7 @@ trait ApiExceptionTrait
      * @param Exception $previous
      * @static
      * @access public
-     * @return ApiExceptionInterface
+     * @return static
      */
     public static function create($message = null, $code = null, Exception $previous = null)
     {
