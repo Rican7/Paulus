@@ -216,6 +216,8 @@ abstract class AbstractController implements ControllerInterface
 
         // Delegate to our application's exception handler
         $this->app()->getExceptionHandler()->handleException($e);
+
+        return $this;
     }
 
     /**
