@@ -6,7 +6,7 @@ Its meant to work as a sort of ["boilerplate"](http://en.wikipedia.org/wiki/Boil
 ## Getting Started
 
 - PHP 5.4.x is required
-- Download the current [stable release](//github.com/Rican7/Paulus/archive/master.zip)
+- Download the current [stable release](https://github.com/Rican7/Paulus/archive/master.zip)
 - Setup [URL rewriting](https://gist.github.com/4191715) for the [routing engine (Klein)](https://github.com/chriso/klein.php)
 - [Configure](/Rican7/Paulus/blob/master/docs/configuration.md) the framework to your needs
 - Create a route (and optionally, a controller) and start hitting your newly created API!
