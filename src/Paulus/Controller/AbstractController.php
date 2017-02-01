@@ -11,10 +11,10 @@
 
 namespace Paulus\Controller;
 
-use Exception;
 use Klein\AbstractResponse;
 use Klein\Request;
 use Klein\ServiceProvider;
+use PDOException;
 use Paulus\Exception\Http\InvalidParameters;
 use Paulus\Exception\Http\ObjectNotFound;
 use Paulus\Exception\Http\Standard\BadGateway;
@@ -163,12 +163,7 @@ abstract class AbstractController implements ControllerInterface
     }
 
     /**
-     * Handle the result of the route callback called
-     * through the current controller
-     *
-     * @param mixed $result_data    The data to be evaluated and/or filtered
-     * @access public
-     * @return ControllerInterface
+     * {@inheritdoc}
      */
     public function handleResult($result_data)
     {
@@ -200,17 +195,12 @@ abstract class AbstractController implements ControllerInterface
     }
 
     /**
-     * Handle a exception thrown during the callback
-     * execution of the current controller
-     *
-     * @param Exception $e  The exception object that was thrown
-     * @access public
-     * @return ControllerInterface
+     * {@inheritdoc}
      */
-    public function handleException(Exception $e)
+    public function handleException($e)
     {
         // Let's turn PDO database exceptions into 502's
-        if ($e instanceof \PDOException) {
+        if ($e instanceof PDOException) {
             $e = BadGateway::create(null, null, $e);
         }
 
