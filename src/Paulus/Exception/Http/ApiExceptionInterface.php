@@ -13,6 +13,7 @@ namespace Paulus\Exception\Http;
 
 use Exception;
 use Paulus\Exception\PaulusExceptionInterface;
+use Throwable;
 
 /**
  * ApiExceptionInterface
@@ -30,14 +31,17 @@ interface ApiExceptionInterface extends PaulusExceptionInterface
      * Static creation method designed to allow for easier fall-back to default
      * values than the default exception constructor
      *
+     * TODO: Change the `$previous` parameter to type-hint against `Throwable`
+     * once PHP 5.x support is no longer necessary.
+     *
      * @param string $message
      * @param int $code
-     * @param Exception $previous
+     * @param Exception|Throwable $previous
      * @static
      * @access public
      * @return ApiExceptionInterface
      */
-    public static function create($message = null, $code = null, Exception $previous = null);
+    public static function create($message = null, $code = null, $previous = null);
 
     /**
      * Get the default message for this type of exception

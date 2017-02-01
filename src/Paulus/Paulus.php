@@ -12,7 +12,6 @@
 namespace Paulus;
 
 use BadMethodCallException;
-use Exception;
 use Klein\AbstractResponse;
 use Klein\Response;
 use LogicException;
@@ -341,7 +340,7 @@ class Paulus
     {
         // Register an error handler through our router's catcher
         $this->router->onError(
-            function ($router, $message, $class, Exception $exception) {
+            function ($router, $message, $class, $exception) {
 
                 // Check if we have a callable handler in our controller
                 $callable = $router->getControllerExceptionHandler();

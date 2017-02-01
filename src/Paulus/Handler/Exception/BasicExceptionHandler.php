@@ -11,7 +11,6 @@
 
 namespace Paulus\Handler\Exception;
 
-use Exception;
 use Klein\AbstractResponse;
 use Paulus\Response\ApiResponse;
 use Psr\Log\LoggerInterface;
@@ -102,13 +101,9 @@ class BasicExceptionHandler implements ExceptionResponseHandlerInterface
     }
 
     /**
-     * Handle an exception thrown in the application
-     *
-     * @param Exception $exception
-     * @access public
-     * @return boolean
+     * {@inheritdoc}
      */
-    public function handleException(Exception $exception)
+    public function handleException($exception)
     {
         $this->logInfoMessage();
 

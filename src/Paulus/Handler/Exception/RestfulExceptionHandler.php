@@ -11,7 +11,6 @@
 
 namespace Paulus\Handler\Exception;
 
-use Exception;
 use Klein\AbstractResponse;
 use Klein\HttpStatus;
 use Paulus\Exception\Http\ApiExceptionInterface;
@@ -93,13 +92,9 @@ class RestfulExceptionHandler extends InformativeExceptionHandler
     }
 
     /**
-     * Handle an exception thrown in the application
-     *
-     * @param Exception $exception
-     * @access public
-     * @return boolean
+     * {@inheritdoc}
      */
-    public function handleException(Exception $exception)
+    public function handleException($exception)
     {
         // Handle our RESTful exceptions
         if ($exception instanceof ApiExceptionInterface) {

@@ -12,6 +12,7 @@
 namespace Paulus\Controller;
 
 use Exception;
+use Throwable;
 
 /**
  * ControllerInterface
@@ -35,9 +36,12 @@ interface ControllerInterface
      * Handle a exception thrown during the callback
      * execution of the current controller
      *
-     * @param Exception $e  The exception object that was thrown
+     * TODO: Change the `$exception` parameter to type-hint against `Throwable`
+     * once PHP 5.x support is no longer necessary.
+     *
+     * @param Exception|Throwable $e  The exception object that was thrown
      * @access public
      * @return ControllerInterface
      */
-    public function handleException(Exception $e);
+    public function handleException($e);
 }

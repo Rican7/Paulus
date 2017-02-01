@@ -11,7 +11,6 @@
 
 namespace Paulus\Handler\Exception;
 
-use Exception;
 use Paulus\Response\ApiResponse;
 
 /**
@@ -62,13 +61,9 @@ class InformativeExceptionHandler extends BasicExceptionHandler
      */
 
     /**
-     * Handle an exception thrown in the application
-     *
-     * @param Exception $exception
-     * @access public
-     * @return boolean
+     * {@inheritdoc}
      */
-    public function handleException(Exception $exception)
+    public function handleException($exception)
     {
         // Prepare our error response
         $this->prepareErrorResponse(
