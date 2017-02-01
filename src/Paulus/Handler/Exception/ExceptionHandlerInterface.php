@@ -12,6 +12,7 @@
 namespace Paulus\Handler\Exception;
 
 use Exception;
+use Throwable;
 
 /**
  * ExceptionHandlerInterface
@@ -26,9 +27,12 @@ interface ExceptionHandlerInterface
     /**
      * Handle an exception thrown in the application
      *
-     * @param Exception $exception
+     * TODO: Change the `$exception` parameter to type-hint against `Throwable`
+     * once PHP 5.x support is no longer necessary.
+     *
+     * @param Exception|Throwable $exception
      * @access public
      * @return boolean
      */
-    public function handleException(Exception $exception);
+    public function handleException($exception);
 }
