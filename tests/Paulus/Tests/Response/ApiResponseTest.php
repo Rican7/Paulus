@@ -61,9 +61,9 @@ class ApiResponseTest extends AbstractPaulusTest
         $this->assertFalse($response->isLocked());
 
         $this->assertEquals(
-            array_change_key_case($test_headers, CASE_LOWER),
+            $test_headers,
             $response->headers()->all(
-                array_keys(array_change_key_case($test_headers, CASE_LOWER))
+                array_keys($test_headers)
             )
         );
     }
