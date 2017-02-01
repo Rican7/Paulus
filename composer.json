@@ -18,7 +18,7 @@
   },
   "require": {
     "php": ">=5.4.0",
-    "klein/klein": "~2.1.0",
+    "klein/klein": "~2.1.1",
     "psr/log": "~1.0"
   },
   "require-dev": {
